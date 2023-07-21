@@ -1,0 +1,162 @@
+graph:
+  vertex:
+    - label_name: PLACE
+      files:
+        - path: /path/to/social_network/static/place_0_0.csv
+          format: standard_csv
+    - label_name: PERSON
+      files:
+        - path: /path/to/social_network/dynamic/person_0_0.csv
+          format: standard_csv
+    - label_name: COMMENT
+      files:
+        - path: /path/to/social_network/dynamic/comment_0_0.csv
+          format: standard_csv
+    - label_name: POST
+      files:
+        - path: /path/to/social_network/dynamic/post_0_0.csv
+          format: standard_csv
+    - label_name: FORUM
+      files:
+        - path: /path/to/social_network/dynamic/forum_0_0.csv
+          format: standard_csv
+    - label_name: ORGANISATION
+      files:
+        - path: /path/to/social_network/static/organisation_0_0.csv
+          format: standard_csv
+    - label_name: TAGCLASS
+      files:
+        - path: /path/to/social_network/static/tagclass_0_0.csv
+          format: standard_csv
+    - label_name: TAG
+      files:
+        - path: /path/to/social_network/static/tag_0_0.csv
+          format: standard_csv
+  edge:
+    - src_label_name: COMMENT
+      dst_label_name: PERSON
+      edge_label_name: HASCREATOR
+      files:
+        - path: /path/to/social_network/dynamic/comment_hasCreator_person_0_0.csv
+          format: standard_csv
+    - src_label_name: POST
+      dst_label_name: PERSON
+      edge_label_name: HASCREATOR
+      files:
+        - path: /path/to/social_network/dynamic/post_hasCreator_person_0_0.csv
+          format: standard_csv
+    - src_label_name: POST
+      dst_label_name: TAG
+      edge_label_name: HASTAG
+      files:
+        - path: /path/to/social_network/dynamic/post_hasTag_tag_0_0.csv
+          format: standard_csv
+    - src_label_name: COMMENT
+      dst_label_name: COMMENT
+      edge_label_name: REPLYOF
+      files:
+        - path: /path/to/social_network/dynamic/comment_replyOf_comment_0_0.csv
+          format: standard_csv
+    - src_label_name: COMMENT
+      dst_label_name: POST
+      edge_label_name: REPLYOF
+      files:
+        - path: /path/to/social_network/dynamic/comment_replyOf_post_0_0.csv
+          format: standard_csv
+    - src_label_name: FORUM
+      dst_label_name: POST
+      edge_label_name: CONTAINEROF
+      files:
+        - path: /path/to/social_network/dynamic/forum_containerOf_post_0_0.csv
+          format: standard_csv
+    - src_label_name: FORUM
+      dst_label_name: PERSON
+      edge_label_name: HASMEMBER
+      files:
+        - path: /path/to/social_network/dynamic/forum_hasMember_person_0_0.csv
+          format: standard_csv
+    - src_label_name: FORUM
+      dst_label_name: PERSON
+      edge_label_name: HASMODERATOR
+      files:
+        - path: /path/to/social_network/dynamic/forum_hasModerator_person_0_0.csv
+          format: standard_csv
+    - src_label_name: PERSON
+      dst_label_name: TAG
+      edge_label_name: HASINTEREST
+      files:
+        - path: /path/to/social_network/dynamic/person_hasInterest_tag_0_0.csv
+          format: standard_csv
+    - src_label_name: COMMENT
+      dst_label_name: PLACE
+      edge_label_name: ISLOCATEDIN
+      files:
+        - path: /path/to/social_network/dynamic/comment_isLocatedIn_place_0_0.csv
+          format: standard_csv
+    - src_label_name: PERSON
+      dst_label_name: PLACE
+      edge_label_name: ISLOCATEDIN
+      files:
+        - path: /path/to/social_network/dynamic/person_isLocatedIn_place_0_0.csv
+          format: standard_csv
+    - src_label_name: POST
+      dst_label_name: PLACE
+      edge_label_name: ISLOCATEDIN
+      files:
+        - path: /path/to/social_network/dynamic/post_isLocatedIn_place_0_0.csv
+          format: standard_csv
+    - src_label_name: ORGANISATION
+      dst_label_name: PLACE
+      edge_label_name: ISLOCATEDIN
+      files:
+        - path: /path/to/social_network/static/organisation_isLocatedIn_place_0_0.csv
+          format: standard_csv
+    - src_label_name: PERSON
+      dst_label_name: PERSON
+      edge_label_name: KNOWS
+      files:
+        - path: /path/to/social_network/dynamic/person_knows_person_0_0.csv
+          format: standard_csv
+    - src_label_name: PERSON
+      dst_label_name: COMMENT
+      edge_label_name: LIKES
+      files:
+        - path: /path/to/social_network/dynamic/person_likes_comment_0_0.csv
+          format: standard_csv
+    - src_label_name: PERSON
+      dst_label_name: POST
+      edge_label_name: LIKES
+      files:
+        - path: /path/to/social_network/dynamic/person_likes_post_0_0.csv
+          format: standard_csv
+    - src_label_name: PERSON
+      dst_label_name: ORGANISATION
+      edge_label_name: WORKAT
+      files:
+        - path: /path/to/social_network/dynamic/person_workAt_organisation_0_0.csv
+          format: standard_csv
+    - src_label_name: PLACE
+      dst_label_name: PLACE
+      edge_label_name: ISPARTOF
+      files:
+        - path: /path/to/social_network/static/place_isPartOf_place_0_0.csv
+          format: standard_csv
+    - src_label_name: TAG
+      dst_label_name: TAGCLASS
+      edge_label_name: HASTYPE
+      files:
+        - path: /path/to/social_network/static/tag_hasType_tagclass_0_0.csv
+          format: standard_csv
+    - src_label_name: TAGCLASS
+      dst_label_name: TAGCLASS
+      edge_label_name: ISSUBCLASSOF
+      files:
+        - path: /path/to/social_network/static/tagclass_isSubclassOf_tagclass_0_0.csv
+          format: standard_csv
+    - src_label_name: PERSON
+      dst_label_name: ORGANISATION
+      edge_label_name: STUDYAT
+      files:
+        - path: /path/to/social_network/dynamic/person_studyAt_organisation_0_0.csv
+          format: standard_csv
+
