@@ -1,8 +1,8 @@
 #!/bin/bash
 
 ARCH=`uname -m`
-# FLEX_HOME=/usr/local
-FLEX_HOME=/root/flex_home
+FLEX_HOME=/usr/local
+# FLEX_HOME=/root/flex_home
 
 for i in ic1 ic2 ic3 ic4 ic5 ic6 ic7 ic8 ic9 ic10 ic11 ic12 ic13 ic14 is1 is2 is3 is4 is5 is6 is7 ins1 ins2 ins3 ins4 ins5 ins6 ins7 ins8
 # for i in ic1
