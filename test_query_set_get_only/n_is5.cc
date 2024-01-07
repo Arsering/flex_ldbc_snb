@@ -28,6 +28,19 @@ namespace gs
 
       oid_t id = input.get_long();
       CHECK(input.empty());
+      auto post_hasCreator_person_out =
+          txn.GetOutgoingSingleGraphView<grape::EmptyType>(
+              post_label_id_, person_label_id_, hasCreator_label_id_);
+      LOG(INFO) << "cp";
+      size_t ts_1, ts_2;
+      ts_1 = gbp::GetSystemTime();
+
+      assert(post_hasCreator_person_out.exist(10));
+      ts_2 = gbp::GetSystemTime();
+      size_t latency = ts_2 - ts_1;
+      // gbp::debug::get_counter_any().fetch_add(latency);
+      LOG(INFO) << ts_2 << " | " << ts_1;
+      return true;
 
       vid_t lid{};
       vid_t v;
@@ -38,11 +51,9 @@ namespace gs
                 post_label_id_, person_label_id_, hasCreator_label_id_);
         assert(post_hasCreator_person_out.exist(lid));
 #if OV
-        assert(post_hasCreator_person_out.exist(lid));
         v = post_hasCreator_person_out.get_edge(lid).neighbor;
 #else
         auto item = post_hasCreator_person_out.get_edge(lid);
-
         v = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
       }
