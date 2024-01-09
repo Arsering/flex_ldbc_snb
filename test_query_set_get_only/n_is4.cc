@@ -28,15 +28,7 @@ namespace gs
           graph_(graph) {}
     ~IS4() {}
 
-    bool Query(Decoder &input, Encoder &output) override
-    {
-      // size_t st = gbp::GetSystemTime();
-      auto ret = Query_inner(input, output);
-      // st = gbp::GetSystemTime() - st;
-      // LOG(INFO) << st;
-      return ret;
-    }
-    bool Query_inner(Decoder &input, Encoder &output)
+    bool Query(Decoder &input, Encoder &output)
     {
       auto txn = graph_.GetReadTransaction();
       oid_t id = input.get_long();
@@ -62,35 +54,25 @@ namespace gs
         return true;
       }
 #else
-      auto st = gbp::GetSystemTime();
-      auto item = post_creationDate_col_.get(10);
-      st = gbp::GetSystemTime() - st;
-      // gbp::debug::get_counter_any().fetch_add(st);
-      LOG(INFO) << st;
-      st = gbp::GetSystemTime();
-      output.put_long(gbp::Decode<gs::Date>(item).milli_second);
-      st = gbp::GetSystemTime() - st;
-      LOG(INFO) << st;
-      return true;
-      // if (txn.GetVertexIndex(post_label_id_, id, lid))
-      // {
-      //   auto item = post_creationDate_col_.get(lid);
-      //   output.put_long(gbp::Decode<gs::Date>(item).milli_second);
+      if (txn.GetVertexIndex(post_label_id_, id, lid))
+      {
+        auto item = post_creationDate_col_.get(lid);
+        output.put_long(gbp::Decode<gs::Date>(item).milli_second);
 
-      //   item = post_length_col_.get(lid);
-      //   auto content = gbp::Decode<int>(item) == 0 ? post_imageFile_col_.get(lid) : post_content_col_.get(lid);
-      //   output.put_string_view({content.Data(), content.Size()});
-      //   return true;
-      // }
-      // else if (txn.GetVertexIndex(comment_label_id_, id, lid))
-      // {
-      //   auto item = comment_creationDate_col_.get(lid);
-      //   output.put_long(gbp::Decode<gs::Date>(item).milli_second);
+        item = post_length_col_.get(lid);
+        auto content = gbp::Decode<int>(item) == 0 ? post_imageFile_col_.get(lid) : post_content_col_.get(lid);
+        output.put_string_view({content.Data(), content.Size()});
+        return true;
+      }
+      else if (txn.GetVertexIndex(comment_label_id_, id, lid))
+      {
+        auto item = comment_creationDate_col_.get(lid);
+        output.put_long(gbp::Decode<gs::Date>(item).milli_second);
 
-      //   const auto &content = comment_content_col_.get(lid);
-      //   output.put_string_view({content.Data(), content.Size()});
-      //   return true;
-      // }
+        const auto &content = comment_content_col_.get(lid);
+        output.put_string_view({content.Data(), content.Size()});
+        return true;
+      }
 #endif
       return false;
     }
