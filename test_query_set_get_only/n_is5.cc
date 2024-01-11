@@ -38,7 +38,7 @@ namespace gs
       assert(post_hasCreator_person_out.exist(10));
       ts_2 = gbp::GetSystemTime();
       size_t latency = ts_2 - ts_1;
-      // gbp::debug::get_counter_any().fetch_add(latency);
+      gbp::debug::get_counter_any().fetch_add(latency);
       LOG(INFO) << ts_2 << " | " << ts_1;
       return true;
 

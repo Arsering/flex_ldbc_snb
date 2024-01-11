@@ -46,8 +46,8 @@ namespace gs
 
 #if OV
       auto st = gbp::GetSystemTime();
-      // auto item = post_creationDate_col_.get(10);
-      txn.GetVertexIndex(post_label_id_, id, lid);
+      auto item = post_creationDate_col_.get(10);
+      // txn.GetVertexIndex(post_label_id_, id, lid);
       st = gbp::GetSystemTime() - st;
       gbp::debug::get_counter_any().fetch_add(st);
       LOG(INFO) << st;
@@ -75,10 +75,10 @@ namespace gs
       }
 #else
       auto st = gbp::GetSystemTime();
-      auto item = post_creationDate_col_.get(10);
-      // txn.GetVertexIndex(post_label_id_, id, lid);
+      // auto item = post_creationDate_col_.get(10);
+      txn.GetVertexIndex(post_label_id_, id, lid);
       st = gbp::GetSystemTime() - st;
-      // gbp::debug::get_counter_any().fetch_add(st);
+      gbp::debug::get_counter_any().fetch_add(st);
       // LOG(INFO) << st;
       st = gbp::GetSystemTime();
       // output.put_long(gbp::Decode<gs::Date>(item).milli_second);

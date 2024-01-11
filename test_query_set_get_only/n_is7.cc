@@ -51,10 +51,10 @@ namespace gs
       oid_t req = input.get_long();
       CHECK(input.empty());
       size_t ts_1;
-      ts_1 = gbp::GetSystemTime();
       auto aa =
           txn.GetIncomingGraphView<grape::EmptyType>(
               comment_label_id_, comment_label_id_, replyOf_label_id_);
+      ts_1 = gbp::GetSystemTime();
       auto bb = aa.get_edges(10);
       ts_1 = gbp::GetSystemTime() - ts_1;
       gbp::debug::get_counter_any().fetch_add(ts_1);
