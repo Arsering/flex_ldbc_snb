@@ -97,6 +97,7 @@ namespace gs
         vec.emplace_back(ie.get_neighbor(), gbp::Decode<gs::Date>(data).milli_second,
                          txn.GetVertexId(person_label_id_, ie.get_neighbor()));
       }
+
       sort(vec.begin(), vec.end(),
            [&](const person_info &x, const person_info &y)
            {
