@@ -5,7 +5,7 @@
 #include "flex/engines/graph_db/database/graph_db_session.h"
 #include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
 #include "flex/utils/property/types.h"
-// #include "utils.h"
+#include "utils.h"
 
 namespace gs
 {
@@ -55,25 +55,32 @@ namespace gs
       person_info(uint8_t distance_, const std::string_view &lastName_, oid_t id_,
                   vid_t vid_)
           : distance(distance_), lastName(lastName_), id(id_), vid(vid_) {}
-#else
-      person_info(uint8_t distance_, std::string lastName_, oid_t id_,
-                  vid_t vid_)
-          : distance(distance_), lastName(std::move(lastName_)), id(id_), vid(vid_) {}
-#endif
+
       uint8_t distance;
-#if OV
+
       std::string_view lastName;
-#else
-      std::string lastName;
-#endif
+
       oid_t id;
       vid_t vid;
+#else
+      person_info(uint8_t distance_, gbp::BufferObject lastName_, oid_t id_,
+                  vid_t vid_)
+          : distance(distance_), lastName(lastName_), id(id_), vid(vid_) {}
+
+      uint8_t distance;
+
+      gbp::BufferObject lastName;
+
+      oid_t id;
+      vid_t vid;
+#endif
     };
 
     struct person_info_comparer
     {
       bool operator()(const person_info &lhs, const person_info &rhs)
       {
+
         if (lhs.distance < rhs.distance)
         {
           return true;
@@ -82,11 +89,13 @@ namespace gs
         {
           return false;
         }
-        if (lhs.lastName < rhs.lastName)
+        std::string_view l_item = {lhs.lastName.Data(), lhs.lastName.Size()};
+        std::string_view r_item = {rhs.lastName.Data(), rhs.lastName.Size()};
+        if (l_item < r_item)
         {
           return true;
         }
-        if (lhs.lastName > rhs.lastName)
+        if (l_item > r_item)
         {
           return false;
         }
@@ -132,7 +141,6 @@ namespace gs
         {
           auto v = ie.get_neighbor();
 #endif
-
           if (distance_[v])
             continue;
           distance_[v] = distance_[u] + 1;
@@ -143,9 +151,9 @@ namespace gs
 #if OV
           if (person_firstName_col_.get_view(v) == firstname)
 #else
-          const auto firstname_in_db = person_firstName_col_.get(root);
-          std::string_view str1{firstname_in_db.Data(), firstname_in_db.Size()};
-          if (str1 == firstname)
+          auto person_firstName_item = person_firstName_col_.get(v);
+          std::string_view person_firstName = {person_firstName_item.Data(), person_firstName_item.Size()};
+          if (person_firstName == firstname)
 #endif
           {
             if (pq.size() < 20)
@@ -154,10 +162,7 @@ namespace gs
               pq.emplace(distance_[v], person_lastName_col_.get_view(v),
                          txn.GetVertexId(person_label_id_, v), v);
 #else
-              auto lastName_in_db = person_lastName_col_.get(v);
-              // TODO:这是一个浅复制还是深复制？？
-              std::string str1{lastName_in_db.Data(), lastName_in_db.Size()};
-              pq.emplace(distance_[v], std::move(str1),
+              pq.emplace(distance_[v], person_lastName_col_.get(v),
                          txn.GetVertexId(person_label_id_, v), v);
 #endif
             }
@@ -171,42 +176,53 @@ namespace gs
                 pq.emplace(distance, person_lastName_col_.get_view(v),
                            txn.GetVertexId(person_label_id_, v), v);
 #else
-                auto lastName_in_db = person_lastName_col_.get(v);
-                // TODO:这是一个浅复制还是深复制？？
-                std::string str1{lastName_in_db.Data(), lastName_in_db.Size()};
-                pq.emplace(distance, std::move(str1),
+                pq.emplace(distance, person_lastName_col_.get(v),
                            txn.GetVertexId(person_label_id_, v), v);
 #endif
               }
               else if (distance == top.distance)
               {
-
 #if OV
                 std::string_view lastName = person_lastName_col_.get_view(v);
-#else
-                auto lastName_in_db = person_lastName_col_.get(v);
-                std::string lastName = {lastName_in_db.Data(), lastName_in_db.Size()};
-#endif
                 if (lastName < top.lastName)
+#else
+                auto lastName_item = person_lastName_col_.get(v);
+                std::string_view lastName = {lastName_item.Data(), lastName_item.Size()};
+                std::string_view top_name = {top.lastName.Data(), top.lastName.Size()};
+                if (lastName < top_name)
+#endif
                 {
                   pq.pop();
+#if OV
                   pq.emplace(distance, std::move(lastName),
                              txn.GetVertexId(person_label_id_, v), v);
+#else
+                  pq.emplace(distance, lastName_item,
+                             txn.GetVertexId(person_label_id_, v), v);
+#endif
                 }
+#if OV
                 else if (lastName == top.lastName)
+#else
+                else if (lastName == top_name)
+
+#endif
                 {
                   oid_t id = txn.GetVertexId(person_label_id_, v);
                   if (id < top.id)
                   {
                     pq.pop();
+#if OV
                     pq.emplace(distance, std::move(lastName), id, v);
+#else
+                    pq.emplace(distance, lastName_item, id, v);
+#endif
                   }
                 }
               }
             }
           }
         }
-
 #if OV
         const auto &oe = person_knows_person_out.get_edges(u);
         for (auto &e : oe)
@@ -227,26 +243,23 @@ namespace gs
           }
 #if OV
           if (person_firstName_col_.get_view(v) == firstname)
-#else
-          auto firstName_in_db = person_firstName_col_.get(v);
-          // TODO:这是一个浅复制还是深复制？？
-          std::string_view str1{firstName_in_db.Data(), firstName_in_db.Size()};
-          if (str1 == firstname)
-#endif
           {
             if (pq.size() < 20)
             {
-#if OV
               pq.emplace(distance_[v], person_lastName_col_.get_view(v),
                          txn.GetVertexId(person_label_id_, v), v);
-#else
-              auto lastName_in_db = person_lastName_col_.get(v);
-              // TODO:这是一个浅复制还是深复制？？
-              std::string str1{lastName_in_db.Data(), lastName_in_db.Size()};
-              pq.emplace(distance_[v], std::move(str1),
-                         txn.GetVertexId(person_label_id_, v), v);
-#endif
             }
+#else
+          auto person_firstName_item = person_firstName_col_.get(v);
+          std::string_view person_firstName = {person_firstName_item.Data(), person_firstName_item.Size()};
+          if (person_firstName == firstname)
+          {
+            if (pq.size() < 20)
+            {
+              pq.emplace(distance_[v], person_lastName_col_.get(v),
+                         txn.GetVertexId(person_label_id_, v), v);
+            }
+#endif
             else
             {
               const person_info &top = pq.top();
@@ -258,10 +271,7 @@ namespace gs
                 pq.emplace(distance, person_lastName_col_.get_view(v),
                            txn.GetVertexId(person_label_id_, v), v);
 #else
-                auto lastName_in_db = person_lastName_col_.get(v);
-                // TODO:这是一个浅复制还是深复制？？
-                std::string str1{lastName_in_db.Data(), lastName_in_db.Size()};
-                pq.emplace(distance, std::move(str1),
+                pq.emplace(distance, person_lastName_col_.get(v),
                            txn.GetVertexId(person_label_id_, v), v);
 #endif
               }
@@ -269,10 +279,6 @@ namespace gs
               {
 #if OV
                 std::string_view lastName = person_lastName_col_.get_view(v);
-#else
-                auto lastName_in_db = person_lastName_col_.get(v);
-                std::string lastName = {lastName_in_db.Data(), lastName_in_db.Size()};
-#endif
                 if (lastName < top.lastName)
                 {
                   pq.pop();
@@ -288,6 +294,26 @@ namespace gs
                     pq.emplace(distance, std::move(lastName), id, v);
                   }
                 }
+#else
+                auto lastName_item = person_lastName_col_.get(v);
+                std::string_view lastName = {lastName_item.Data(), lastName_item.Size()};
+                std::string_view top_name = {top.lastName.Data(), top.lastName.Size()};
+                if (lastName < top_name)
+                {
+                  pq.pop();
+                  pq.emplace(distance, lastName_item,
+                             txn.GetVertexId(person_label_id_, v), v);
+                }
+                else if (lastName == top_name)
+                {
+                  oid_t id = txn.GetVertexId(person_label_id_, v);
+                  if (id < top.id)
+                  {
+                    pq.pop();
+                    pq.emplace(distance, lastName_item, id, v);
+                  }
+                }
+#endif
               }
             }
           }
@@ -330,84 +356,79 @@ namespace gs
       auto organisation_isLocatedIn_place_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
               organisation_label_id_, place_label_id_, isLocatedIn_label_id_);
-#if !OV
-      gbp::BufferObject tmp;
-#endif
       for (size_t i = ans_.size(); i > 0; i--)
       {
         auto &info = ans_[i - 1];
         auto v = info.vid;
         output.put_long(info.id);
         output.put_int(info.distance - 1);
-        output.put_string_view(info.lastName);
 #if OV
+        output.put_string_view(info.lastName);
         output.put_long(person_birthday_col_.get_view(v).milli_second);
         output.put_long(person_creationDate_col_.get_view(v).milli_second);
         output.put_string_view(person_gender_col_.get_view(v));
         output.put_string_view(person_browserUsed_col_.get_view(v));
         output.put_string_view(person_locationIp_col_.get_view(v));
 #else
-        tmp = person_birthday_col_.get(v);
-        output.put_long(gbp::Decode<gs::Date>(tmp).milli_second);
-        tmp = person_creationDate_col_.get(v);
-        output.put_long(gbp::Decode<gs::Date>(tmp).milli_second);
-        tmp = person_gender_col_.get(v);
-        output.put_string_view({tmp.Data(), tmp.Size()});
-        tmp = person_browserUsed_col_.get(v);
-        output.put_string_view({tmp.Data(), tmp.Size()});
-        tmp = person_locationIp_col_.get(v);
-        output.put_string_view({tmp.Data(), tmp.Size()});
+        output.put_string_view({info.lastName.Data(), info.lastName.Size()});
+        auto item = person_birthday_col_.get(v);
+        output.put_long(gbp::Decode<gs::Date>(item).milli_second);
+        item = person_creationDate_col_.get(v);
+        output.put_long(gbp::Decode<gs::Date>(item).milli_second);
+        item = person_gender_col_.get(v);
+        output.put_string_view({item.Data(), item.Size()});
+        item = person_browserUsed_col_.get(v);
+        output.put_string_view({item.Data(), item.Size()});
+        item = person_locationIp_col_.get(v);
+        output.put_string_view({item.Data(), item.Size()});
 #endif
         assert(person_isLocatedIn_place_out.exist(v));
-
 #if OV
         auto person_place = person_isLocatedIn_place_out.get_edge(v).neighbor;
         output.put_string_view(place_name_col_.get_view(person_place));
         output.put_string_view(person_email_col_.get_view(v));
         output.put_string_view(person_language_col_.get_view(v));
 #else
-        tmp = person_isLocatedIn_place_out.get_edge(v);
-        auto person_place = gbp::Decode<MutableNbr<grape::EmptyType>>(tmp).neighbor;
-        tmp = place_name_col_.get(person_place);
-        output.put_string_view({tmp.Data(), tmp.Size()});
-        tmp = person_email_col_.get(v);
-        output.put_string_view({tmp.Data(), tmp.Size()});
-        tmp = person_language_col_.get(v);
-        output.put_string_view({tmp.Data(), tmp.Size()});
+        item = person_isLocatedIn_place_out.get_edge(v);
+        auto person_place = gbp::Decode<MutableNbr<grape::EmptyType>>(item).neighbor;
+        item = place_name_col_.get(person_place);
+        output.put_string_view({item.Data(), item.Size()});
+        item = person_email_col_.get(v);
+        output.put_string_view({item.Data(), item.Size()});
+        item = person_language_col_.get(v);
+        output.put_string_view({item.Data(), item.Size()});
 #endif
-
         int university_num = 0;
         size_t un_offset = output.skip_int();
 #if OV
         const auto &universities = person_studyAt_organisation_out.get_edges(v);
         for (auto &e1 : universities)
         {
-#else
-        auto universities = person_studyAt_organisation_out.get_edges(v);
-        for (; universities.is_valid(); universities.next())
-        {
-#endif
-#if OV
           output.put_string_view(organisation_name_col_.get_view(e1.neighbor));
           output.put_int(e1.data);
           assert(organisation_isLocatedIn_place_out.exist(e1.neighbor));
           auto univ_place =
               organisation_isLocatedIn_place_out.get_edge(e1.neighbor).neighbor;
           output.put_string_view(place_name_col_.get_view(univ_place));
-#else
-          tmp = organisation_name_col_.get(universities.get_neighbor());
-          output.put_string_view({tmp.Data(), tmp.Size()});
-          tmp = universities.get_data();
-          output.put_int(gbp::Decode<int>(tmp));
-          assert(organisation_isLocatedIn_place_out.exist(universities.get_neighbor()));
-          tmp = organisation_isLocatedIn_place_out.get_edge(universities.get_neighbor());
-          auto univ_place =
-              gbp::Decode<MutableNbr<grape::EmptyType>>(tmp).neighbor;
-          tmp = place_name_col_.get(univ_place);
-          output.put_string_view({tmp.Data(), tmp.Size()});
-#endif
           university_num++;
         }
+#else
+        auto universities = person_studyAt_organisation_out.get_edges(v);
+        for (; universities.is_valid(); universities.next())
+        {
+          auto item = organisation_name_col_.get(universities.get_neighbor());
+          output.put_string_view({item.Data(), item.Size()});
+          item = universities.get_data();
+          output.put_int(gbp::Decode<int>(item));
+          assert(organisation_isLocatedIn_place_out.exist(universities.get_neighbor()));
+          item = organisation_isLocatedIn_place_out.get_edge(universities.get_neighbor());
+          auto univ_place =
+              gbp::Decode<MutableNbr<grape::EmptyType>>(item).neighbor;
+          item = place_name_col_.get(univ_place);
+          output.put_string_view({item.Data(), item.Size()});
+          university_num++;
+        }
+#endif
         output.put_int_at(un_offset, university_num);
         int company_num = 0;
         size_t cn_offset = output.skip_int();
@@ -421,23 +442,25 @@ namespace gs
           auto company_place =
               organisation_isLocatedIn_place_out.get_edge(e1.neighbor).neighbor;
           output.put_string_view(place_name_col_.get_view(company_place));
+          company_num++;
+        }
 #else
         auto companies = person_workAt_organisation_out.get_edges(v);
         for (; companies.is_valid(); companies.next())
         {
-          tmp = organisation_name_col_.get(companies.get_neighbor());
-          output.put_string_view({tmp.Data(), tmp.Size()});
-          tmp = companies.get_data();
-          output.put_int(gbp::Decode<int>(tmp));
+          auto item = organisation_name_col_.get(companies.get_neighbor());
+          output.put_string_view({item.Data(), item.Size()});
+          item = companies.get_data();
+          output.put_int(gbp::Decode<int>(item));
           assert(organisation_isLocatedIn_place_out.exist(companies.get_neighbor()));
-          tmp = organisation_isLocatedIn_place_out.get_edge(companies.get_neighbor());
+          item = organisation_isLocatedIn_place_out.get_edge(companies.get_neighbor());
           auto company_place =
-              gbp::Decode<MutableNbr<grape::EmptyType>>(tmp).neighbor;
-          tmp = place_name_col_.get(company_place);
-          output.put_string_view({tmp.Data(), tmp.Size()});
-#endif
+              gbp::Decode<MutableNbr<grape::EmptyType>>(item).neighbor;
+          item = place_name_col_.get(company_place);
+          output.put_string_view({item.Data(), item.Size()});
           company_num++;
         }
+#endif
         output.put_int_at(cn_offset, company_num);
       }
       return true;
