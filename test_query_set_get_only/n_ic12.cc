@@ -5,7 +5,7 @@
 #include "flex/engines/graph_db/database/graph_db_session.h"
 #include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
 #include "flex/utils/property/types.h"
-#include "utils.h"
+// #include "utils.h"
 
 namespace gs
 {
@@ -61,13 +61,13 @@ namespace gs
           }
         }
 #else
-        const auto &ie = tagClass_isSubClassOf_tagClass_in.get_edges(v);
-        for (auto &e : ie)
+        auto ie = tagClass_isSubClassOf_tagClass_in.get_edges(v);
+        for (; ie.is_valid(); ie.next())
         {
-          if (!sub_tagClass_[e.neighbor])
+          if (!sub_tagClass_[ie.get_neighbor()])
           {
-            sub_tagClass_[e.neighbor] = true;
-            q.push(e.neighbor);
+            sub_tagClass_[ie.get_neighbor()] = true;
+            q.push(ie.get_neighbor());
           }
         }
 #endif
@@ -118,7 +118,9 @@ namespace gs
       vid_t tagClass_id = tagClass_num_;
       for (vid_t i = 0; i < tagClass_num_; ++i)
       {
-        if (tagClass_name_col_.get_view(i) == tagclassname)
+        auto item = tagClass_name_col_.get(i);
+        std::string_view tagClass_name = {item.Data(), item.Size()};
+        if (tagClass_name == tagclassname)
         {
           tagClass_id = i;
           break;
@@ -147,6 +149,7 @@ namespace gs
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
               tag_label_id_, tagClass_label_id_, hasType_label_id_);
 
+#if OV
       const auto &oe = txn.GetOutgoingEdges<Date>(
           person_label_id_, root, person_label_id_, knows_label_id_);
       for (auto &e : oe)
@@ -171,7 +174,33 @@ namespace gs
             }
           }
         }
-
+#else
+      auto oe = txn.GetOutgoingEdges<Date>(
+          person_label_id_, root, person_label_id_, knows_label_id_);
+      for (; oe.is_valid(); oe.next())
+      {
+        auto v = oe.get_neighbor();
+        int count = 0;
+        auto comment_ie = comment_hasCreator_person_in.get_edges(v);
+        for (; comment_ie.is_valid(); comment_ie.next())
+        {
+          if (comment_replyOf_post_out.exist(comment_ie.get_neighbor()))
+          {
+            auto e2 = comment_replyOf_post_out.get_edge(comment_ie.get_neighbor());
+            auto tag_oe = post_hasTag_tag_out.get_edges(gbp::Decode<gs::MutableNbr<grape::EmptyType>>(e2).neighbor);
+            for (; tag_oe.is_valid(); tag_oe.next())
+            {
+              auto item = tag_hasType_tagClass_out.get_edge(tag_oe.get_neighbor());
+              auto tc = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              if (sub_tagClass_[tc])
+              {
+                ++count;
+                break;
+              }
+            }
+          }
+        }
+#endif
         if (count)
         {
           if (pq.size() < 20)
@@ -199,6 +228,7 @@ namespace gs
         }
       }
 
+#if OV
       const auto &ie = txn.GetIncomingEdges<Date>(
           person_label_id_, root, person_label_id_, knows_label_id_);
       for (auto &e : ie)
@@ -250,7 +280,60 @@ namespace gs
           }
         }
       }
-
+#else
+      auto ie = txn.GetIncomingEdges<Date>(
+          person_label_id_, root, person_label_id_, knows_label_id_);
+      for (; ie.is_valid(); ie.next())
+      {
+        auto v = ie.get_neighbor();
+        int count = 0;
+        auto comment_ie = comment_hasCreator_person_in.get_edges(v);
+        for (; comment_ie.is_valid(); comment_ie.next())
+        {
+          if (comment_replyOf_post_out.exist(comment_ie.get_neighbor()))
+          {
+            auto e2 = comment_replyOf_post_out.get_edge(comment_ie.get_neighbor());
+            auto tag_oe = post_hasTag_tag_out.get_edges(gbp::Decode<gs::MutableNbr<grape::EmptyType>>(e2).neighbor);
+            for (; tag_oe.is_valid(); tag_oe.next())
+            {
+              assert(tag_hasType_tagClass_out.exist(tag_oe.get_neighbor()));
+              auto item = tag_hasType_tagClass_out.get_edge(tag_oe.get_neighbor());
+              auto tc = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              if (sub_tagClass_[tc])
+              {
+                ++count;
+                break;
+              }
+            }
+          }
+        }
+        if (count)
+        {
+          if (pq.size() < 20)
+          {
+            pq.emplace(count, v, txn.GetVertexId(person_label_id_, v));
+          }
+          else
+          {
+            const auto &top = pq.top();
+            if (count > top.reply_count)
+            {
+              pq.pop();
+              pq.emplace(count, v, txn.GetVertexId(person_label_id_, v));
+            }
+            else if (count == top.reply_count)
+            {
+              oid_t friend_id = txn.GetVertexId(person_label_id_, v);
+              if (friend_id < top.person_id)
+              {
+                pq.pop();
+                pq.emplace(count, v, friend_id);
+              }
+            }
+          }
+        }
+      }
+#endif
       std::vector<person_info> vec;
       vec.reserve(pq.size());
       while (!pq.empty())
@@ -263,10 +346,18 @@ namespace gs
       {
         auto &v = vec[i - 1];
         output.put_long(v.person_id);
+#if OV
         output.put_string_view(person_firstName_col_.get_view(v.person_vid));
         output.put_string_view(person_lastName_col_.get_view(v.person_vid));
+#else
+        auto item = person_firstName_col_.get(v.person_vid);
+        output.put_string_view({item.Data(), item.Size()});
+        item = person_lastName_col_.get(v.person_vid);
+        output.put_string_view({item.Data(), item.Size()});
 
+#endif
         tmp.clear();
+#if OV
         const auto &comment_ie =
             comment_hasCreator_person_in.get_edges(v.person_vid);
         for (auto &e1 : comment_ie)
@@ -288,10 +379,39 @@ namespace gs
             }
           }
         }
+#else
+        auto comment_ie =
+            comment_hasCreator_person_in.get_edges(v.person_vid);
+        for (; comment_ie.is_valid(); comment_ie.next())
+        {
+          if (comment_replyOf_post_out.exist(comment_ie.get_neighbor()))
+          {
+            auto e2 = comment_replyOf_post_out.get_edge(comment_ie.get_neighbor());
+            auto tag_e = txn.GetOutgoingEdges<grape::EmptyType>(
+                post_label_id_, gbp::Decode<gs::MutableNbr<grape::EmptyType>>(e2).neighbor, tag_label_id_, hasTag_label_id_);
+            for (; tag_e.is_valid(); tag_e.next())
+            {
+              auto tag = tag_e.get_neighbor();
+              assert(tag_hasType_tagClass_out.exist(tag));
+              auto item = tag_hasType_tagClass_out.get_edge(tag);
+              auto tc = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              if (sub_tagClass_[tc])
+              {
+                tmp.insert(tag);
+              }
+            }
+          }
+        }
+#endif
         output.put_int(tmp.size());
         for (auto tag : tmp)
         {
+#if OV
           output.put_string_view(tag_name_col_.get_view(tag));
+#else
+          auto item = tag_name_col_.get(tag);
+          output.put_string_view({item.Data(), item.Size()});
+#endif
         }
         output.put_int(v.reply_count);
       }
