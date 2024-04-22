@@ -145,7 +145,7 @@ namespace gs
         for (; person_ie.is_valid(); person_ie.next())
         {
           auto item = person_ie.get_data();
-          vec.emplace_back(person_ie.get_neighbor(), pid, gbp::Decode<Date>(item).milli_second,
+          vec.emplace_back(person_ie.get_neighbor(), pid, gbp::BufferObject::Ref<Date>(item).milli_second,
                            txn.GetVertexId(person_label_id_, person_ie.get_neighbor()),
                            message_id, true);
         }
@@ -180,7 +180,7 @@ namespace gs
         for (; person_ie.is_valid(); person_ie.next())
         {
           auto item = person_ie.get_data();
-          vec.emplace_back(person_ie.get_neighbor(), cid, gbp::Decode<Date>(item).milli_second,
+          vec.emplace_back(person_ie.get_neighbor(), cid, gbp::BufferObject::Ref<Date>(item).milli_second,
                            txn.GetVertexId(person_label_id_, person_ie.get_neighbor()),
                            message_id, false);
         }
@@ -239,9 +239,10 @@ namespace gs
         output.put_string_view(lastname);
 #else
         auto firstname = person_firstName_col_.get(v.v);
-        output.put_string_view({firstname.Data(), firstname.Size()});
+        output.put_buffer_object(firstname);
         auto lastname = person_lastName_col_.get(v.v);
-        output.put_string_view({lastname.Data(), lastname.Size()});
+        output.put_buffer_object(lastname);
+
 #endif
         output.put_long(v.creationDate);
         output.put_long(v.message_id);
@@ -273,22 +274,22 @@ namespace gs
         if (v.is_post)
         {
           auto item = post_length_col_.get(v.mid);
-          auto content = gbp::Decode<int>(item) == 0 ? post_imageFile_col_.get(v.mid) : post_content_col_.get(v.mid);
+          auto content = gbp::BufferObject::Ref<int>(item) == 0 ? post_imageFile_col_.get(v.mid) : post_content_col_.get(v.mid);
 
-          output.put_string_view({content.Data(), content.Size()});
+          output.put_buffer_object(content);
           item = post_creationDate_col_.get(v.mid);
           auto min = (v.creationDate -
-                      gbp::Decode<Date>(item).milli_second) /
+                      gbp::BufferObject::Ref<Date>(item).milli_second) /
                      mill_per_min;
           output.put_int(min);
         }
         else
         {
           auto content = comment_content_col_.get(v.mid);
-          output.put_string_view({content.Data(), content.Size()});
+          output.put_buffer_object(content);
           auto item = comment_creationDate_col_.get(v.mid);
           auto min = (v.creationDate -
-                      gbp::Decode<Date>(item).milli_second) /
+                      gbp::BufferObject::Ref<Date>(item).milli_second) /
                      mill_per_min;
           output.put_int(min);
         }

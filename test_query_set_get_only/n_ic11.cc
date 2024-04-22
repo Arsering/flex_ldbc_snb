@@ -149,10 +149,7 @@ namespace gs
 #if OV
         return lhs.company_name > rhs.company_name;
 #else
-        std::string_view l_item = {lhs.company_name.Data(), lhs.company_name.Size()};
-        std::string_view r_item = {rhs.company_name.Data(), rhs.company_name.Size()};
-        return l_item > r_item;
-
+        return lhs.company_name > rhs.company_name;
 #endif
       }
     };
@@ -181,8 +178,7 @@ namespace gs
         if (place_name_col_.get_view(i) == countryname)
 #else
         auto place_name_item = place_name_col_.get(i);
-        std::string_view place_name = {place_name_item.Data(), place_name_item.Size()};
-        if (place_name == countryname)
+        if (place_name_item == countryname)
 #endif
         {
           country_id = i;
@@ -226,7 +222,7 @@ namespace gs
         for (; person_ie.is_valid(); person_ie.next())
         {
           auto data_item = person_ie.get_data();
-          auto wf = gbp::Decode<int>(data_item);
+          auto wf = gbp::BufferObject::Ref<int>(data_item);
           if (wf < workfromyear)
           {
             auto u = person_ie.get_neighbor();
@@ -253,13 +249,9 @@ namespace gs
                       (other_person_id == top.person_id &&
                        name > top.company_name))
 #else
-                  std::string_view company_name_tmp = {top.company_name.Data(),
-                                                       top.company_name.Size()};
-                  std::string_view name_tmp = {name.Data(),
-                                               name.Size()};
                   if ((other_person_id < top.person_id) ||
                       (other_person_id == top.person_id &&
-                       name_tmp > company_name_tmp))
+                       name > top.company_name))
 #endif
                   {
                     pq.pop();
@@ -289,13 +281,15 @@ namespace gs
         output.put_string_view(firstname);
         const auto &lastname = person_lastName_col_.get_view(p.person_vid);
         output.put_string_view(lastname);
+        output.put_string_view(p.company_name);
 #else
         auto firstname = person_firstName_col_.get(p.person_vid);
-        output.put_string_view({firstname.Data(), firstname.Size()});
+        output.put_buffer_object(firstname);
         auto lastname = person_lastName_col_.get(p.person_vid);
-        output.put_string_view({lastname.Data(), lastname.Size()});
+        output.put_buffer_object(lastname);
+        output.put_buffer_object(p.company_name);
+
 #endif
-        output.put_string_view({p.company_name.Data(), p.company_name.Size()});
         output.put_int(p.workfrom);
       }
       return true;

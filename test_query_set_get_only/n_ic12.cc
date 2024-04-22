@@ -118,9 +118,12 @@ namespace gs
       vid_t tagClass_id = tagClass_num_;
       for (vid_t i = 0; i < tagClass_num_; ++i)
       {
-        auto item = tagClass_name_col_.get(i);
-        std::string_view tagClass_name = {item.Data(), item.Size()};
+#if OV
+        if (tagClass_name_col_.get_view(i) == tagclassname)
+#else
+        auto tagClass_name = tagClass_name_col_.get(i);
         if (tagClass_name == tagclassname)
+#endif
         {
           tagClass_id = i;
           break;
@@ -187,11 +190,11 @@ namespace gs
           if (comment_replyOf_post_out.exist(comment_ie.get_neighbor()))
           {
             auto e2 = comment_replyOf_post_out.get_edge(comment_ie.get_neighbor());
-            auto tag_oe = post_hasTag_tag_out.get_edges(gbp::Decode<gs::MutableNbr<grape::EmptyType>>(e2).neighbor);
+            auto tag_oe = post_hasTag_tag_out.get_edges(gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor);
             for (; tag_oe.is_valid(); tag_oe.next())
             {
               auto item = tag_hasType_tagClass_out.get_edge(tag_oe.get_neighbor());
-              auto tc = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              auto tc = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
               if (sub_tagClass_[tc])
               {
                 ++count;
@@ -293,12 +296,12 @@ namespace gs
           if (comment_replyOf_post_out.exist(comment_ie.get_neighbor()))
           {
             auto e2 = comment_replyOf_post_out.get_edge(comment_ie.get_neighbor());
-            auto tag_oe = post_hasTag_tag_out.get_edges(gbp::Decode<gs::MutableNbr<grape::EmptyType>>(e2).neighbor);
+            auto tag_oe = post_hasTag_tag_out.get_edges(gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor);
             for (; tag_oe.is_valid(); tag_oe.next())
             {
               assert(tag_hasType_tagClass_out.exist(tag_oe.get_neighbor()));
               auto item = tag_hasType_tagClass_out.get_edge(tag_oe.get_neighbor());
-              auto tc = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              auto tc = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
               if (sub_tagClass_[tc])
               {
                 ++count;
@@ -351,9 +354,9 @@ namespace gs
         output.put_string_view(person_lastName_col_.get_view(v.person_vid));
 #else
         auto item = person_firstName_col_.get(v.person_vid);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
         item = person_lastName_col_.get(v.person_vid);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
 
 #endif
         tmp.clear();
@@ -388,13 +391,13 @@ namespace gs
           {
             auto e2 = comment_replyOf_post_out.get_edge(comment_ie.get_neighbor());
             auto tag_e = txn.GetOutgoingEdges<grape::EmptyType>(
-                post_label_id_, gbp::Decode<gs::MutableNbr<grape::EmptyType>>(e2).neighbor, tag_label_id_, hasTag_label_id_);
+                post_label_id_, gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor, tag_label_id_, hasTag_label_id_);
             for (; tag_e.is_valid(); tag_e.next())
             {
               auto tag = tag_e.get_neighbor();
               assert(tag_hasType_tagClass_out.exist(tag));
               auto item = tag_hasType_tagClass_out.get_edge(tag);
-              auto tc = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              auto tc = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
               if (sub_tagClass_[tc])
               {
                 tmp.insert(tag);
@@ -410,7 +413,8 @@ namespace gs
           output.put_string_view(tag_name_col_.get_view(tag));
 #else
           auto item = tag_name_col_.get(tag);
-          output.put_string_view({item.Data(), item.Size()});
+          output.put_buffer_object(item);
+
 #endif
         }
         output.put_int(v.reply_count);

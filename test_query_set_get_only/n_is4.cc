@@ -57,20 +57,20 @@ namespace gs
       if (txn.GetVertexIndex(post_label_id_, id, lid))
       {
         auto item = post_creationDate_col_.get(lid);
-        output.put_long(gbp::Decode<gs::Date>(item).milli_second);
+        output.put_long(gbp::BufferObject::Ref<gs::Date>(item).milli_second);
 
         item = post_length_col_.get(lid);
-        auto content = gbp::Decode<int>(item) == 0 ? post_imageFile_col_.get(lid) : post_content_col_.get(lid);
-        output.put_string_view({content.Data(), content.Size()});
+        auto content = gbp::BufferObject::Ref<int>(item) == 0 ? post_imageFile_col_.get(lid) : post_content_col_.get(lid);
+        output.put_buffer_object(content);
         return true;
       }
       else if (txn.GetVertexIndex(comment_label_id_, id, lid))
       {
         auto item = comment_creationDate_col_.get(lid);
-        output.put_long(gbp::Decode<gs::Date>(item).milli_second);
+        output.put_long(gbp::BufferObject::Ref<gs::Date>(item).milli_second);
 
         const auto &content = comment_content_col_.get(lid);
-        output.put_string_view({content.Data(), content.Size()});
+        output.put_buffer_object(content);
         return true;
       }
 #endif

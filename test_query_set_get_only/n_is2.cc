@@ -6,6 +6,8 @@
 #include "flex/utils/property/types.h"
 // #include "utils.h"
 
+// #define SR_DEBUG
+
 namespace gs
 {
 
@@ -86,6 +88,7 @@ namespace gs
                           message_info_comparer>
           pq(comparer);
 #if OV
+
       const auto &post_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, post_label_id_, hasCreator_label_id_);
       int64_t current_creationdate = 0;
@@ -121,8 +124,10 @@ namespace gs
           }
         }
       }
+
       const auto &comment_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, comment_label_id_, hasCreator_label_id_);
+
       for (auto &e : comment_ie)
       {
         if (pq.size() < 10)
@@ -155,6 +160,7 @@ namespace gs
           }
         }
       }
+
       std::vector<message_info> vec;
       vec.reserve(pq.size());
       while (!pq.empty())
@@ -172,7 +178,6 @@ namespace gs
       auto post_hasCreator_person_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
               post_label_id_, person_label_id_, hasCreator_label_id_);
-
       for (size_t i = vec.size(); i > 0; i--)
       {
         const auto &v = vec[i - 1];
@@ -222,27 +227,19 @@ namespace gs
       auto post_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, post_label_id_, hasCreator_label_id_);
       int64_t current_creationdate = 0;
-      // for (auto &e : post_ie)
       for (; post_ie.is_valid(); post_ie.next())
       {
+        auto item = post_creationDate_col_.get(post_ie.get_neighbor());
+        auto creationdate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
+
         if (pq.size() < 10)
         {
-          auto item = post_creationDate_col_.get(post_ie.get_neighbor());
-          auto creationdate = gbp::Decode<gs::Date>(item).milli_second;
-
-          // auto creationdate =
-          //     post_creationDate_col_.get_view(e.neighbor).milli_second;
           pq.emplace(true, post_ie.get_neighbor(), creationdate,
                      txn.GetVertexId(post_label_id_, post_ie.get_neighbor()));
           current_creationdate = pq.top().creationdate;
         }
         else
         {
-          // auto creationdate =
-          //     post_creationDate_col_.get_view(e.neighbor).milli_second;
-          auto item = post_creationDate_col_.get(post_ie.get_neighbor());
-          auto creationdate = gbp::Decode<gs::Date>(item).milli_second;
-
           if (creationdate > current_creationdate)
           {
             pq.pop();
@@ -252,7 +249,6 @@ namespace gs
           }
           else if (creationdate == current_creationdate)
           {
-            // auto messageid = txn.GetVertexId(post_label_id_, e.neighbor);
             auto messageid = txn.GetVertexId(post_label_id_, post_ie.get_neighbor());
             if (messageid > pq.top().messageid)
             {
@@ -264,17 +260,14 @@ namespace gs
       }
       auto comment_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, comment_label_id_, hasCreator_label_id_);
-      // for (auto &e : comment_ie)
-      for (; comment_ie.is_valid(); comment_ie.next())
 
+      for (; comment_ie.is_valid(); comment_ie.next())
       {
         if (pq.size() < 10)
         {
           auto item = comment_creationDate_col_.get(comment_ie.get_neighbor());
-          auto creationdate = gbp::Decode<gs::Date>(item).milli_second;
+          auto creationdate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
 
-          // auto creationdate =
-          //     comment_creationDate_col_.get_view(e.neighbor).milli_second;
           pq.emplace(false, comment_ie.get_neighbor(), creationdate,
                      txn.GetVertexId(comment_label_id_, comment_ie.get_neighbor()));
           current_creationdate = pq.top().creationdate;
@@ -282,10 +275,8 @@ namespace gs
         else
         {
           auto item = comment_creationDate_col_.get(comment_ie.get_neighbor());
-          auto creationdate = gbp::Decode<gs::Date>(item).milli_second;
+          auto creationdate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
 
-          // auto creationdate =
-          //     comment_creationDate_col_.get_view(e.neighbor).milli_second;
           if (creationdate > current_creationdate)
           {
             pq.pop();
@@ -330,57 +321,54 @@ namespace gs
         if (v.is_post)
         {
           auto item = post_length_col_.get(v.v);
-          auto content = gbp::Decode<int>(item) == 0 ? post_imageFile_col_.get(v.v) : post_content_col_.get(v.v);
-          // const auto &content = post_length_col_.get_view(v.v) == 0
-          //                                                                  ? post_imageFile_col_.get_view(v.v)
-          //                                                                  : post_content_col_.get_view(v.v);
-          output.put_string_view({content.Data(), content.Size()});
+          auto content = gbp::BufferObject::Ref<int>(item) == 0 ? post_imageFile_col_.get(v.v) : post_content_col_.get(v.v);
+
+          output.put_buffer_object(content);
           output.put_long(v.messageid);
           output.put_long(req);
-          // const auto &firstname = person_firstName_col_.get_view(root);
           auto firstname = person_firstName_col_.get(root);
-          output.put_string_view({firstname.Data(), firstname.Size()});
-          // const auto &lastname = person_lastName_col_.get_view(root);
+          output.put_buffer_object(firstname);
+
           auto lastname = person_lastName_col_.get(root);
-          output.put_string_view({lastname.Data(), lastname.Size()});
+          output.put_buffer_object(lastname);
         }
         else
         {
-          // const auto &content = comment_content_col_.get_view(v.v);
           auto content = comment_content_col_.get(v.v);
-          output.put_string_view({content.Data(), content.Size()});
+          output.put_buffer_object(content);
+
           vid_t u = v.v;
           while (true)
           {
             if (comment_replyOf_post_out.exist(u))
             {
-              // auto post_id = comment_replyOf_post_out.get_edge(u).neighbor;
               auto post_id = comment_replyOf_post_out.get_edge(u);
+              output.put_long(txn.GetVertexId(post_label_id_, gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor));
+              auto item = post_hasCreator_person_out.get_edge(gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor);
 
-              output.put_long(txn.GetVertexId(post_label_id_, gbp::Decode<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor));
-              auto item = post_hasCreator_person_out.get_edge(gbp::Decode<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor);
-
-              // u = post_hasCreator_person_out.get_edge(post_id).neighbor;
-              u = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              u = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
               output.put_long(txn.GetVertexId(person_label_id_, u));
-              // const auto &firstname = person_firstName_col_.get_view(u);
               auto firstname = person_firstName_col_.get(u);
 
-              output.put_string_view({firstname.Data(), firstname.Size()});
+              output.put_buffer_object(firstname);
               auto lastname = person_lastName_col_.get(u);
-              output.put_string_view({lastname.Data(), lastname.Size()});
+              output.put_buffer_object(lastname);
               break;
             }
             else
             {
               assert(comment_replyOf_comment_out.exist(u));
               auto item = comment_replyOf_comment_out.get_edge(u);
-              u = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
-              // u = comment_replyOf_comment_out.get_edge(u).neighbor;
+              u = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
             }
           }
         }
       }
+#ifdef SR_DEBUG
+      ts = gbp::GetSystemTime() - ts;
+      LOG(INFO) << "p7 = " << ts;
+      ts = gbp::GetSystemTime();
+#endif
 #endif
       return true;
     }

@@ -122,8 +122,8 @@ namespace gs
           {
             friends_set_[u] = true;
             auto item = person_birthday_col_.get(u);
-            auto t = gbp::Decode<Date>(item).milli_second / 1000;
-            delete &item;
+            auto t = gbp::BufferObject::Ref<Date>(item).milli_second / 1000;
+            item.free();
             auto tm = gmtime((time_t *)(&t));
             if ((tm->tm_mon + 1 == mon && tm->tm_mday >= 21) ||
                 ((mon <= 11 && tm->tm_mon == mon && tm->tm_mday < 22) ||
@@ -142,8 +142,8 @@ namespace gs
           {
             friends_set_[u] = true;
             auto item = person_birthday_col_.get(u);
-            auto t = gbp::Decode<Date>(item).milli_second / 1000;
-            delete &item;
+            auto t = gbp::BufferObject::Ref<Date>(item).milli_second / 1000;
+            item.free();
             auto tm = gmtime((time_t *)(&t));
             if ((tm->tm_mon + 1 == mon && tm->tm_mday >= 21) ||
                 ((mon <= 11 && tm->tm_mon == mon && tm->tm_mday < 22) ||
@@ -315,18 +315,21 @@ namespace gs
         output.put_string_view(place_name_col_.get_view(person_place));
 #else
         auto item = person_firstName_col_.get(v.person_vid);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
         item = person_lastName_col_.get(v.person_vid);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
+
         output.put_int(v.score);
         item = person_gender_col_.get(v.person_vid);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
+
         assert(person_isLocatedIn_place_out.exist(v.person_vid));
         item = person_isLocatedIn_place_out.get_edge(v.person_vid);
         auto person_place =
-            gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+            gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         item = place_name_col_.get(person_place);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
+
 #endif
       }
       return true;

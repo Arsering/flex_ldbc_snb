@@ -57,9 +57,7 @@ namespace gs
 #if OV
         return lhs.tag_name < rhs.tag_name;
 #else
-        std::string_view l_item = {lhs.tag_name.Data(), lhs.tag_name.Size()};
-        std::string_view r_item = {rhs.tag_name.Data(), rhs.tag_name.Size()};
-        return l_item < r_item;
+        return lhs.tag_name < rhs.tag_name;
 
 #endif
       }
@@ -85,8 +83,7 @@ namespace gs
         if (tag_name_col_.get_view(i) == tagname)
 #else
         auto tag_name_item = tag_name_col_.get(i);
-        std::string_view tag_name = {tag_name_item.Data(), tag_name_item.Size()};
-        if (tag_name == tagname)
+        if (tag_name_item == tagname)
 #endif
         {
           tag_id = i;
@@ -132,7 +129,7 @@ namespace gs
         vid_t post_id = posts_with_tag.get_neighbor();
         assert(post_hasCreator_person_out.exist(post_id));
         auto item = post_hasCreator_person_out.get_edge(post_id);
-        auto creator = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        auto creator = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         if (friends_[creator])
         {
           auto oe = post_hasTag_tag_out.get_edges(post_id);
@@ -185,13 +182,15 @@ namespace gs
           if (tag_name < top.tag_name)
 #else
           auto tag_name_item = tag_name_col_.get(other_tag_id);
-          std::string_view tag_name = {tag_name_item.Data(), tag_name_item.Size()};
-          std::string_view top_name = {top.tag_name.Data(), top.tag_name.Size()};
-          if (tag_name < top_name)
+          if (tag_name_item < top.tag_name)
 #endif
           {
             que.pop();
+#if OV
+            que.emplace(cur_count, tag_name);
+#else
             que.emplace(cur_count, tag_name_item);
+#endif
           }
         }
         ++other_tag_id;
@@ -205,7 +204,11 @@ namespace gs
       }
       for (size_t i = vec.size(); i > 0; i--)
       {
-        output.put_string_view({vec[i - 1].tag_name.Data(), vec[i - 1].tag_name.Size()});
+#if OV
+        output.put_string_view(vec[i - 1].tag_name);
+#else
+        output.put_buffer_object(vec[i - 1].tag_name);
+#endif
         output.put_int(vec[i - 1].count);
       }
       return true;

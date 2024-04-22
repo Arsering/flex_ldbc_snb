@@ -5,7 +5,7 @@
 #include "flex/engines/graph_db/database/graph_db_session.h"
 #include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
 #include "flex/utils/property/types.h"
-#include "utils.h"
+// #include "utils.h"
 
 namespace gs
 {
@@ -68,9 +68,7 @@ namespace gs
           : distance(distance_), lastName(lastName_), id(id_), vid(vid_) {}
 
       uint8_t distance;
-
       gbp::BufferObject lastName;
-
       oid_t id;
       vid_t vid;
 #endif
@@ -89,16 +87,26 @@ namespace gs
         {
           return false;
         }
-        std::string_view l_item = {lhs.lastName.Data(), lhs.lastName.Size()};
-        std::string_view r_item = {rhs.lastName.Data(), rhs.lastName.Size()};
-        if (l_item < r_item)
+#if OV
+        if (lhs.lastName < rhs.lastName)
         {
           return true;
         }
-        if (l_item > r_item)
+        if (lhs.lastName > rhs.lastName)
         {
           return false;
         }
+#else
+        if (lhs.lastName < rhs.lastName)
+        {
+          return true;
+        }
+        if (lhs.lastName > rhs.lastName)
+        {
+          return false;
+        }
+#endif
+
         return lhs.id < rhs.id;
       }
     };
@@ -152,8 +160,7 @@ namespace gs
           if (person_firstName_col_.get_view(v) == firstname)
 #else
           auto person_firstName_item = person_firstName_col_.get(v);
-          std::string_view person_firstName = {person_firstName_item.Data(), person_firstName_item.Size()};
-          if (person_firstName == firstname)
+          if (person_firstName_item == firstname)
 #endif
           {
             if (pq.size() < 20)
@@ -187,9 +194,8 @@ namespace gs
                 if (lastName < top.lastName)
 #else
                 auto lastName_item = person_lastName_col_.get(v);
-                std::string_view lastName = {lastName_item.Data(), lastName_item.Size()};
-                std::string_view top_name = {top.lastName.Data(), top.lastName.Size()};
-                if (lastName < top_name)
+
+                if (lastName_item < top.lastName)
 #endif
                 {
                   pq.pop();
@@ -204,7 +210,7 @@ namespace gs
 #if OV
                 else if (lastName == top.lastName)
 #else
-                else if (lastName == top_name)
+                else if (lastName_item == top.lastName)
 
 #endif
                 {
@@ -251,8 +257,7 @@ namespace gs
             }
 #else
           auto person_firstName_item = person_firstName_col_.get(v);
-          std::string_view person_firstName = {person_firstName_item.Data(), person_firstName_item.Size()};
-          if (person_firstName == firstname)
+          if (person_firstName_item == firstname)
           {
             if (pq.size() < 20)
             {
@@ -296,15 +301,13 @@ namespace gs
                 }
 #else
                 auto lastName_item = person_lastName_col_.get(v);
-                std::string_view lastName = {lastName_item.Data(), lastName_item.Size()};
-                std::string_view top_name = {top.lastName.Data(), top.lastName.Size()};
-                if (lastName < top_name)
+                if (lastName_item < top.lastName)
                 {
                   pq.pop();
                   pq.emplace(distance, lastName_item,
                              txn.GetVertexId(person_label_id_, v), v);
                 }
-                else if (lastName == top_name)
+                else if (lastName_item == top.lastName)
                 {
                   oid_t id = txn.GetVertexId(person_label_id_, v);
                   if (id < top.id)
@@ -370,17 +373,18 @@ namespace gs
         output.put_string_view(person_browserUsed_col_.get_view(v));
         output.put_string_view(person_locationIp_col_.get_view(v));
 #else
-        output.put_string_view({info.lastName.Data(), info.lastName.Size()});
+
+        output.put_buffer_object(info.lastName);
         auto item = person_birthday_col_.get(v);
-        output.put_long(gbp::Decode<gs::Date>(item).milli_second);
+        output.put_long(gbp::BufferObject::Ref<gs::Date>(item).milli_second);
         item = person_creationDate_col_.get(v);
-        output.put_long(gbp::Decode<gs::Date>(item).milli_second);
+        output.put_long(gbp::BufferObject::Ref<gs::Date>(item).milli_second);
         item = person_gender_col_.get(v);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
         item = person_browserUsed_col_.get(v);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
         item = person_locationIp_col_.get(v);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
 #endif
         assert(person_isLocatedIn_place_out.exist(v));
 #if OV
@@ -390,13 +394,13 @@ namespace gs
         output.put_string_view(person_language_col_.get_view(v));
 #else
         item = person_isLocatedIn_place_out.get_edge(v);
-        auto person_place = gbp::Decode<MutableNbr<grape::EmptyType>>(item).neighbor;
+        auto person_place = gbp::BufferObject::Ref<MutableNbr<grape::EmptyType>>(item).neighbor;
         item = place_name_col_.get(person_place);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
         item = person_email_col_.get(v);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
         item = person_language_col_.get(v);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
 #endif
         int university_num = 0;
         size_t un_offset = output.skip_int();
@@ -417,15 +421,15 @@ namespace gs
         for (; universities.is_valid(); universities.next())
         {
           auto item = organisation_name_col_.get(universities.get_neighbor());
-          output.put_string_view({item.Data(), item.Size()});
+          output.put_buffer_object(item);
           item = universities.get_data();
-          output.put_int(gbp::Decode<int>(item));
+          output.put_int(gbp::BufferObject::Ref<int>(item));
           assert(organisation_isLocatedIn_place_out.exist(universities.get_neighbor()));
           item = organisation_isLocatedIn_place_out.get_edge(universities.get_neighbor());
           auto univ_place =
-              gbp::Decode<MutableNbr<grape::EmptyType>>(item).neighbor;
+              gbp::BufferObject::Ref<MutableNbr<grape::EmptyType>>(item).neighbor;
           item = place_name_col_.get(univ_place);
-          output.put_string_view({item.Data(), item.Size()});
+          output.put_buffer_object(item);
           university_num++;
         }
 #endif
@@ -449,15 +453,15 @@ namespace gs
         for (; companies.is_valid(); companies.next())
         {
           auto item = organisation_name_col_.get(companies.get_neighbor());
-          output.put_string_view({item.Data(), item.Size()});
+          output.put_buffer_object(item);
           item = companies.get_data();
-          output.put_int(gbp::Decode<int>(item));
+          output.put_int(gbp::BufferObject::Ref<int>(item));
           assert(organisation_isLocatedIn_place_out.exist(companies.get_neighbor()));
           item = organisation_isLocatedIn_place_out.get_edge(companies.get_neighbor());
           auto company_place =
-              gbp::Decode<MutableNbr<grape::EmptyType>>(item).neighbor;
+              gbp::BufferObject::Ref<MutableNbr<grape::EmptyType>>(item).neighbor;
           item = place_name_col_.get(company_place);
-          output.put_string_view({item.Data(), item.Size()});
+          output.put_buffer_object(item);
           company_num++;
         }
 #endif

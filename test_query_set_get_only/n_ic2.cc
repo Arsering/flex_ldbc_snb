@@ -119,8 +119,7 @@ namespace gs
 #else
           auto pid = posts.get_neighbor();
           auto item = post_creationDate_col_.get(pid);
-          auto creationDate = gbp::Decode<gs::Date>(item).milli_second;
-          delete &item;
+          auto creationDate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
 #endif
           if (creationDate < maxdate)
           {
@@ -161,8 +160,7 @@ namespace gs
         {
           auto cid = comments.get_neighbor();
           auto item = comment_creationDate_col_.get(cid);
-          auto creationDate = gbp::Decode<gs::Date>(item).milli_second;
-          delete &item;
+          auto creationDate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
 #endif
           if (creationDate < maxdate)
           {
@@ -216,8 +214,8 @@ namespace gs
         {
           auto pid = posts.get_neighbor();
           auto item = post_creationDate_col_.get(pid);
-          auto creationDate = gbp::Decode<gs::Date>(item).milli_second;
-          delete &item;
+          auto creationDate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
+          item.free();
 #endif
           if (creationDate < maxdate)
           {
@@ -258,8 +256,8 @@ namespace gs
         {
           auto cid = comments.get_neighbor();
           auto item = comment_creationDate_col_.get(cid);
-          auto creationDate = gbp::Decode<gs::Date>(item).milli_second;
-          delete &item;
+          auto creationDate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
+          item.free();
 #endif
           if (creationDate < maxdate)
           {
@@ -320,25 +318,23 @@ namespace gs
           output.put_string_view(content);
         }
 #else
-        auto firstname = person_firstName_col_.get(v.person_vid);
-        output.put_string_view({firstname.Data(), firstname.Size()});
-        delete &firstname;
-        auto lastname = person_lastName_col_.get(v.person_vid);
-        output.put_string_view({lastname.Data(), lastname.Size()});
-        delete &lastname;
+        auto item = person_firstName_col_.get(v.person_vid);
+        output.put_buffer_object(item);
+        item = person_lastName_col_.get(v.person_vid);
+        output.put_buffer_object(item);
+        item.free();
 
         output.put_long(v.message_id);
-
         if (!v.is_post)
         {
           auto content = comment_content_col_.get(v.message_vid);
-          output.put_string_view({content.Data(), content.Size()});
+          output.put_buffer_object(content);
         }
         else
         {
           auto item = post_length_col_.get(v.message_vid);
-          auto content = gbp::Decode<int>(item) == 0 ? post_imageFile_col_.get(v.message_vid) : post_content_col_.get(v.message_vid);
-          output.put_string_view({content.Data(), content.Size()});
+          auto content = gbp::BufferObject::Ref<int>(item) == 0 ? post_imageFile_col_.get(v.message_vid) : post_content_col_.get(v.message_vid);
+          output.put_buffer_object(content);
         }
 #endif
         output.put_long(v.creationdate);

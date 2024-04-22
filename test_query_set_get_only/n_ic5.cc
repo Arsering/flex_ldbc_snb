@@ -98,7 +98,7 @@ namespace gs
             for (; forum_person_ie.is_valid(); forum_person_ie.next())
             {
               auto item = forum_person_ie.get_data();
-              if (mindate < gbp::Decode<Date>(item).milli_second)
+              if (mindate < gbp::BufferObject::Ref<Date>(item).milli_second)
               {
                 auto forum = forum_person_ie.get_neighbor();
 #endif
@@ -127,9 +127,10 @@ namespace gs
             for (; post_person_ie.is_valid(); post_person_ie.next())
             {
               auto p = post_person_ie.get_neighbor();
+
               assert(forum_containerOf_post_in.exist(p));
               auto item = forum_containerOf_post_in.get_edge(p);
-              auto f = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              auto f = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
               if (person_forum_set_[f])
               {
@@ -190,7 +191,7 @@ namespace gs
         output.put_string_view(forum_title_col_.get_view(cur.forum_lid));
 #else
         auto forum_title = forum_title_col_.get(cur.forum_lid);
-        output.put_string_view({forum_title.Data(), forum_title.Size()});
+        output.put_buffer_object(forum_title);
 #endif
         output.put_int(cur.post_count - 1);
       }

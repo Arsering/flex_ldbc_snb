@@ -48,7 +48,7 @@ namespace gs
 #else
 
         auto item = forum_containerOf_post_in.get_edge(v);
-        u = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        u = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
       }
       else if (txn.GetVertexIndex(comment_label_id_, req, v))
@@ -69,10 +69,10 @@ namespace gs
             u = forum_containerOf_post_in.get_edge(v).neighbor;
 #else
             auto item = comment_replyOf_post_out.get_edge(v);
-            v = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+            v = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
             assert(forum_containerOf_post_in.exist(v));
             item = forum_containerOf_post_in.get_edge(v);
-            u = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+            u = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
             break;
           }
@@ -83,7 +83,7 @@ namespace gs
             v = comment_replyOf_comment_out.get_edge(v).neighbor;
 #else
             auto item = comment_replyOf_comment_out.get_edge(v);
-            v = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+            v = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
           }
         }
@@ -109,16 +109,17 @@ namespace gs
       output.put_string_view(person_lastName_col_.get_view(p));
 #else
       auto item = forum_title_col_.get(u);
-      output.put_string_view({item.Data(), item.Size()});
+      output.put_buffer_object(item);
       assert(forum_hasModerator_person_out.exist(u));
       // auto p = forum_hasModerator_person_out.get_edge(u).neighbor;
       item = forum_hasModerator_person_out.get_edge(u);
-      auto p = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+      auto p = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
       output.put_long(txn.GetVertexId(person_label_id_, p));
       item = person_firstName_col_.get(p);
-      output.put_string_view({item.Data(), item.Size()});
+      output.put_buffer_object(item);
       item = person_lastName_col_.get(p);
-      output.put_string_view({item.Data(), item.Size()});
+      output.put_buffer_object(item);
+
 #endif
       return true;
     }

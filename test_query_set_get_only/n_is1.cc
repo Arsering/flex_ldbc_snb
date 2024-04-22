@@ -53,10 +53,6 @@ namespace gs
       const auto firstname = person_firstName_col_.get(root);
       const auto lastname = person_lastName_col_.get(root);
       const auto gender = person_gender_col_.get(root);
-      const auto locationIp = person_locationIp_col_.get(root);
-      auto creationdate = person_creationDate_col_.get(root);
-      auto birthday = person_birthday_col_.get(root);
-      auto browser_used = person_browserUsed_col_.get(root);
 #endif
       auto person_isLocatedIn_place_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
@@ -72,16 +68,23 @@ namespace gs
       assert(person_isLocatedIn_place_out.exist(root));
       auto person_place = person_isLocatedIn_place_out.get_edge(root).neighbor;
 #else
-      output.put_string_view({firstname.Data(), firstname.Size()});
-      output.put_string_view({lastname.Data(), lastname.Size()});
-      output.put_string_view({locationIp.Data(), locationIp.Size()});
-      output.put_string_view({gender.Data(), gender.Size()});
-      output.put_long(gbp::Decode<gs::Date>(creationdate).milli_second);
-      output.put_long(gbp::Decode<gs::Date>(birthday).milli_second);
-      output.put_string_view({browser_used.Data(), browser_used.Size()});
+      const auto locationIp = person_locationIp_col_.get(root);
+      auto creationdate = person_creationDate_col_.get(root);
+      auto birthday = person_birthday_col_.get(root);
+      auto browser_used = person_browserUsed_col_.get(root);
+
+      output.put_buffer_object(firstname);
+      output.put_buffer_object(lastname);
+      output.put_buffer_object(locationIp);
+      output.put_buffer_object(gender);
+
+      output.put_long(gbp::BufferObject::Ref<gs::Date>(creationdate).milli_second);
+      output.put_long(gbp::BufferObject::Ref<gs::Date>(birthday).milli_second);
+      output.put_buffer_object(browser_used);
+
       assert(person_isLocatedIn_place_out.exist(root));
       auto person_place_bo = person_isLocatedIn_place_out.get_edge(root);
-      auto person_place = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(person_place_bo).neighbor;
+      auto person_place = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(person_place_bo).neighbor;
 #endif
       output.put_long(txn.GetVertexId(place_label_id_, person_place));
 

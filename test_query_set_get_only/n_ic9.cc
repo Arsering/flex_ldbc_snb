@@ -115,7 +115,7 @@ namespace gs
                 auto u = edges.get_neighbor();
                 auto item = post_creationDate_col_.get(u);
                 auto creation_date =
-                    gbp::Decode<Date>(item).milli_second;
+                    gbp::BufferObject::Ref<Date>(item).milli_second;
 #endif
                 if (creation_date < maxdate)
                 {
@@ -161,7 +161,7 @@ namespace gs
                 auto u = edges.get_neighbor();
                 auto item = comment_creationDate_col_.get(u);
                 auto creation_date =
-                    gbp::Decode<Date>(item).milli_second;
+                    gbp::BufferObject::Ref<Date>(item).milli_second;
 #endif
                 if (creation_date < maxdate)
                 {
@@ -214,9 +214,11 @@ namespace gs
         output.put_string_view(lastname);
 #else
         auto firstname = person_firstName_col_.get(person_lid);
-        output.put_string_view({firstname.Data(), firstname.Size()});
+        output.put_buffer_object(firstname);
+
         auto lastname = person_lastName_col_.get(person_lid);
-        output.put_string_view({lastname.Data(), lastname.Size()});
+        output.put_buffer_object(lastname);
+
 #endif
         output.put_long(v.message_id);
 #if OV
@@ -237,15 +239,15 @@ namespace gs
         if (v.is_comment)
         {
           auto content = comment_content_col_.get(v.message_vid);
-          output.put_string_view({content.Data(), content.Size()});
+          output.put_buffer_object(content);
         }
         else
         {
           vid_t post_lid = v.message_vid;
           auto item = post_length_col_.get(post_lid);
-          auto post_content = gbp::Decode<int>(item) == 0 ? post_imageFile_col_.get(post_lid) : post_content_col_.get(post_lid);
+          auto post_content = gbp::BufferObject::Ref<int>(item) == 0 ? post_imageFile_col_.get(post_lid) : post_content_col_.get(post_lid);
 
-          output.put_string_view({post_content.Data(), post_content.Size()});
+          output.put_buffer_object(post_content);
         }
 #endif
         output.put_long(v.creation_date);

@@ -57,9 +57,7 @@ namespace gs
 #if OV
         return lhs.tag_name < rhs.tag_name;
 #else
-        std::string_view l_item = {lhs.tag_name.Data(), lhs.tag_name.Size()};
-        std::string_view r_item = {rhs.tag_name.Data(), rhs.tag_name.Size()};
-        return l_item < r_item;
+        return lhs.tag_name < rhs.tag_name;
 
 #endif
       }
@@ -129,7 +127,7 @@ namespace gs
         for (; ie.is_valid(); ie.next())
         {
           auto item = post_creationDate_col_.get(ie.get_neighbor());
-          auto creationDate = gbp::Decode<Date>(item).milli_second;
+          auto creationDate = gbp::BufferObject::Ref<Date>(item).milli_second;
           auto post_id = ie.get_neighbor();
           if (creationDate < end_date)
           {
@@ -198,9 +196,7 @@ namespace gs
 
 #else
             auto tag_name_item = tag_name_col_.get(tag_id);
-            std::string_view tag_name = {tag_name_item.Data(), tag_name_item.Size()};
-            std::string_view top_name = {top.tag_name.Data(), top.tag_name.Size()};
-            if (tag_name < top_name)
+            if (tag_name_item < top.tag_name)
 #endif
             {
               que.pop();
@@ -208,7 +204,6 @@ namespace gs
               que.emplace(count, tag_name);
 #else
               que.emplace(count, tag_name_item);
-
 #endif
             }
           }
@@ -228,7 +223,7 @@ namespace gs
 #if OV
         output.put_string_view(t.tag_name);
 #else
-        output.put_string_view({t.tag_name.Data(), t.tag_name.Size()});
+        output.put_buffer_object(t.tag_name);
 #endif
         output.put_int(t.count);
       }

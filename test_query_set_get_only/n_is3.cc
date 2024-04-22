@@ -85,7 +85,7 @@ namespace gs
       for (; oe.is_valid(); oe.next())
       {
         auto data = oe.get_data();
-        vec.emplace_back(oe.get_neighbor(), gbp::Decode<gs::Date>(data).milli_second,
+        vec.emplace_back(oe.get_neighbor(), gbp::BufferObject::Ref<gs::Date>(data).milli_second,
                          txn.GetVertexId(person_label_id_, oe.get_neighbor()));
       }
       auto ie = txn.GetIncomingEdges<Date>(
@@ -94,7 +94,7 @@ namespace gs
       for (; ie.is_valid(); ie.next())
       {
         auto data = ie.get_data();
-        vec.emplace_back(ie.get_neighbor(), gbp::Decode<gs::Date>(data).milli_second,
+        vec.emplace_back(ie.get_neighbor(), gbp::BufferObject::Ref<gs::Date>(data).milli_second,
                          txn.GetVertexId(person_label_id_, ie.get_neighbor()));
       }
 
@@ -112,9 +112,9 @@ namespace gs
         output.put_long(v.person_id);
         output.put_long(v.creationdate);
         auto firstname = person_firstName_col_.get(v.v);
-        output.put_string_view({firstname.Data(), firstname.Size()});
+        output.put_buffer_object(firstname);
         auto lastname = person_lastName_col_.get(v.v);
-        output.put_string_view({lastname.Data(), lastname.Size()});
+        output.put_buffer_object(lastname);
       }
 #endif
       return true;

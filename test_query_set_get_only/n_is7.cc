@@ -102,10 +102,11 @@ namespace gs
               comment_creationDate_col_.get_view(comment_v).milli_second;
 #else
         auto item = post_hasCreator_person_out.get_edge(v);
-        message_author_id = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        message_author_id = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
         auto ie = comment_replyOf_post_in.get_edges(v);
         // for (auto &e : ie)
+
         for (; ie.is_valid(); ie.next())
         {
           auto comment_v = ie.get_neighbor();
@@ -114,10 +115,10 @@ namespace gs
           // comment_hasCreator_person_out.get_edge(comment_v).neighbor;
 
           item = comment_hasCreator_person_out.get_edge(comment_v);
-          auto comment_creator = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto comment_creator = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
           item = comment_creationDate_col_.get(comment_v);
-          auto creationdate = gbp::Decode<gs::Date>(item).milli_second;
+          auto creationdate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
           comments.emplace_back(
               comment_v, comment_creator,
               txn.GetVertexId(person_label_id_, comment_creator), creationdate);
@@ -127,7 +128,7 @@ namespace gs
       {
         assert(comment_hasCreator_person_out.exist(v));
         auto item = comment_hasCreator_person_out.get_edge(v);
-        message_author_id = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        message_author_id = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
         auto ie = comment_replyOf_comment_in.get_edges(v);
         // for (auto &e : ie)
@@ -136,10 +137,10 @@ namespace gs
           auto comment_v = ie.get_neighbor();
           assert(comment_hasCreator_person_out.exist(comment_v));
           item = comment_hasCreator_person_out.get_edge(comment_v);
-          auto comment_creator = gbp::Decode<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto comment_creator = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
           item = comment_creationDate_col_.get(comment_v);
-          auto creationdate = gbp::Decode<gs::Date>(item).milli_second;
+          auto creationdate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
 #endif
           comments.emplace_back(
               comment_v, comment_creator,
@@ -167,6 +168,7 @@ namespace gs
       auto oe = txn.GetOutgoingEdges<Date>(
           person_label_id_, message_author_id, person_label_id_, knows_label_id_);
       // for (auto &e : oe)
+
       for (; oe.is_valid(); oe.next())
       {
         friends_[oe.get_neighbor()] = true;
@@ -174,6 +176,7 @@ namespace gs
       auto ie = txn.GetIncomingEdges<Date>(
           person_label_id_, message_author_id, person_label_id_, knows_label_id_);
       // for (auto &e : ie)
+
       for (; ie.is_valid(); ie.next())
       {
         friends_[ie.get_neighbor()] = true;
@@ -188,6 +191,7 @@ namespace gs
              }
              return a.personid < b.personid;
            });
+
       for (const auto &a : comments)
       {
         output.put_long(txn.GetVertexId(comment_label_id_, a.commentid));
@@ -199,16 +203,18 @@ namespace gs
         output.put_string_view(person_lastName_col_.get_view(a.pid));
 #else
         auto item = comment_content_col_.get(a.commentid);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
         output.put_long(a.personid);
         item = person_firstName_col_.get(a.pid);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
         item = person_lastName_col_.get(a.pid);
-        output.put_string_view({item.Data(), item.Size()});
+        output.put_buffer_object(item);
+
 #endif
         output.put_byte(friends_[a.pid] ? static_cast<uint8_t>(1)
                                         : static_cast<uint8_t>(0));
       }
+
       return true;
     }
 
