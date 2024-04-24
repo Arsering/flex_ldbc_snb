@@ -12,57 +12,57 @@ namespace gs
   class IC11 : public AppBase
   {
   public:
-    IC11(GraphDBSession &graph)
-        : person_label_id_(graph.schema().get_vertex_label_id("PERSON")),
-          place_label_id_(graph.schema().get_vertex_label_id("PLACE")),
-          isLocatedIn_label_id_(graph.schema().get_edge_label_id("ISLOCATEDIN")),
-          organisation_label_id_(
-              graph.schema().get_vertex_label_id("ORGANISATION")),
-          workAt_label_id_(graph.schema().get_edge_label_id("WORKAT")),
-          knows_label_id_(graph.schema().get_edge_label_id("KNOWS")),
-          person_firstName_col_(*(std::dynamic_pointer_cast<StringColumn>(
-              graph.get_vertex_property_column(person_label_id_, "firstName")))),
-          person_lastName_col_(*(std::dynamic_pointer_cast<StringColumn>(
-              graph.get_vertex_property_column(person_label_id_, "lastName")))),
-          organisation_name_col_(*(std::dynamic_pointer_cast<StringColumn>(
-              graph.get_vertex_property_column(organisation_label_id_, "name")))),
-          place_name_col_(*(std::dynamic_pointer_cast<StringColumn>(
-              graph.get_vertex_property_column(place_label_id_, "name")))),
-          place_num_(graph.graph().vertex_num(place_label_id_)),
-          graph_(graph) {}
+    IC11(GraphDBSession& graph)
+      : person_label_id_(graph.schema().get_vertex_label_id("PERSON")),
+      place_label_id_(graph.schema().get_vertex_label_id("PLACE")),
+      isLocatedIn_label_id_(graph.schema().get_edge_label_id("ISLOCATEDIN")),
+      organisation_label_id_(
+        graph.schema().get_vertex_label_id("ORGANISATION")),
+      workAt_label_id_(graph.schema().get_edge_label_id("WORKAT")),
+      knows_label_id_(graph.schema().get_edge_label_id("KNOWS")),
+      person_firstName_col_(*(std::dynamic_pointer_cast<StringColumn>(
+        graph.get_vertex_property_column(person_label_id_, "firstName")))),
+      person_lastName_col_(*(std::dynamic_pointer_cast<StringColumn>(
+        graph.get_vertex_property_column(person_label_id_, "lastName")))),
+      organisation_name_col_(*(std::dynamic_pointer_cast<StringColumn>(
+        graph.get_vertex_property_column(organisation_label_id_, "name")))),
+      place_name_col_(*(std::dynamic_pointer_cast<StringColumn>(
+        graph.get_vertex_property_column(place_label_id_, "name")))),
+      place_num_(graph.graph().vertex_num(place_label_id_)),
+      graph_(graph) {}
 
     ~IC11() {}
 
-    void mark_1d_2d_friends(const ReadTransaction &txn, vid_t root)
+    void mark_1d_2d_friends(const ReadTransaction& txn, vid_t root)
     {
       std::vector<vid_t> tmp;
 
       auto person_knows_person_out = txn.GetOutgoingGraphView<Date>(
-          person_label_id_, person_label_id_, knows_label_id_);
+        person_label_id_, person_label_id_, knows_label_id_);
       auto person_knows_person_in = txn.GetIncomingGraphView<Date>(
-          person_label_id_, person_label_id_, knows_label_id_);
+        person_label_id_, person_label_id_, knows_label_id_);
 #if OV
-      const auto &ie = person_knows_person_in.get_edges(root);
-      for (auto &e : ie)
+      const auto& ie = person_knows_person_in.get_edges(root);
+      for (auto& e : ie)
       {
         friends_[e.neighbor] = true;
         tmp.push_back(e.neighbor);
       }
-      const auto &oe = person_knows_person_out.get_edges(root);
-      for (auto &e : oe)
+      const auto& oe = person_knows_person_out.get_edges(root);
+      for (auto& e : oe)
       {
         friends_[e.neighbor] = true;
         tmp.push_back(e.neighbor);
       }
       for (auto v : tmp)
       {
-        const auto &ie2 = person_knows_person_in.get_edges(v);
-        for (auto &e : ie2)
+        const auto& ie2 = person_knows_person_in.get_edges(v);
+        for (auto& e : ie2)
         {
           friends_[e.neighbor] = true;
         }
-        const auto &oe2 = person_knows_person_out.get_edges(v);
-        for (auto &e : oe2)
+        const auto& oe2 = person_knows_person_out.get_edges(v);
+        for (auto& e : oe2)
         {
           friends_[e.neighbor] = true;
         }
@@ -101,11 +101,11 @@ namespace gs
     {
 #if OV
       person_info(vid_t person_vid_, int workfrom_, oid_t person_id_,
-                  const std::string_view &company_name_)
-          : person_vid(person_vid_),
-            workfrom(workfrom_),
-            person_id(person_id_),
-            company_name(company_name_) {}
+        const std::string_view& company_name_)
+        : person_vid(person_vid_),
+        workfrom(workfrom_),
+        person_id(person_id_),
+        company_name(company_name_) {}
 
       vid_t person_vid;
       int workfrom;
@@ -113,11 +113,11 @@ namespace gs
       std::string_view company_name;
 #else
       person_info(vid_t person_vid_, int workfrom_, oid_t person_id_,
-                  gbp::BufferObject company_name_)
-          : person_vid(person_vid_),
-            workfrom(workfrom_),
-            person_id(person_id_),
-            company_name(company_name_) {}
+        gbp::BufferObject company_name_)
+        : person_vid(person_vid_),
+        workfrom(workfrom_),
+        person_id(person_id_),
+        company_name(company_name_) {}
 
       vid_t person_vid;
       int workfrom;
@@ -128,7 +128,7 @@ namespace gs
 
     struct person_info_comparer
     {
-      bool operator()(const person_info &lhs, const person_info &rhs)
+      bool operator()(const person_info& lhs, const person_info& rhs)
       {
         if (lhs.workfrom < rhs.workfrom)
         {
@@ -154,7 +154,7 @@ namespace gs
       }
     };
 
-    bool Query(Decoder &input, Encoder &output) override
+    bool Query(Decoder& input, Encoder& output) override
     {
       auto txn = graph_.GetReadTransaction();
 
@@ -189,22 +189,22 @@ namespace gs
 
       person_info_comparer comparer;
       std::priority_queue<person_info, std::vector<person_info>,
-                          person_info_comparer>
-          pq(comparer);
+        person_info_comparer>
+        pq(comparer);
 
       auto person_workAt_organisation_in = txn.GetIncomingGraphView<int>(
-          organisation_label_id_, person_label_id_, workAt_label_id_);
+        organisation_label_id_, person_label_id_, workAt_label_id_);
 
 #if OV
-      const auto &ie = txn.GetIncomingEdges<grape::EmptyType>(
-          place_label_id_, country_id, organisation_label_id_,
-          isLocatedIn_label_id_);
-      for (auto &e : ie)
+      const auto& ie = txn.GetIncomingEdges<grape::EmptyType>(
+        place_label_id_, country_id, organisation_label_id_,
+        isLocatedIn_label_id_);
+      for (auto& e : ie)
       {
         auto company = e.neighbor;
-        const auto &person_ie = person_workAt_organisation_in.get_edges(company);
-        const auto &name = organisation_name_col_.get_view(company);
-        for (auto &e1 : person_ie)
+        const auto& person_ie = person_workAt_organisation_in.get_edges(company);
+        const auto& name = organisation_name_col_.get_view(company);
+        for (auto& e1 : person_ie)
         {
           auto wf = e1.data;
           if (wf < workfromyear)
@@ -212,15 +212,15 @@ namespace gs
             auto u = e1.neighbor;
 #else
       auto ie = txn.GetIncomingEdges<grape::EmptyType>(
-          place_label_id_, country_id, organisation_label_id_,
-          isLocatedIn_label_id_);
+        place_label_id_, country_id, organisation_label_id_,
+        isLocatedIn_label_id_);
       for (; ie.is_valid(); ie.next())
       {
         auto company = ie.get_neighbor();
         auto person_ie = person_workAt_organisation_in.get_edges(company);
-        auto name = organisation_name_col_.get(company);
         for (; person_ie.is_valid(); person_ie.next())
         {
+          auto name = organisation_name_col_.get(company);
           auto data_item = person_ie.get_data();
           auto wf = gbp::BufferObject::Ref<int>(data_item);
           if (wf < workfromyear)
@@ -235,7 +235,7 @@ namespace gs
               }
               else
               {
-                const auto &top = pq.top();
+                const auto& top = pq.top();
                 if (wf < top.workfrom)
                 {
                   pq.pop();
@@ -246,12 +246,12 @@ namespace gs
                   oid_t other_person_id = txn.GetVertexId(person_label_id_, u);
 #if OV
                   if ((other_person_id < top.person_id) ||
-                      (other_person_id == top.person_id &&
-                       name > top.company_name))
+                    (other_person_id == top.person_id &&
+                      name > top.company_name))
 #else
                   if ((other_person_id < top.person_id) ||
-                      (other_person_id == top.person_id &&
-                       name > top.company_name))
+                    (other_person_id == top.person_id &&
+                      name > top.company_name))
 #endif
                   {
                     pq.pop();
@@ -274,12 +274,12 @@ namespace gs
 
       for (auto i = tmp.size(); i > 0; i--)
       {
-        const auto &p = tmp[i - 1];
+        const auto& p = tmp[i - 1];
         output.put_long(p.person_id);
 #if OV
-        const auto &firstname = person_firstName_col_.get_view(p.person_vid);
+        const auto& firstname = person_firstName_col_.get_view(p.person_vid);
         output.put_string_view(firstname);
-        const auto &lastname = person_lastName_col_.get_view(p.person_vid);
+        const auto& lastname = person_lastName_col_.get_view(p.person_vid);
         output.put_string_view(lastname);
         output.put_string_view(p.company_name);
 #else
@@ -304,30 +304,30 @@ namespace gs
 
     label_t knows_label_id_;
 
-    const StringColumn &person_firstName_col_;
-    const StringColumn &person_lastName_col_;
-    const StringColumn &organisation_name_col_;
-    const StringColumn &place_name_col_;
+    const StringColumn& person_firstName_col_;
+    const StringColumn& person_lastName_col_;
+    const StringColumn& organisation_name_col_;
+    const StringColumn& place_name_col_;
 
     vid_t place_num_;
 
     std::vector<bool> friends_;
 
-    GraphDBSession &graph_;
+    GraphDBSession& graph_;
   };
 } // namespace gs
 
 extern "C"
 {
-  void *CreateApp(gs::GraphDBSession &db)
+  void* CreateApp(gs::GraphDBSession& db)
   {
-    gs::IC11 *app = new gs::IC11(db);
-    return static_cast<void *>(app);
+    gs::IC11* app = new gs::IC11(db);
+    return static_cast<void*>(app);
   }
 
-  void DeleteApp(void *app)
+  void DeleteApp(void* app)
   {
-    gs::IC11 *casted = static_cast<gs::IC11 *>(app);
+    gs::IC11* casted = static_cast<gs::IC11*>(app);
     delete casted;
   }
 }
