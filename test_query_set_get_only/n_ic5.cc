@@ -98,7 +98,7 @@ namespace gs
             for (; forum_person_ie.is_valid(); forum_person_ie.next())
             {
               auto item = forum_person_ie.get_data();
-              if (mindate < gbp::BufferObject::Ref<Date>(item).milli_second)
+              if (mindate < ((Date *)item)->milli_second)
               {
                 auto forum = forum_person_ie.get_neighbor();
 #endif

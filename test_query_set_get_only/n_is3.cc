@@ -85,7 +85,7 @@ namespace gs
       for (; oe.is_valid(); oe.next())
       {
         auto data = oe.get_data();
-        vec.emplace_back(oe.get_neighbor(), gbp::BufferObject::Ref<gs::Date>(data).milli_second,
+        vec.emplace_back(oe.get_neighbor(), ((gs::Date *)data)->milli_second,
                          txn.GetVertexId(person_label_id_, oe.get_neighbor()));
       }
       auto ie = txn.GetIncomingEdges<Date>(
@@ -94,7 +94,7 @@ namespace gs
       for (; ie.is_valid(); ie.next())
       {
         auto data = ie.get_data();
-        vec.emplace_back(ie.get_neighbor(), gbp::BufferObject::Ref<gs::Date>(data).milli_second,
+        vec.emplace_back(ie.get_neighbor(), ((gs::Date *)data)->milli_second,
                          txn.GetVertexId(person_label_id_, ie.get_neighbor()));
       }
 

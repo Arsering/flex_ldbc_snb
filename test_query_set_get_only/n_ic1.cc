@@ -411,8 +411,8 @@ namespace gs
         {
           auto item = organisation_name_col_.get(universities.get_neighbor());
           output.put_buffer_object(item);
-          item = universities.get_data();
-          output.put_int(gbp::BufferObject::Ref<int>(item));
+          auto item_t = universities.get_data();
+          output.put_int(*((int *)item_t));
           assert(organisation_isLocatedIn_place_out.exist(universities.get_neighbor()));
           item = organisation_isLocatedIn_place_out.get_edge(universities.get_neighbor());
           auto univ_place =
@@ -443,8 +443,8 @@ namespace gs
         {
           auto item = organisation_name_col_.get(companies.get_neighbor());
           output.put_buffer_object(item);
-          item = companies.get_data();
-          output.put_int(gbp::BufferObject::Ref<int>(item));
+          auto item_t = companies.get_data();
+          output.put_int(*((int *)item_t));
           assert(organisation_isLocatedIn_place_out.exist(companies.get_neighbor()));
           item = organisation_isLocatedIn_place_out.get_edge(companies.get_neighbor());
           auto company_place =

@@ -145,7 +145,7 @@ namespace gs
         for (; person_ie.is_valid(); person_ie.next())
         {
           auto item = person_ie.get_data();
-          vec.emplace_back(person_ie.get_neighbor(), pid, gbp::BufferObject::Ref<Date>(item).milli_second,
+          vec.emplace_back(person_ie.get_neighbor(), pid, ((Date *)item)->milli_second,
                            txn.GetVertexId(person_label_id_, person_ie.get_neighbor()),
                            message_id, true);
         }
@@ -180,7 +180,7 @@ namespace gs
         for (; person_ie.is_valid(); person_ie.next())
         {
           auto item = person_ie.get_data();
-          vec.emplace_back(person_ie.get_neighbor(), cid, gbp::BufferObject::Ref<Date>(item).milli_second,
+          vec.emplace_back(person_ie.get_neighbor(), cid, ((Date *)item)->milli_second,
                            txn.GetVertexId(person_label_id_, person_ie.get_neighbor()),
                            message_id, false);
         }
