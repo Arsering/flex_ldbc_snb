@@ -87,26 +87,15 @@ namespace gs
         {
           return false;
         }
-#if OV
-        if (lhs.lastName < rhs.lastName)
-        {
-          return true;
-        }
-        if (lhs.lastName > rhs.lastName)
-        {
-          return false;
-        }
-#else
-        if (lhs.lastName < rhs.lastName)
-        {
-          return true;
-        }
-        if (lhs.lastName > rhs.lastName)
-        {
-          return false;
-        }
-#endif
 
+        if (lhs.lastName < rhs.lastName)
+        {
+          return true;
+        }
+        if (lhs.lastName > rhs.lastName)
+        {
+          return false;
+        }
         return lhs.id < rhs.id;
       }
     };
