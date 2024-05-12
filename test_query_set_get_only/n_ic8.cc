@@ -70,6 +70,7 @@ namespace gs
       {
         return false;
       }
+
       comment_info_comparer comparer;
       std::priority_queue<comment_info, std::vector<comment_info>,
                           comment_info_comparer>
@@ -80,6 +81,7 @@ namespace gs
 #if OV
       const auto &post_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, post_label_id_, hasCreator_label_id_);
+
       for (auto &e : post_ie)
       {
         auto v = e.neighbor;
@@ -100,6 +102,7 @@ namespace gs
 #else
       auto post_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, post_label_id_, hasCreator_label_id_);
+
       for (; post_ie.is_valid(); post_ie.next())
       {
         auto v = post_ie.get_neighbor();
@@ -231,12 +234,10 @@ namespace gs
         output.put_buffer_object(item);
         item = person_lastName_col_.get(p);
         output.put_buffer_object(item);
-
         output.put_long(v.creationDate);
         output.put_long(v.comment_id);
         item = comment_content_col_.get(v.comment_vid);
         output.put_buffer_object(item);
-
 #endif
       }
       return true;

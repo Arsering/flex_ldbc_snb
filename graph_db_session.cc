@@ -90,7 +90,7 @@ namespace gs
     // if (type != 4)
     //   return result_buffer;
     static std::atomic<size_t> query_id{0};
-    gbp::get_counter_operation().fetch_add(1);
+    gbp::get_counter_query().fetch_add(1);
 
     Decoder decoder(str_data, str_len);
     Encoder encoder(result_buffer);

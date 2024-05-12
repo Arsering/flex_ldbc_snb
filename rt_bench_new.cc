@@ -34,13 +34,16 @@ namespace bpo = boost::program_options;
 using namespace std::chrono_literals;
 
 static std::string log_data_path = "";
-class Req {
- public:
-  static Req& get() {
+class Req
+{
+public:
+  static Req &get()
+  {
     static Req r;
     return r;
   }
-  void init(size_t warmup_num, size_t benchmark_num) {
+  void init(size_t warmup_num, size_t benchmark_num)
+  {
     warmup_num_ = warmup_num;
     num_of_reqs_ = warmup_num + benchmark_num;
     num_of_reqs_unique_ = reqs_.size();
@@ -52,7 +55,8 @@ class Req {
     // log_thread_ = std::thread([this]() { logger(); });
   }
 
-  void load(const std::string& file) {
+  void load(const std::string &file)
+  {
     LOG(INFO) << "load queries from " << file << "\n";
     std::ifstream fi(file, std::ios::in);
     const size_t size = 4096;
@@ -61,20 +65,25 @@ class Req {
     size_t index = 0;
     size_t log_count = 0;
 
-    while (true) {
+    while (true)
+    {
       fi.read(buffer.data(), size);
       auto len = fi.gcount();
       if (len == 0)
         break;
-      for (size_t i = 0; i < len; ++i) {
+      for (size_t i = 0; i < len; ++i)
+      {
         tmp[index++] = buffer[i];
-        if (index >= 4 && tmp[index - 1] == '#') {
+        if (index >= 4 && tmp[index - 1] == '#')
+        {
           if (tmp[index - 4] == 'e' && tmp[index - 3] == 'o' &&
-              tmp[index - 2] == 'r') {
+              tmp[index - 2] == 'r')
+          {
             if (log_count % 2 == 0)
               reqs_.emplace_back(
                   std::string(tmp.begin(), tmp.begin() + index - 4));
-            else {
+            else
+            {
               auto tmp_str = std::string(tmp.begin(), tmp.begin() + index - 4);
               req_ids_.emplace_back(std::stoull(tmp_str));
             }
@@ -90,9 +99,11 @@ class Req {
     num_of_reqs_ = reqs_.size();
   }
 
-  seastar::future<> do_query(server::executor_ref& ref) {
+  seastar::future<> do_query(server::executor_ref &ref)
+  {
     auto id = cur_.fetch_add(1);
-    if (id >= num_of_reqs_) {
+    if (id >= num_of_reqs_)
+    {
       return seastar::make_ready_future<>();
     }
 
@@ -103,23 +114,28 @@ class Req {
         .run_graph_db_query(
             server::query_param{reqs_[id % num_of_reqs_unique_]})
         .then_wrapped(
-            [&, id](seastar::future<server::query_result>&& fut) mutable {
+            [&, id](seastar::future<server::query_result> &&fut) mutable
+            {
               auto result = fut.get0();
               end_[id] = gbp::GetSystemTime();
             })
-        .then([&] { return do_query(ref); });
+        .then([&]
+              { return do_query(ref); });
   }
 
-  seastar::future<> simulate() {
+  seastar::future<> simulate()
+  {
     hiactor::scope_builder builder;
     builder.set_shard(hiactor::local_shard_id())
         .enter_sub_scope(hiactor::scope<server::executor_group>(0));
     return seastar::do_with(
         builder.build_ref<server::executor_ref>(0),
-        [&](server::executor_ref& ref) { return do_query(ref); });
+        [&](server::executor_ref &ref)
+        { return do_query(ref); });
   }
 
-  void output() {
+  void output()
+  {
     std::ofstream profiling_file(log_data_path + "/profiling.log",
                                  std::ios::out);
     profiling_file << "LOG Format: Query Type | latency (OV)" << std::endl;
@@ -127,8 +143,9 @@ class Req {
     std::vector<long long> vec(29, 0);
     std::vector<int> count(29, 0);
     std::vector<std::vector<long long>> ts(29);
-    for (size_t idx = 0; idx < num_of_reqs_; idx++) {
-      auto& s = reqs_[idx % num_of_reqs_unique_];
+    for (size_t idx = 0; idx < num_of_reqs_; idx++)
+    {
+      auto &s = reqs_[idx % num_of_reqs_unique_];
       size_t id = static_cast<size_t>(s.back()) - 1;
       // auto tmp = std::chrono::duration_cast<std::chrono::microseconds>(
       //                end_[idx] - start_[idx])
@@ -143,9 +160,11 @@ class Req {
     profiling_file.close();
     std::vector<std::string> queries = {"IS1", "IS2", "IS3", "IS4",
                                         "IS5", "IS6", "IS7"};
-    for (auto i = 0; i < vec.size(); ++i) {
+    for (auto i = 0; i < vec.size(); ++i)
+    {
       size_t sz = ts[i].size();
-      if (sz > 0) {
+      if (sz > 0)
+      {
         std::cout << queries[i] << "; mean: " << vec[i] * 1. / count[i]
                   << "; counts: " << count[i] << "; ";
 
@@ -162,13 +181,15 @@ class Req {
   }
   void LoggerStop() { logger_stop_ = true; }
 
- private:
+private:
   Req() : cur_(0), warmup_num_(0) {}
-  ~Req() {
+  ~Req()
+  {
     logger_stop_ = true;
     log_thread_.join();
   }
-  void logger() {
+  void logger()
+  {
     size_t operation_count_pre = 0;
     size_t operation_count_now = 0;
     size_t read_count_pre = 0;
@@ -178,9 +199,10 @@ class Req {
     size_t read_count_per_query_pre = 0;
     size_t read_count_per_query_now = 0;
 
-    while (true) {
+    while (true)
+    {
       sleep(1);
-      operation_count_now = gbp::get_counter_operation().load();
+      operation_count_now = gbp::get_counter_query().load();
       read_count_now = gbp::debug::get_counter_read().load();
       fetch_count_now = gbp::debug::get_counter_fetch().load();
       read_count_per_query_now = gbp::debug::get_counter_fetch_unique().load();
@@ -231,7 +253,8 @@ class Req {
   // std::vector<executor_ref> executor_refs_;
 };
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
   size_t pool_size = 1024LU * 1024LU * 8;
   bpo::options_description desc("Usage:");
   desc.add_options()("help", "Display help message")(
@@ -258,11 +281,13 @@ int main(int argc, char** argv) {
   bpo::store(bpo::command_line_parser(argc, argv).options(desc).run(), vm);
   bpo::notify(vm);
 
-  if (vm.count("help")) {
+  if (vm.count("help"))
+  {
     std::cout << desc << std::endl;
     return 0;
   }
-  if (vm.count("version")) {
+  if (vm.count("version"))
+  {
     std::cout << "GraphScope/Flex version " << FLEX_VERSION << std::endl;
     return 0;
   }
@@ -274,17 +299,20 @@ int main(int argc, char** argv) {
   std::string data_path = "";
   std::string bulk_load_config_path = "";
 
-  if (!vm.count("graph-config")) {
+  if (!vm.count("graph-config"))
+  {
     LOG(ERROR) << "graph-config is required";
     return -1;
   }
   graph_schema_path = vm["graph-config"].as<std::string>();
-  if (!vm.count("data-path")) {
+  if (!vm.count("data-path"))
+  {
     LOG(ERROR) << "data-path is required";
     return -1;
   }
   data_path = vm["data-path"].as<std::string>();
-  if (!vm.count("log-data-path")) {
+  if (!vm.count("log-data-path"))
+  {
     LOG(ERROR) << "log-data-path is required";
     return -1;
   }
@@ -300,7 +328,6 @@ int main(int argc, char** argv) {
   tzset();
 
   pool_size = vm["buffer-pool-size"].as<uint64_t>();
-  gbp::get_pool_size() = pool_size;
   LOG(INFO) << "pool_size = " << pool_size;
 #if OV
   gbp::get_mark_mmapwarmup().store(1);
@@ -318,7 +345,7 @@ int main(int argc, char** argv) {
   sleep(10);
 
   double t0 = -grape::GetCurrentTime();
-  auto& db = gs::GraphDB::get();
+  auto &db = gs::GraphDB::get();
 
   auto schema = gs::Schema::LoadFromYaml(graph_schema_path);
   LOG(INFO) << "Start loading graph";
@@ -346,19 +373,20 @@ int main(int argc, char** argv) {
 
   auto begin = std::chrono::system_clock::now();
   int ac = 1;
-  char* av[] = {(char*) "rt_bench"};
-  app.run(ac, av, [shard_num] {
-    return seastar::parallel_for_each(
-               boost::irange<unsigned>(0u, shard_num),
-               [](unsigned id) {
-                 return seastar::smp::submit_to(
-                     id, [id] { return Req::get().simulate(); });
-               })
-        .then([] {
+  char *av[] = {(char *)"rt_bench"};
+  app.run(ac, av, [shard_num]
+          { return seastar::parallel_for_each(
+                       boost::irange<unsigned>(0u, shard_num),
+                       [](unsigned id)
+                       {
+                         return seastar::smp::submit_to(
+                             id, [id]
+                             { return Req::get().simulate(); });
+                       })
+                .then([]
+                      {
           hiactor::actor_engine().exit();
-          fmt::print("Exit actor system.\n");
-        });
-  });
+          fmt::print("Exit actor system.\n"); }); });
   auto end = std::chrono::system_clock::now();
   std::cout << "cost time:"
             << std::chrono::duration_cast<std::chrono::milliseconds>(end -
