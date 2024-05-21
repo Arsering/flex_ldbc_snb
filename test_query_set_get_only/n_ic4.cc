@@ -35,10 +35,10 @@ namespace gs
       int count;
       std::string_view tag_name;
 #else
-      tag_info(int count_, gbp::BufferObject tag_name_)
+      tag_info(int count_, gbp::BufferBlock tag_name_)
           : count(count_), tag_name(tag_name_) {}
       int count;
-      gbp::BufferObject tag_name;
+      gbp::BufferBlock tag_name;
 #endif
     };
 
@@ -127,7 +127,7 @@ namespace gs
         for (; ie.is_valid(); ie.next())
         {
           auto item = post_creationDate_col_.get(ie.get_neighbor());
-          auto creationDate = gbp::BufferObject::Ref<Date>(item).milli_second;
+          auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
           auto post_id = ie.get_neighbor();
           if (creationDate < end_date)
           {

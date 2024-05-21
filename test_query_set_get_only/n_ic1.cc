@@ -63,12 +63,12 @@ namespace gs
       oid_t id;
       vid_t vid;
 #else
-      person_info(uint8_t distance_, gbp::BufferObject lastName_, oid_t id_,
+      person_info(uint8_t distance_, gbp::BufferBlock lastName_, oid_t id_,
                   vid_t vid_)
           : distance(distance_), lastName(lastName_), id(id_), vid(vid_) {}
 
       uint8_t distance;
-      gbp::BufferObject lastName;
+      gbp::BufferBlock lastName;
       oid_t id;
       vid_t vid;
 #endif
@@ -365,9 +365,9 @@ namespace gs
 
         output.put_buffer_object(info.lastName);
         auto item = person_birthday_col_.get(v);
-        output.put_long(gbp::BufferObject::Ref<gs::Date>(item).milli_second);
+        output.put_long(gbp::BufferBlock::Ref<gs::Date>(item).milli_second);
         item = person_creationDate_col_.get(v);
-        output.put_long(gbp::BufferObject::Ref<gs::Date>(item).milli_second);
+        output.put_long(gbp::BufferBlock::Ref<gs::Date>(item).milli_second);
         item = person_gender_col_.get(v);
         output.put_buffer_object(item);
         item = person_browserUsed_col_.get(v);
@@ -383,7 +383,7 @@ namespace gs
         output.put_string_view(person_language_col_.get_view(v));
 #else
         item = person_isLocatedIn_place_out.get_edge(v);
-        auto person_place = gbp::BufferObject::Ref<MutableNbr<grape::EmptyType>>(item).neighbor;
+        auto person_place = gbp::BufferBlock::Ref<MutableNbr<grape::EmptyType>>(item).neighbor;
         item = place_name_col_.get(person_place);
         output.put_buffer_object(item);
         item = person_email_col_.get(v);
@@ -416,7 +416,7 @@ namespace gs
           assert(organisation_isLocatedIn_place_out.exist(universities.get_neighbor()));
           item = organisation_isLocatedIn_place_out.get_edge(universities.get_neighbor());
           auto univ_place =
-              gbp::BufferObject::Ref<MutableNbr<grape::EmptyType>>(item).neighbor;
+              gbp::BufferBlock::Ref<MutableNbr<grape::EmptyType>>(item).neighbor;
           item = place_name_col_.get(univ_place);
           output.put_buffer_object(item);
           university_num++;
@@ -448,7 +448,7 @@ namespace gs
           assert(organisation_isLocatedIn_place_out.exist(companies.get_neighbor()));
           item = organisation_isLocatedIn_place_out.get_edge(companies.get_neighbor());
           auto company_place =
-              gbp::BufferObject::Ref<MutableNbr<grape::EmptyType>>(item).neighbor;
+              gbp::BufferBlock::Ref<MutableNbr<grape::EmptyType>>(item).neighbor;
           item = place_name_col_.get(company_place);
           output.put_buffer_object(item);
           company_num++;

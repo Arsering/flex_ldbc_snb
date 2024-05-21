@@ -107,10 +107,10 @@ namespace gs
         if (comment_replyOf_post_out_.exist(v))
         {
           auto e1 = comment_replyOf_post_out_.get_edge(v);
-          auto e1_neb = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(e1).neighbor;
+          auto e1_neb = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e1).neighbor;
           assert(post_hasCreator_person_out_.exist(e1_neb));
           auto item = post_hasCreator_person_out_.get_edge(e1_neb);
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (n == y)
           {
             score += 2;
@@ -119,10 +119,10 @@ namespace gs
         else if (comment_replyOf_comment_out_.exist(v))
         {
           auto e2 = comment_replyOf_comment_out_.get_edge(v);
-          auto e2_neb = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor;
+          auto e2_neb = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor;
           assert(comment_hasCreator_person_out_.exist(e2_neb));
           auto item = comment_hasCreator_person_out_.get_edge(e2_neb);
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (n == y)
           {
             score += 1;
@@ -136,10 +136,10 @@ namespace gs
         if (comment_replyOf_post_out_.exist(v))
         {
           auto e1 = comment_replyOf_post_out_.get_edge(v);
-          auto e1_neb = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(e1).neighbor;
+          auto e1_neb = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e1).neighbor;
           assert(post_hasCreator_person_out_.exist(e1_neb));
           auto item = post_hasCreator_person_out_.get_edge(e1_neb);
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (n == x)
           {
             score += 2;
@@ -148,10 +148,10 @@ namespace gs
         else if (comment_replyOf_comment_out_.exist(v))
         {
           auto &e2 = comment_replyOf_comment_out_.get_edge(v);
-          auto e2_neb = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor;
+          auto e2_neb = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor;
           assert(comment_hasCreator_person_out_.exist(e2_neb));
           auto item = comment_hasCreator_person_out_.get_edge(e2_neb);
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (n == x)
           {
             score += 1;
@@ -241,10 +241,10 @@ namespace gs
         if (comment_replyOf_post_out_.exist(comment_ie.get_neighbor()))
         {
           auto e1 = comment_replyOf_post_out_.get_edge(comment_ie.get_neighbor());
-          auto e1_neb = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(e1).neighbor;
+          auto e1_neb = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e1).neighbor;
           assert(post_hasCreator_person_out_.exist(e1_neb));
           auto item = post_hasCreator_person_out_.get_edge(e1_neb);
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (n == v)
           {
             ret += 2;
@@ -253,11 +253,11 @@ namespace gs
         else if (comment_replyOf_comment_out_.exist(comment_ie.get_neighbor()))
         {
           auto e2 = comment_replyOf_comment_out_.get_edge(comment_ie.get_neighbor());
-          auto e2_neb = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor;
+          auto e2_neb = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor;
 
           assert(comment_hasCreator_person_out_.exist(e2_neb));
           auto item = comment_hasCreator_person_out_.get_edge(e2_neb);
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (n == v)
           {
             ret += 1;
@@ -270,7 +270,7 @@ namespace gs
         {
           assert(comment_hasCreator_person_out_.exist(follows_ie.get_neighbor()));
           auto item = comment_hasCreator_person_out_.get_edge(follows_ie.get_neighbor());
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (n == v)
           {
             ret += 1;
@@ -286,7 +286,7 @@ namespace gs
         {
           assert(comment_hasCreator_person_out_.exist(follows_ie.get_neighbor()));
           auto item = comment_hasCreator_person_out_.get_edge(follows_ie.get_neighbor());
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (n == v)
           {
             ret += 2;
@@ -356,11 +356,11 @@ namespace gs
         if (comment_replyOf_post_out_.exist(comment_ie.get_neighbor()))
         {
           auto e1 = comment_replyOf_post_out_.get_edge(comment_ie.get_neighbor());
-          auto e1_neb = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(e1).neighbor;
+          auto e1_neb = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e1).neighbor;
 
           assert(post_hasCreator_person_out_.exist(e1_neb));
           auto item = post_hasCreator_person_out_.get_edge(e1_neb);
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (count[n] != 0)
           {
             count[n] += 2;
@@ -369,11 +369,11 @@ namespace gs
         else if (comment_replyOf_comment_out_.exist(comment_ie.get_neighbor()))
         {
           auto e2 = comment_replyOf_comment_out_.get_edge(comment_ie.get_neighbor());
-          auto e2_neb = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor;
+          auto e2_neb = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor;
 
           assert(comment_hasCreator_person_out_.exist(e2_neb));
           auto item = comment_hasCreator_person_out_.get_edge(e2_neb);
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (count[n] != 0)
           {
             count[n] += 1;
@@ -385,7 +385,7 @@ namespace gs
         {
           assert(comment_hasCreator_person_out_.exist(follows_ie.get_neighbor()));
           auto item = comment_hasCreator_person_out_.get_edge(follows_ie.get_neighbor());
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (count[n] != 0)
           {
             count[n] += 1;
@@ -400,7 +400,7 @@ namespace gs
         {
           assert(comment_hasCreator_person_out_.exist(follows_ie.get_neighbor()));
           auto item = comment_hasCreator_person_out_.get_edge(follows_ie.get_neighbor());
-          auto n = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto n = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (count[n] != 0)
           {
             count[n] += 2;

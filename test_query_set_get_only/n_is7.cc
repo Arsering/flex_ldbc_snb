@@ -102,7 +102,7 @@ namespace gs
               comment_creationDate_col_.get_view(comment_v).milli_second;
 #else
         auto item = post_hasCreator_person_out.get_edge(v);
-        message_author_id = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        message_author_id = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
         auto ie = comment_replyOf_post_in.get_edges(v);
         // for (auto &e : ie)
@@ -115,10 +115,10 @@ namespace gs
           // comment_hasCreator_person_out.get_edge(comment_v).neighbor;
 
           item = comment_hasCreator_person_out.get_edge(comment_v);
-          auto comment_creator = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto comment_creator = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
           item = comment_creationDate_col_.get(comment_v);
-          auto creationdate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
+          auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
           comments.emplace_back(
               comment_v, comment_creator,
               txn.GetVertexId(person_label_id_, comment_creator), creationdate);
@@ -128,7 +128,7 @@ namespace gs
       {
         assert(comment_hasCreator_person_out.exist(v));
         auto item = comment_hasCreator_person_out.get_edge(v);
-        message_author_id = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        message_author_id = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
         auto ie = comment_replyOf_comment_in.get_edges(v);
         // for (auto &e : ie)
@@ -137,10 +137,10 @@ namespace gs
           auto comment_v = ie.get_neighbor();
           assert(comment_hasCreator_person_out.exist(comment_v));
           item = comment_hasCreator_person_out.get_edge(comment_v);
-          auto comment_creator = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+          auto comment_creator = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
           item = comment_creationDate_col_.get(comment_v);
-          auto creationdate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
+          auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
 #endif
           comments.emplace_back(
               comment_v, comment_creator,

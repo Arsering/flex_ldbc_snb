@@ -35,10 +35,10 @@ namespace gs
       int count;
       std::string_view tag_name;
 #else
-      tag_info(int count_, gbp::BufferObject tag_name_)
+      tag_info(int count_, gbp::BufferBlock tag_name_)
           : count(count_), tag_name(tag_name_) {}
       int count;
-      gbp::BufferObject tag_name;
+      gbp::BufferBlock tag_name;
 #endif
     };
 
@@ -129,7 +129,7 @@ namespace gs
         vid_t post_id = posts_with_tag.get_neighbor();
         assert(post_hasCreator_person_out.exist(post_id));
         auto item = post_hasCreator_person_out.get_edge(post_id);
-        auto creator = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        auto creator = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         if (friends_[creator])
         {
           auto oe = post_hasTag_tag_out.get_edges(post_id);

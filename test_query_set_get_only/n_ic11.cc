@@ -113,7 +113,7 @@ namespace gs
       std::string_view company_name;
 #else
       person_info(vid_t person_vid_, int workfrom_, oid_t person_id_,
-                  gbp::BufferObject company_name_)
+                  gbp::BufferBlock company_name_)
           : person_vid(person_vid_),
             workfrom(workfrom_),
             person_id(person_id_),
@@ -122,7 +122,7 @@ namespace gs
       vid_t person_vid;
       int workfrom;
       oid_t person_id;
-      gbp::BufferObject company_name;
+      gbp::BufferBlock company_name;
 #endif
     };
 

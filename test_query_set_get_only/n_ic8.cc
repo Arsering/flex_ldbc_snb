@@ -113,7 +113,7 @@ namespace gs
           if (pq.size() < 20)
           {
             auto item = comment_creationDate_col_.get(u);
-            pq.emplace(u, gbp::BufferObject::Ref<Date>(item).milli_second,
+            pq.emplace(u, gbp::BufferBlock::Ref<Date>(item).milli_second,
                        txn.GetVertexId(comment_label_id_, u));
           }
           else
@@ -121,7 +121,7 @@ namespace gs
             const auto &top = pq.top();
             auto item = comment_creationDate_col_.get(u);
             int64_t creationDate =
-                gbp::BufferObject::Ref<Date>(item).milli_second;
+                gbp::BufferBlock::Ref<Date>(item).milli_second;
 #endif
             if (creationDate > top.creationDate)
             {
@@ -171,7 +171,7 @@ namespace gs
                        txn.GetVertexId(comment_label_id_, u));
 #else
             auto item = comment_creationDate_col_.get(u);
-            pq.emplace(u, gbp::BufferObject::Ref<Date>(item).milli_second,
+            pq.emplace(u, gbp::BufferBlock::Ref<Date>(item).milli_second,
                        txn.GetVertexId(comment_label_id_, u));
             item.free();
 #endif
@@ -185,7 +185,7 @@ namespace gs
 #else
             auto item = comment_creationDate_col_.get(u);
             int64_t creationDate =
-                gbp::BufferObject::Ref<Date>(item).milli_second;
+                gbp::BufferBlock::Ref<Date>(item).milli_second;
 #endif
             if (creationDate > top.creationDate)
             {
@@ -228,7 +228,7 @@ namespace gs
         output.put_string_view(comment_content_col_.get_view(v.comment_vid));
 #else
         auto item = comment_hasCreator_person_out.get_edge(v.comment_vid);
-        auto p = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         output.put_long(txn.GetVertexId(person_label_id_, p));
         item = person_firstName_col_.get(p);
         output.put_buffer_object(item);

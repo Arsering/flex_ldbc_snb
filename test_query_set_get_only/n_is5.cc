@@ -43,7 +43,7 @@ namespace gs
 #else
         auto item = post_hasCreator_person_out.get_edge(lid);
 
-        v = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        v = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
       }
       else if (txn.GetVertexIndex(comment_label_id_, id, lid))
@@ -56,7 +56,7 @@ namespace gs
         v = comment_hasCreator_person_out.get_edge(lid).neighbor;
 #else
         auto item = comment_hasCreator_person_out.get_edge(lid);
-        v = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        v = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
       }
       else

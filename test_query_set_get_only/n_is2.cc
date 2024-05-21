@@ -230,7 +230,7 @@ namespace gs
       for (; post_ie.is_valid(); post_ie.next())
       {
         auto item = post_creationDate_col_.get(post_ie.get_neighbor());
-        auto creationdate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
+        auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
 
         if (pq.size() < 10)
         {
@@ -266,7 +266,7 @@ namespace gs
         if (pq.size() < 10)
         {
           auto item = comment_creationDate_col_.get(comment_ie.get_neighbor());
-          auto creationdate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
+          auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
 
           pq.emplace(false, comment_ie.get_neighbor(), creationdate,
                      txn.GetVertexId(comment_label_id_, comment_ie.get_neighbor()));
@@ -275,7 +275,7 @@ namespace gs
         else
         {
           auto item = comment_creationDate_col_.get(comment_ie.get_neighbor());
-          auto creationdate = gbp::BufferObject::Ref<gs::Date>(item).milli_second;
+          auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
 
           if (creationdate > current_creationdate)
           {
@@ -321,7 +321,7 @@ namespace gs
         if (v.is_post)
         {
           auto item = post_length_col_.get(v.v);
-          auto content = gbp::BufferObject::Ref<int>(item) == 0 ? post_imageFile_col_.get(v.v) : post_content_col_.get(v.v);
+          auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? post_imageFile_col_.get(v.v) : post_content_col_.get(v.v);
 
           output.put_buffer_object(content);
           output.put_long(v.messageid);
@@ -343,10 +343,10 @@ namespace gs
             if (comment_replyOf_post_out.exist(u))
             {
               auto post_id = comment_replyOf_post_out.get_edge(u);
-              output.put_long(txn.GetVertexId(post_label_id_, gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor));
-              auto item = post_hasCreator_person_out.get_edge(gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor);
+              output.put_long(txn.GetVertexId(post_label_id_, gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor));
+              auto item = post_hasCreator_person_out.get_edge(gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor);
 
-              u = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              u = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
               output.put_long(txn.GetVertexId(person_label_id_, u));
               auto firstname = person_firstName_col_.get(u);
 
@@ -359,7 +359,7 @@ namespace gs
             {
               assert(comment_replyOf_comment_out.exist(u));
               auto item = comment_replyOf_comment_out.get_edge(u);
-              u = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              u = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
             }
           }
         }

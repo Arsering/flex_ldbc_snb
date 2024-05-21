@@ -130,7 +130,7 @@ namespace gs
 
               assert(forum_containerOf_post_in.exist(p));
               auto item = forum_containerOf_post_in.get_edge(p);
-              auto f = gbp::BufferObject::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              auto f = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
               if (person_forum_set_[f])
               {

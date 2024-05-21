@@ -115,7 +115,7 @@ namespace gs
                 auto u = edges.get_neighbor();
                 auto item = post_creationDate_col_.get(u);
                 auto creation_date =
-                    gbp::BufferObject::Ref<Date>(item).milli_second;
+                    gbp::BufferBlock::Ref<Date>(item).milli_second;
 #endif
                 if (creation_date < maxdate)
                 {
@@ -161,7 +161,7 @@ namespace gs
                 auto u = edges.get_neighbor();
                 auto item = comment_creationDate_col_.get(u);
                 auto creation_date =
-                    gbp::BufferObject::Ref<Date>(item).milli_second;
+                    gbp::BufferBlock::Ref<Date>(item).milli_second;
 #endif
                 if (creation_date < maxdate)
                 {
@@ -245,7 +245,7 @@ namespace gs
         {
           vid_t post_lid = v.message_vid;
           auto item = post_length_col_.get(post_lid);
-          auto post_content = gbp::BufferObject::Ref<int>(item) == 0 ? post_imageFile_col_.get(post_lid) : post_content_col_.get(post_lid);
+          auto post_content = gbp::BufferBlock::Ref<int>(item) == 0 ? post_imageFile_col_.get(post_lid) : post_content_col_.get(post_lid);
 
           output.put_buffer_object(post_content);
         }
