@@ -33,32 +33,35 @@ namespace gs
     {
 
       auto txn = graph_.GetReadTransaction();
-
       oid_t req = input.get_long();
       CHECK(input.empty());
 
       vid_t root{};
-
       if (!txn.GetVertexIndex(person_label_id_, req, root))
       {
         return false;
       }
+
 #if OV
       const auto &oe = txn.GetOutgoingEdges<Date>(
           person_label_id_, root, person_label_id_, knows_label_id_);
       std::vector<person_info> vec;
+
       for (auto &e : oe)
       {
         vec.emplace_back(e.neighbor, e.data.milli_second,
                          txn.GetVertexId(person_label_id_, e.neighbor));
       }
+
       const auto &ie = txn.GetIncomingEdges<Date>(
           person_label_id_, root, person_label_id_, knows_label_id_);
+
       for (auto &e : ie)
       {
         vec.emplace_back(e.neighbor, e.data.milli_second,
                          txn.GetVertexId(person_label_id_, e.neighbor));
       }
+
       sort(vec.begin(), vec.end(),
            [&](const person_info &x, const person_info &y)
            {
@@ -68,6 +71,7 @@ namespace gs
              }
              return x.person_id < y.person_id;
            });
+
       for (auto &v : vec)
       {
         output.put_long(v.person_id);
@@ -77,19 +81,24 @@ namespace gs
         const auto &lastname = person_lastName_col_.get_view(v.v);
         output.put_string_view(lastname);
       }
+
 #else
       auto oe = txn.GetOutgoingEdges<Date>(
           person_label_id_, root, person_label_id_, knows_label_id_);
       std::vector<person_info> vec;
+
       // for (auto &e : oe)
       for (; oe.is_valid(); oe.next())
       {
         auto data = oe.get_data();
+
         vec.emplace_back(oe.get_neighbor(), ((gs::Date *)data)->milli_second,
                          txn.GetVertexId(person_label_id_, oe.get_neighbor()));
       }
+
       auto ie = txn.GetIncomingEdges<Date>(
           person_label_id_, root, person_label_id_, knows_label_id_);
+
       // for (auto &e : ie)
       for (; ie.is_valid(); ie.next())
       {
@@ -107,6 +116,7 @@ namespace gs
              }
              return x.person_id < y.person_id;
            });
+
       for (auto &v : vec)
       {
         output.put_long(v.person_id);
@@ -116,6 +126,7 @@ namespace gs
         auto lastname = person_lastName_col_.get(v.v);
         output.put_buffer_object(lastname);
       }
+
 #endif
       return true;
     }
