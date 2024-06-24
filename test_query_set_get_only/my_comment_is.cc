@@ -45,18 +45,18 @@ public:
 #else
       if (txn.GetVertexIndex(comment_label_id_, id, lid))
       {
-        auto item = comment_creationDate_col_.get(lid);
-        output.put_long(gbp::BufferBlock::Ref<gs::Date>(item).milli_second);
+        // auto item = comment_creationDate_col_.get(lid);
+        // output.put_long(gbp::BufferBlock::Ref<gs::Date>(item).milli_second);
 
-        const auto &content = comment_content_col_.get(lid);
-        output.put_buffer_object(content);
+        // const auto &content = comment_content_col_.get(lid);
+        // output.put_buffer_object(content);
 
-        const auto &length=comment_length_col_.get(lid);
-        const auto &browser_used=comment_browserUsed_col_.get(lid);
-        const auto &location=comment_locationIP_col_.get(lid);
-        output.put_int(gbp::BufferBlock::Ref<int>(length));
-        output.put_buffer_object(browser_used);
-        output.put_buffer_object(location);
+        // const auto &length=comment_length_col_.get(lid);
+        // const auto &browser_used=comment_browserUsed_col_.get(lid);
+        // const auto &location=comment_locationIP_col_.get(lid);
+        // output.put_int(gbp::BufferBlock::Ref<int>(length));
+        // output.put_buffer_object(browser_used);
+        // output.put_buffer_object(location);
         return true;
       }
 #endif

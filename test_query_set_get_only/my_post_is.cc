@@ -31,35 +31,23 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output)
     {
-    //   LOG(INFO)<<"begin post is";
+      // LOG(INFO)<<"begin post is";
       auto txn = graph_.GetReadTransaction();
       oid_t id = input.get_long();
       CHECK(input.empty());
 
       vid_t lid{};
 
-#if OV
       if (txn.GetVertexIndex(post_label_id_, id, lid))
       {
-        output.put_long(post_creationDate_col_.get_view(lid).milli_second);
-        const auto &content = post_length_col_.get_view(lid) == 0
-                                  ? post_imageFile_col_.get_view(lid)
-                                  : post_content_col_.get_view(lid);
-        output.put_string_view(content);
-        return true;
-      }
-#else
-      if (txn.GetVertexIndex(post_label_id_, id, lid))
-      {
-        auto item = post_creationDate_col_.get(lid);
-        output.put_long(gbp::BufferBlock::Ref<gs::Date>(item).milli_second);
+        // auto item = post_creationDate_col_.get(lid);
+        // output.put_long(gbp::BufferBlock::Ref<gs::Date>(item).milli_second);
 
-        item = post_length_col_.get(lid);
-        auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? post_imageFile_col_.get(lid) : post_content_col_.get(lid);
-        output.put_buffer_object(content);
+        // item = post_length_col_.get(lid);
+        // auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? post_imageFile_col_.get(lid) : post_content_col_.get(lid);
+        // output.put_buffer_object(content);
         return true;
       }
-#endif
       return false;
     }
 

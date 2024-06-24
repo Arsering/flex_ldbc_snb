@@ -31,26 +31,26 @@ public:
 #if OV
       if (txn.GetVertexIndex(post_label_id_, id, lid))
       {
-        output.put_long(post_creationDate_col_.get_view(lid).milli_second);
-        const auto &content = post_length_col_.get_view(lid) == 0
-                                  ? post_imageFile_col_.get_view(lid)
-                                  : post_content_col_.get_view(lid);
-        output.put_string_view(content);
+        // output.put_long(post_creationDate_col_.get_view(lid).milli_second);
+        // const auto &content = post_length_col_.get_view(lid) == 0
+        //                           ? post_imageFile_col_.get_view(lid)
+        //                           : post_content_col_.get_view(lid);
+        // output.put_string_view(content);
         return true;
       }
       else if (txn.GetVertexIndex(comment_label_id_, id, lid))
       {
-        output.put_long(comment_creationDate_col_.get_view(lid).milli_second);
-        const auto &content = comment_content_col_.get_view(lid);
-        output.put_string_view(content);
+        // output.put_long(comment_creationDate_col_.get_view(lid).milli_second);
+        // const auto &content = comment_content_col_.get_view(lid);
+        // output.put_string_view(content);
         return true;
       }
 #else
     if (txn.GetVertexIndex(forum_label_id_, id, lid)) {
-      auto content = forum_title_col_.get(lid) ;
-      auto date=forum_creationDate_col_.get(lid);
-      output.put_buffer_object(content);
-      output.put_long(gbp::BufferBlock::Ref<gs::Date>(date).milli_second);
+      // auto content = forum_title_col_.get(lid) ;
+      // auto date=forum_creationDate_col_.get(lid);
+      // output.put_buffer_object(content);
+      // output.put_long(gbp::BufferBlock::Ref<gs::Date>(date).milli_second);
       return true;
     }
 #endif

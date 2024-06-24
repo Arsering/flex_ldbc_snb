@@ -46,6 +46,7 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
+      // LOG(INFO)<<"begin is7";
       auto txn = graph_.GetReadTransaction();
 
       oid_t req = input.get_long();

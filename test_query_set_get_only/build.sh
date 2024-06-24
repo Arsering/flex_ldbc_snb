@@ -6,7 +6,7 @@ FLEX_HOME=/usr/local
 
 # for i in n_is1 n_is2 n_is3 n_is4 n_is5 n_is6 n_is7
 
-for i in n_ic1 n_ic2 n_ic3 n_ic4 n_ic5 n_ic6 n_ic7 n_ic8 n_ic9 n_ic10 n_ic11 n_ic12 n_ic13 n_ic14 n_is1 n_is2 n_is3 n_is4 n_is5 n_is6 n_is7 n_ins1 n_ins2 n_ins3 n_ins4 n_ins5 n_ins6 n_ins7 n_ins8 comment_is forum_is person_is post_is
+for i in n_ic1 n_ic2 n_ic3 n_ic4 n_ic5 n_ic6 n_ic7 n_ic8 n_ic9 n_ic10 n_ic11 n_ic12 n_ic13 n_ic14 n_is1 n_is2 n_is3 n_is4 n_is5 n_is6 n_is7 n_ins1 n_ins2 n_ins3 n_ins4 n_ins5 n_ins6 n_ins7 n_ins8 my_comment_is my_comment_edge_is my_forum_is my_person_is my_person_edge_is my_post_is my_post_edge_is
 # for i in n_ic5
 do
 {

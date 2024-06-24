@@ -46,50 +46,51 @@ public:
     if (!txn.GetVertexIndex(person_label_id_, req, root)) {
       return false;
     }
-#if OV
-      const auto &firstname = person_firstName_col_.get_view(root);
-      const auto &lastname = person_lastName_col_.get_view(root);
-      const auto &gender = person_gender_col_.get_view(root);
-#else
-      const auto firstname = person_firstName_col_.get(root);
-      const auto lastname = person_lastName_col_.get(root);
-      const auto gender = person_gender_col_.get(root);
-#endif
-      auto person_isLocatedIn_place_out =
-          txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-              person_label_id_, place_label_id_, isLocatedIn_label_id_);
-#if OV
-      output.put_string_view(firstname);
-      output.put_string_view(lastname);
-      output.put_string_view(person_locationIp_col_.get_view(root));
-      output.put_string_view(gender);
-      output.put_long(person_creationDate_col_.get_view(root).milli_second);
-      output.put_long(person_birthday_col_.get_view(root).milli_second);
-      output.put_string_view(person_browserUsed_col_.get_view(root));
-      assert(person_isLocatedIn_place_out.exist(root));
-      auto person_place = person_isLocatedIn_place_out.get_edge(root).neighbor;
-#else
-      const auto locationIp = person_locationIp_col_.get(root);
-      auto creationdate = person_creationDate_col_.get(root);
-      auto birthday = person_birthday_col_.get(root);
-      auto browser_used = person_browserUsed_col_.get(root);
-      auto language = person_language_col_.get(root);
+    {
+// #if OV
+//       const auto &firstname = person_firstName_col_.get_view(root);
+//       const auto &lastname = person_lastName_col_.get_view(root);
+//       const auto &gender = person_gender_col_.get_view(root);
+// #else
+//       const auto firstname = person_firstName_col_.get(root);
+//       const auto lastname = person_lastName_col_.get(root);
+//       const auto gender = person_gender_col_.get(root);
+// #endif
+//       auto person_isLocatedIn_place_out =
+//           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
+//               person_label_id_, place_label_id_, isLocatedIn_label_id_);
+// #if OV
+//       output.put_string_view(firstname);
+//       output.put_string_view(lastname);
+//       output.put_string_view(person_locationIp_col_.get_view(root));
+//       output.put_string_view(gender);
+//       output.put_long(person_creationDate_col_.get_view(root).milli_second);
+//       output.put_long(person_birthday_col_.get_view(root).milli_second);
+//       output.put_string_view(person_browserUsed_col_.get_view(root));
+//       assert(person_isLocatedIn_place_out.exist(root));
+//       auto person_place = person_isLocatedIn_place_out.get_edge(root).neighbor;
+// #else
+//       const auto locationIp = person_locationIp_col_.get(root);
+//       auto creationdate = person_creationDate_col_.get(root);
+//       auto birthday = person_birthday_col_.get(root);
+//       auto browser_used = person_browserUsed_col_.get(root);
+//       auto language = person_language_col_.get(root);
 
-      output.put_buffer_object(firstname);
-      output.put_buffer_object(lastname);
-      output.put_buffer_object(locationIp);
-      output.put_buffer_object(gender);
+//       output.put_buffer_object(firstname);
+//       output.put_buffer_object(lastname);
+//       output.put_buffer_object(locationIp);
+//       output.put_buffer_object(gender);
 
-      output.put_long(gbp::BufferBlock::Ref<gs::Date>(creationdate).milli_second);
-      output.put_long(gbp::BufferBlock::Ref<gs::Date>(birthday).milli_second);
-      output.put_buffer_object(browser_used);
+//       output.put_long(gbp::BufferBlock::Ref<gs::Date>(creationdate).milli_second);
+//       output.put_long(gbp::BufferBlock::Ref<gs::Date>(birthday).milli_second);
+//       output.put_buffer_object(browser_used);
 
-      assert(person_isLocatedIn_place_out.exist(root));
-      auto person_place_bo = person_isLocatedIn_place_out.get_edge(root);
-      auto person_place = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(person_place_bo).neighbor;
-#endif
-      output.put_long(txn.GetVertexId(place_label_id_, person_place));
-
+//       assert(person_isLocatedIn_place_out.exist(root));
+//       auto person_place_bo = person_isLocatedIn_place_out.get_edge(root);
+//       auto person_place = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(person_place_bo).neighbor;
+// #endif
+//       output.put_long(txn.GetVertexId(place_label_id_, person_place));
+    }
       return true;
     }
 
