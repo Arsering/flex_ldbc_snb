@@ -6,8 +6,6 @@
 #include "flex/utils/property/types.h"
 // #include "utils.h"
 
-// #define SR_DEBUG
-
 namespace gs
 {
 
@@ -340,9 +338,9 @@ namespace gs
           vid_t u = v.v;
           while (true)
           {
-            if (comment_replyOf_post_out.exist(u))
+            auto post_id = comment_replyOf_post_out.exist(u, exist_mark);
+            if (exist_mark)
             {
-              auto post_id = comment_replyOf_post_out.get_edge(u);
               output.put_long(txn.GetVertexId(post_label_id_, gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor));
               auto item = post_hasCreator_person_out.get_edge(gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor);
 
@@ -357,23 +355,21 @@ namespace gs
             }
             else
             {
-              assert(comment_replyOf_comment_out.exist(u));
-              auto item = comment_replyOf_comment_out.get_edge(u);
+              auto item = comment_replyOf_comment_out.exist(u, exist_mark);
+              assert(exist_mark);
               u = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
             }
           }
         }
       }
-#ifdef SR_DEBUG
-      ts = gbp::GetSystemTime() - ts;
-      LOG(INFO) << "p7 = " << ts;
-      ts = gbp::GetSystemTime();
-#endif
 #endif
       return true;
     }
 
   private:
+#if !OV
+    bool exist_mark = false;
+#endif
     label_t post_label_id_;
     label_t comment_label_id_;
     label_t person_label_id_;

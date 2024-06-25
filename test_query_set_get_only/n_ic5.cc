@@ -58,7 +58,9 @@ namespace gs
     bool Query(Decoder &input, Encoder &output) override
     {
       auto txn = graph_.GetReadTransaction();
-
+#if !OV
+      bool exist_mark = false;
+#endif
       oid_t personid = input.get_long();
       int64_t mindate = input.get_long();
       CHECK(input.empty());
@@ -127,9 +129,8 @@ namespace gs
             for (; post_person_ie.is_valid(); post_person_ie.next())
             {
               auto p = post_person_ie.get_neighbor();
-
-              assert(forum_containerOf_post_in.exist(p));
-              auto item = forum_containerOf_post_in.get_edge(p);
+              auto item = forum_containerOf_post_in.exist(p, exist_mark);
+              assert(exist_mark);
               auto f = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
               if (person_forum_set_[f])

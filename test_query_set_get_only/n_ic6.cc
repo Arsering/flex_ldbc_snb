@@ -127,8 +127,9 @@ namespace gs
       for (; posts_with_tag.is_valid(); posts_with_tag.next())
       {
         vid_t post_id = posts_with_tag.get_neighbor();
-        assert(post_hasCreator_person_out.exist(post_id));
-        auto item = post_hasCreator_person_out.get_edge(post_id);
+
+        auto item = post_hasCreator_person_out.exist(post_id, exist_mark);
+        assert(exist_mark);
         auto creator = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         if (friends_[creator])
         {
@@ -215,6 +216,9 @@ namespace gs
     }
 
   private:
+#if !OV
+    bool exist_mark = false;
+#endif
     label_t tag_label_id_;
     label_t person_label_id_;
     label_t post_label_id_;
