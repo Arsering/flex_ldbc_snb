@@ -10,7 +10,7 @@ for i in n_ic1 n_ic2 n_ic3 n_ic4 n_ic5 n_ic6 n_ic7 n_ic8 n_ic9 n_ic10 n_ic11 n_i
 # for i in n_ic5
 do
 {
-  g++ -flto -fno-gnu-unique -fPIC -g3 -O0 --std=c++17 -I/usr/lib/${ARCH}-linux-gnu/openmpi/include -I${FLEX_HOME}/include -L${FLEX_HOME}/lib -rdynamic -o lib${i}.so ${i}.cc -lflex_utils -lflex_rt_mutable_graph -lflex_graph_db -shared
+  g++ -flto -fno-gnu-unique -fPIC -O2 --std=c++17 -I/usr/lib/${ARCH}-linux-gnu/openmpi/include -I${FLEX_HOME}/include -L${FLEX_HOME}/lib -rdynamic -o lib${i}.so ${i}.cc -lflex_utils -lflex_rt_mutable_graph -lflex_graph_db -shared
   if [ $? -ne 0 ]; then
       echo -e "\033[41;36m ${i}: Compile failed \033[0m"
       exit

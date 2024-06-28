@@ -375,13 +375,14 @@ namespace gs
         item = person_locationIp_col_.get(v);
         output.put_buffer_object(item);
 #endif
-        assert(person_isLocatedIn_place_out.exist(v));
 #if OV
+        assert(person_isLocatedIn_place_out.exist(v));
         auto person_place = person_isLocatedIn_place_out.get_edge(v).neighbor;
         output.put_string_view(place_name_col_.get_view(person_place));
         output.put_string_view(person_email_col_.get_view(v));
         output.put_string_view(person_language_col_.get_view(v));
 #else
+        assert(person_isLocatedIn_place_out.exist(v));
         item = person_isLocatedIn_place_out.get_edge(v);
         auto person_place = gbp::BufferBlock::Ref<MutableNbr<grape::EmptyType>>(item).neighbor;
         item = place_name_col_.get(person_place);
