@@ -51,7 +51,6 @@ namespace gs
 
     struct person_info
     {
-
       person_info(uint8_t distance_, const std::string_view &lastName_, oid_t id_,
                   vid_t vid_)
           : distance(distance_), lastName(lastName_), id(id_), vid(vid_) {}
@@ -129,7 +128,6 @@ namespace gs
           }
 
           if (person_firstName_col_.get_view(v) == firstname)
-
           {
             if (pq.size() < 20)
             {
@@ -142,13 +140,11 @@ namespace gs
               uint8_t distance = distance_[v];
               if (distance < top.distance)
               {
-
                 pq.emplace(distance, person_lastName_col_.get_view(v),
                            txn.GetVertexId(person_label_id_, v), v);
               }
               else if (distance == top.distance)
               {
-
                 std::string_view lastName = person_lastName_col_.get_view(v);
                 if (lastName < top.lastName)
                 {
@@ -265,14 +261,15 @@ namespace gs
         auto v = info.vid;
         output.put_long(info.id);
         output.put_int(info.distance - 1);
+
         output.put_string_view(info.lastName);
         output.put_long(person_birthday_col_.get_view(v).milli_second);
         output.put_long(person_creationDate_col_.get_view(v).milli_second);
         output.put_string_view(person_gender_col_.get_view(v));
         output.put_string_view(person_browserUsed_col_.get_view(v));
         output.put_string_view(person_locationIp_col_.get_view(v));
-        assert(person_isLocatedIn_place_out.exist(v));
 
+        assert(person_isLocatedIn_place_out.exist(v));
         auto person_place = person_isLocatedIn_place_out.get_edge(v).neighbor;
         output.put_string_view(place_name_col_.get_view(person_place));
         output.put_string_view(person_email_col_.get_view(v));
