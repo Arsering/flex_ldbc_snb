@@ -129,7 +129,6 @@ namespace gs
       oid_t personid = input.get_long();
       int month = input.get_int();
       CHECK(input.empty());
-
       vid_t root{};
       if (!txn.GetVertexIndex(person_label_id_, personid, root))
       {

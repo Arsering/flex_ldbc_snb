@@ -119,7 +119,7 @@ namespace gs
 #else
           auto pid = posts.get_neighbor();
           auto item = post_creationDate_col_.get(pid);
-          auto creationDate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
+          auto creationDate = gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second;
 #endif
           if (creationDate < maxdate)
           {
@@ -160,7 +160,7 @@ namespace gs
         {
           auto cid = comments.get_neighbor();
           auto item = comment_creationDate_col_.get(cid);
-          auto creationDate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
+          auto creationDate = gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second;
 #endif
           if (creationDate < maxdate)
           {
@@ -214,7 +214,7 @@ namespace gs
         {
           auto pid = posts.get_neighbor();
           auto item = post_creationDate_col_.get(pid);
-          auto creationDate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
+          auto creationDate = gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second;
           item.free();
 #endif
           if (creationDate < maxdate)
@@ -256,8 +256,7 @@ namespace gs
         {
           auto cid = comments.get_neighbor();
           auto item = comment_creationDate_col_.get(cid);
-          auto creationDate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
-          item.free();
+          auto creationDate = gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second;
 #endif
           if (creationDate < maxdate)
           {
@@ -333,7 +332,7 @@ namespace gs
         else
         {
           auto item = post_length_col_.get(v.message_vid);
-          auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? post_imageFile_col_.get(v.message_vid) : post_content_col_.get(v.message_vid);
+          auto content = gbp::BufferBlock::RefSingle<int>(item) == 0 ? post_imageFile_col_.get(v.message_vid) : post_content_col_.get(v.message_vid);
           output.put_buffer_object(content);
         }
 #endif

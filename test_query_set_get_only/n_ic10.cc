@@ -323,8 +323,9 @@ namespace gs
         item = person_gender_col_.get(v.person_vid);
         output.put_buffer_object(item);
 
-        assert(person_isLocatedIn_place_out.exist(v.person_vid));
         item = person_isLocatedIn_place_out.get_edge(v.person_vid);
+        assert(person_isLocatedIn_place_out.exist1(item));
+
         auto person_place =
             gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         item = place_name_col_.get(person_place);

@@ -83,11 +83,13 @@ namespace gs
 
       for (auto v : neighbors)
       {
-        assert(person_isLocatedIn_place_out.exist(v));
 #if OV
+        assert(person_isLocatedIn_place_out.exist(v));
         auto p = person_isLocatedIn_place_out.get_edge(v).neighbor;
 #else
         auto item = person_isLocatedIn_place_out.get_edge(v);
+        assert(person_isLocatedIn_place_out.exist1(item));
+
         auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         item.free();
 #endif
@@ -116,8 +118,9 @@ namespace gs
           if (!friends_[iev.get_neighbor()])
           {
             friends_[iev.get_neighbor()] = true;
-            assert(person_isLocatedIn_place_out.exist(iev.get_neighbor()));
             auto item = person_isLocatedIn_place_out.get_edge(iev.get_neighbor());
+            assert(person_isLocatedIn_place_out.exist1(item));
+
             auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
             item.free();
             if (!place_Locatedin_[p])
@@ -149,8 +152,9 @@ namespace gs
           auto neb = oev.get_neighbor();
           if (!friends_[neb])
           {
-            assert(person_isLocatedIn_place_out.exist(neb));
             auto item = person_isLocatedIn_place_out.get_edge(neb);
+            assert(person_isLocatedIn_place_out.exist1(item));
+
             auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
             if (!place_Locatedin_[p])
             {
@@ -360,8 +364,9 @@ namespace gs
         auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
         if (start_date <= creationDate && creationDate < end_date)
         {
-          assert(post_hasCreator_person_out.exist(postex.get_neighbor()));
           auto item = post_hasCreator_person_out.get_edge(postex.get_neighbor());
+          assert(post_hasCreator_person_out.exist1(item));
+
           auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (friends_[p])
           {
@@ -378,8 +383,9 @@ namespace gs
         auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
         if (start_date <= creationDate && creationDate < end_date)
         {
-          assert(comment_hasCreator_person_out.exist(commentex.get_neighbor()));
           auto item = comment_hasCreator_person_out.get_edge(commentex.get_neighbor());
+          assert(comment_hasCreator_person_out.exist1(item));
+
           auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (friends_[p])
           {
@@ -397,8 +403,9 @@ namespace gs
         item.free();
         if (start_date <= creationDate && creationDate < end_date)
         {
-          assert(post_hasCreator_person_out.exist(postey.get_neighbor()));
           item = post_hasCreator_person_out.get_edge(postey.get_neighbor());
+          assert(post_hasCreator_person_out.exist1(item));
+
           auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           item.free();
           if (friends_[p])
@@ -416,8 +423,9 @@ namespace gs
         item.free();
         if (start_date <= creationDate && creationDate < end_date)
         {
-          assert(comment_hasCreator_person_out.exist(commentey.get_neighbor()));
           item = comment_hasCreator_person_out.get_edge(commentey.get_neighbor());
+          assert(comment_hasCreator_person_out.exist1(item));
+
           auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           item.free();
 
@@ -555,4 +563,3 @@ extern "C"
     delete casted;
   }
 }
-

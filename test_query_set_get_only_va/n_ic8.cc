@@ -76,11 +76,10 @@ namespace gs
                           comment_info_comparer>
           pq(comparer);
 
-      auto comment_replyOf_post_in = txn.GetIncomingGraphView<grape::EmptyType>(
-          post_label_id_, comment_label_id_, replyOf_label_id_);
-
       const auto &post_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, post_label_id_, hasCreator_label_id_);
+      auto comment_replyOf_post_in = txn.GetIncomingGraphView<grape::EmptyType>(
+          post_label_id_, comment_label_id_, replyOf_label_id_);
 
       for (auto &e : post_ie)
       {
@@ -116,12 +115,12 @@ namespace gs
         }
       }
 
+      const auto &comment_ie = txn.GetIncomingEdges<grape::EmptyType>(
+          person_label_id_, root, comment_label_id_, hasCreator_label_id_);
       auto comment_replyOf_comment_in =
           txn.GetIncomingGraphView<grape::EmptyType>(
               comment_label_id_, comment_label_id_, replyOf_label_id_);
 
-      const auto &comment_ie = txn.GetIncomingEdges<grape::EmptyType>(
-          person_label_id_, root, comment_label_id_, hasCreator_label_id_);
       for (auto &e : comment_ie)
       {
         auto v = e.neighbor;

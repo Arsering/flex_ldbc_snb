@@ -28,7 +28,7 @@ namespace gs
           graph_(graph) {}
     ~IS4() {}
 
-    bool Query(Decoder &input, Encoder &output)
+    bool Query(Decoder &input, Encoder &output) override
     {
       auto txn = graph_.GetReadTransaction();
       oid_t id = input.get_long();

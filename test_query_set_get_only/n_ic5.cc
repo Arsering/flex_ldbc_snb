@@ -124,12 +124,14 @@ namespace gs
               auto f = forum_containerOf_post_in.get_edge(p).neighbor;
 #else
             auto post_person_ie = post_hasCreator_person_in.get_edges(v);
+            bool mark = false;
             for (; post_person_ie.is_valid(); post_person_ie.next())
             {
               auto p = post_person_ie.get_neighbor();
 
-              assert(forum_containerOf_post_in.exist(p));
+              // assert(forum_containerOf_post_in.exist(p));
               auto item = forum_containerOf_post_in.get_edge(p);
+              assert(forum_containerOf_post_in.exist1(item));
               auto f = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
               if (person_forum_set_[f])

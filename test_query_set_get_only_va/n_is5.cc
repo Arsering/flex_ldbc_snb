@@ -2,7 +2,7 @@
 #include "flex/engines/graph_db/database/graph_db_session.h"
 #include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
 #include "flex/utils/property/types.h"
-// #include "utils.h"
+#include "n_utils.h"
 
 namespace gs
 {
@@ -36,7 +36,6 @@ namespace gs
         auto post_hasCreator_person_out =
             txn.GetOutgoingSingleGraphView<grape::EmptyType>(
                 post_label_id_, person_label_id_, hasCreator_label_id_);
-        assert(post_hasCreator_person_out.exist(lid));
 
         assert(post_hasCreator_person_out.exist(lid));
         v = post_hasCreator_person_out.get_edge(lid).neighbor;

@@ -145,12 +145,11 @@ namespace gs
                           person_info_comparer>
           pq(comparer);
 
-      auto person_workAt_organisation_in = txn.GetIncomingGraphView<int>(
-          organisation_label_id_, person_label_id_, workAt_label_id_);
-
       const auto &ie = txn.GetIncomingEdges<grape::EmptyType>(
           place_label_id_, country_id, organisation_label_id_,
           isLocatedIn_label_id_);
+      auto person_workAt_organisation_in = txn.GetIncomingGraphView<int>(
+          organisation_label_id_, person_label_id_, workAt_label_id_);
       for (auto &e : ie)
       {
         auto company = e.neighbor;

@@ -40,10 +40,9 @@ namespace gs
     void get_friends(const ReadTransaction &txn, vid_t root, int mon)
     {
       std::vector<vid_t> friends_1d;
-      friends_set_[root] = true;
-
       const auto &oe = txn.GetOutgoingEdges<Date>(
           person_label_id_, root, person_label_id_, knows_label_id_);
+      friends_set_[root] = true;
       for (auto &e : oe)
       {
         friends_1d.emplace_back(e.neighbor);
@@ -139,12 +138,10 @@ namespace gs
       friends_set_.clear();
       friends_set_.resize(txn.GetVertexNum(person_label_id_), false);
       get_friends(txn, root, month);
-
-      hasInterests_.clear();
-      hasInterests_.resize(txn.GetVertexNum(tag_label_id_));
-
       const auto &oe = txn.GetOutgoingEdges<grape::EmptyType>(
           person_label_id_, root, tag_label_id_, hasInterest_label_id_);
+      hasInterests_.clear();
+      hasInterests_.resize(txn.GetVertexNum(tag_label_id_));
       for (auto &e : oe)
       {
         hasInterests_[e.neighbor] = true;

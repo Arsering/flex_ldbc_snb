@@ -36,12 +36,12 @@ namespace gs
         auto post_hasCreator_person_out =
             txn.GetOutgoingSingleGraphView<grape::EmptyType>(
                 post_label_id_, person_label_id_, hasCreator_label_id_);
-        assert(post_hasCreator_person_out.exist(lid));
 #if OV
         assert(post_hasCreator_person_out.exist(lid));
         v = post_hasCreator_person_out.get_edge(lid).neighbor;
 #else
         auto item = post_hasCreator_person_out.get_edge(lid);
+        assert(post_hasCreator_person_out.exist1(item));
 
         v = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif

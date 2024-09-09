@@ -127,8 +127,10 @@ namespace gs
       for (; posts_with_tag.is_valid(); posts_with_tag.next())
       {
         vid_t post_id = posts_with_tag.get_neighbor();
-        assert(post_hasCreator_person_out.exist(post_id));
+
         auto item = post_hasCreator_person_out.get_edge(post_id);
+        assert(post_hasCreator_person_out.exist1(item));
+
         auto creator = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         if (friends_[creator])
         {

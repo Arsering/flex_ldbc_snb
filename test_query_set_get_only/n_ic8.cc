@@ -217,8 +217,8 @@ namespace gs
       for (auto i = vec.size(); i > 0; i--)
       {
         auto &v = vec[i - 1];
-        assert(comment_hasCreator_person_out.exist(v.comment_vid));
 #if OV
+        assert(comment_hasCreator_person_out.exist(v.comment_vid));
         auto p = comment_hasCreator_person_out.get_edge(v.comment_vid).neighbor;
         output.put_long(txn.GetVertexId(person_label_id_, p));
         output.put_string_view(person_firstName_col_.get_view(p));
@@ -228,6 +228,8 @@ namespace gs
         output.put_string_view(comment_content_col_.get_view(v.comment_vid));
 #else
         auto item = comment_hasCreator_person_out.get_edge(v.comment_vid);
+        assert(comment_hasCreator_person_out.exist1(item));
+
         auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         output.put_long(txn.GetVertexId(person_label_id_, p));
         item = person_firstName_col_.get(p);

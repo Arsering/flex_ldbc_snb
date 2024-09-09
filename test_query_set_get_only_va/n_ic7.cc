@@ -104,11 +104,11 @@ namespace gs
 
       std::vector<person_info> vec;
 
+      const auto &post_ie = txn.GetIncomingEdges<grape::EmptyType>(
+          person_label_id_, root, post_label_id_, hasCreator_label_id_);
       auto person_likes_post_in = txn.GetIncomingGraphView<Date>(
           post_label_id_, person_label_id_, likes_label_id_);
 
-      const auto &post_ie = txn.GetIncomingEdges<grape::EmptyType>(
-          person_label_id_, root, post_label_id_, hasCreator_label_id_);
       for (auto &e : post_ie)
       {
         auto pid = e.neighbor;
@@ -122,11 +122,11 @@ namespace gs
         }
       }
 
+      const auto &comment_ie = txn.GetIncomingEdges<grape::EmptyType>(
+          person_label_id_, root, comment_label_id_, hasCreator_label_id_);
       auto person_likes_comment_in = txn.GetIncomingGraphView<Date>(
           comment_label_id_, person_label_id_, likes_label_id_);
 
-      const auto &comment_ie = txn.GetIncomingEdges<grape::EmptyType>(
-          person_label_id_, root, comment_label_id_, hasCreator_label_id_);
       for (auto &e : comment_ie)
       {
         auto cid = e.neighbor;

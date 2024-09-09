@@ -42,12 +42,13 @@ namespace gs
               post_label_id_, forum_label_id_, containerOf_label_id_);
       if (txn.GetVertexIndex(post_label_id_, req, v))
       {
-        assert(forum_containerOf_post_in.exist(v));
 #if OV
+        assert(forum_containerOf_post_in.exist(v));
         u = forum_containerOf_post_in.get_edge(v).neighbor;
 #else
 
         auto item = forum_containerOf_post_in.get_edge(v);
+        assert(forum_containerOf_post_in.exist1(item));
         u = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
       }
@@ -61,28 +62,33 @@ namespace gs
                 comment_label_id_, comment_label_id_, replyOf_label_id_);
         while (true)
         {
+#if OV
           if (comment_replyOf_post_out.exist(v))
           {
-#if OV
             v = comment_replyOf_post_out.get_edge(v).neighbor;
             assert(forum_containerOf_post_in.exist(v));
             u = forum_containerOf_post_in.get_edge(v).neighbor;
 #else
-            auto item = comment_replyOf_post_out.get_edge(v);
+          auto item = comment_replyOf_post_out.get_edge(v);
+          if (comment_replyOf_post_out.exist1(item))
+          {
             v = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
-            assert(forum_containerOf_post_in.exist(v));
+            // assert(forum_containerOf_post_in.exist(v));
             item = forum_containerOf_post_in.get_edge(v);
+            assert(forum_containerOf_post_in.exist1(item));
             u = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
             break;
           }
           else
           {
-            assert(comment_replyOf_comment_out.exist(v));
 #if OV
+            assert(comment_replyOf_comment_out.exist(v));
             v = comment_replyOf_comment_out.get_edge(v).neighbor;
 #else
             auto item = comment_replyOf_comment_out.get_edge(v);
+            assert(comment_replyOf_comment_out.exist1(item));
+
             v = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 #endif
           }
@@ -110,9 +116,10 @@ namespace gs
 #else
       auto item = forum_title_col_.get(u);
       output.put_buffer_object(item);
-      assert(forum_hasModerator_person_out.exist(u));
       // auto p = forum_hasModerator_person_out.get_edge(u).neighbor;
       item = forum_hasModerator_person_out.get_edge(u);
+      assert(forum_hasModerator_person_out.exist1(item));
+
       auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
       output.put_long(txn.GetVertexId(person_label_id_, p));
       item = person_firstName_col_.get(p);

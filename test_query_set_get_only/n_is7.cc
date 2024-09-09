@@ -70,8 +70,8 @@ namespace gs
               comment_label_id_, comment_label_id_, replyOf_label_id_);
       if (txn.GetVertexIndex(post_label_id_, req, v))
       {
-        assert(post_hasCreator_person_out.exist(v));
 #if OV
+        assert(post_hasCreator_person_out.exist(v));
         message_author_id = post_hasCreator_person_out.get_edge(v).neighbor;
         const auto &ie = comment_replyOf_post_in.get_edges(v);
         for (auto &e : ie)
@@ -102,6 +102,8 @@ namespace gs
               comment_creationDate_col_.get_view(comment_v).milli_second;
 #else
         auto item = post_hasCreator_person_out.get_edge(v);
+        assert(post_hasCreator_person_out.exist1(item));
+
         message_author_id = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
         auto ie = comment_replyOf_post_in.get_edges(v);
@@ -110,11 +112,9 @@ namespace gs
         for (; ie.is_valid(); ie.next())
         {
           auto comment_v = ie.get_neighbor();
-          assert(comment_hasCreator_person_out.exist(comment_v));
-          // auto comment_creator =
-          // comment_hasCreator_person_out.get_edge(comment_v).neighbor;
-
           item = comment_hasCreator_person_out.get_edge(comment_v);
+          assert(comment_hasCreator_person_out.exist1(item));
+
           auto comment_creator = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
           item = comment_creationDate_col_.get(comment_v);
@@ -126,8 +126,9 @@ namespace gs
       }
       else if (txn.GetVertexIndex(comment_label_id_, req, v))
       {
-        assert(comment_hasCreator_person_out.exist(v));
         auto item = comment_hasCreator_person_out.get_edge(v);
+        assert(comment_hasCreator_person_out.exist1(item));
+
         message_author_id = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
         auto ie = comment_replyOf_comment_in.get_edges(v);
@@ -135,8 +136,9 @@ namespace gs
         for (; ie.is_valid(); ie.next())
         {
           auto comment_v = ie.get_neighbor();
-          assert(comment_hasCreator_person_out.exist(comment_v));
           item = comment_hasCreator_person_out.get_edge(comment_v);
+          assert(comment_hasCreator_person_out.exist1(item));
+
           auto comment_creator = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
           item = comment_creationDate_col_.get(comment_v);
