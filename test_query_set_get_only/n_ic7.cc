@@ -274,12 +274,12 @@ namespace gs
         if (v.is_post)
         {
           auto item = post_length_col_.get(v.mid);
-          auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? post_imageFile_col_.get(v.mid) : post_content_col_.get(v.mid);
+          auto content = gbp::BufferBlock::RefSingle<int>(item) == 0 ? post_imageFile_col_.get(v.mid) : post_content_col_.get(v.mid);
 
           output.put_buffer_object(content);
           item = post_creationDate_col_.get(v.mid);
           auto min = (v.creationDate -
-                      gbp::BufferBlock::Ref<Date>(item).milli_second) /
+                      gbp::BufferBlock::RefSingle<Date>(item).milli_second) /
                      mill_per_min;
           output.put_int(min);
         }

@@ -127,7 +127,7 @@ namespace gs
         for (; ie.is_valid(); ie.next())
         {
           auto item = post_creationDate_col_.get(ie.get_neighbor());
-          auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
+          auto creationDate = gbp::BufferBlock::RefSingle<Date>(item).milli_second;
           auto post_id = ie.get_neighbor();
           if (creationDate < end_date)
           {

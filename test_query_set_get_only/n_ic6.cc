@@ -131,7 +131,7 @@ namespace gs
         auto item = post_hasCreator_person_out.get_edge(post_id);
         assert(post_hasCreator_person_out.exist1(item));
 
-        auto creator = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        auto creator = gbp::BufferBlock::RefSingle<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         if (friends_[creator])
         {
           auto oe = post_hasTag_tag_out.get_edges(post_id);

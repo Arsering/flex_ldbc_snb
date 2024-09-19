@@ -122,7 +122,7 @@ namespace gs
           {
             friends_set_[u] = true;
             auto item = person_birthday_col_.get(u);
-            auto t = gbp::BufferBlock::Ref<Date>(item).milli_second / 1000;
+            auto t = gbp::BufferBlock::RefSingle<Date>(item).milli_second / 1000;
             item.free();
             auto tm = gmtime((time_t *)(&t));
             if ((tm->tm_mon + 1 == mon && tm->tm_mday >= 21) ||
@@ -142,7 +142,7 @@ namespace gs
           {
             friends_set_[u] = true;
             auto item = person_birthday_col_.get(u);
-            auto t = gbp::BufferBlock::Ref<Date>(item).milli_second / 1000;
+            auto t = gbp::BufferBlock::RefSingle<Date>(item).milli_second / 1000;
             item.free();
             auto tm = gmtime((time_t *)(&t));
             if ((tm->tm_mon + 1 == mon && tm->tm_mday >= 21) ||
@@ -327,7 +327,7 @@ namespace gs
         assert(person_isLocatedIn_place_out.exist1(item));
 
         auto person_place =
-            gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+            gbp::BufferBlock::RefSingle<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         item = place_name_col_.get(person_place);
         output.put_buffer_object(item);
 

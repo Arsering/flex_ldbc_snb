@@ -190,11 +190,11 @@ namespace gs
           auto e2 = comment_replyOf_post_out.get_edge(comment_ie.get_neighbor());
           if (comment_replyOf_post_out.exist1(e2))
           {
-            auto tag_oe = post_hasTag_tag_out.get_edges(gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor);
+            auto tag_oe = post_hasTag_tag_out.get_edges(gbp::BufferBlock::RefSingle<gs::MutableNbr<grape::EmptyType>>(e2).neighbor);
             for (; tag_oe.is_valid(); tag_oe.next())
             {
               auto item = tag_hasType_tagClass_out.get_edge(tag_oe.get_neighbor());
-              auto tc = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              auto tc = gbp::BufferBlock::RefSingle<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
               if (sub_tagClass_[tc])
               {
                 ++count;
@@ -298,7 +298,7 @@ namespace gs
           auto e2 = comment_replyOf_post_out.get_edge(comment_ie.get_neighbor());
           if (comment_replyOf_post_out.exist1(e2))
           {
-            auto tag_oe = post_hasTag_tag_out.get_edges(gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor);
+            auto tag_oe = post_hasTag_tag_out.get_edges(gbp::BufferBlock::RefSingle<gs::MutableNbr<grape::EmptyType>>(e2).neighbor);
             for (; tag_oe.is_valid(); tag_oe.next())
             {
               auto item = tag_hasType_tagClass_out.get_edge(tag_oe.get_neighbor());
@@ -306,7 +306,7 @@ namespace gs
               // auto item = tag_hasType_tagClass_out.exist(tag_oe.get_neighbor(), mark);
               // assert(mark);
               // assert(tag_hasType_tagClass_out.exist1(tag_oe.get_neighbor(), item));
-              auto tc = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              auto tc = gbp::BufferBlock::RefSingle<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
               if (sub_tagClass_[tc])
               {
                 ++count;
@@ -396,7 +396,7 @@ namespace gs
           if (comment_replyOf_post_out.exist1(e2))
           {
             auto tag_e = txn.GetOutgoingEdges<grape::EmptyType>(
-                post_label_id_, gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor, tag_label_id_, hasTag_label_id_);
+                post_label_id_, gbp::BufferBlock::RefSingle<gs::MutableNbr<grape::EmptyType>>(e2).neighbor, tag_label_id_, hasTag_label_id_);
             for (; tag_e.is_valid(); tag_e.next())
             {
               auto tag = tag_e.get_neighbor();
@@ -404,7 +404,7 @@ namespace gs
               auto item = tag_hasType_tagClass_out.get_edge(tag);
               assert(tag_hasType_tagClass_out.exist1(item));
 
-              auto tc = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+              auto tc = gbp::BufferBlock::RefSingle<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
               if (sub_tagClass_[tc])
               {
                 tmp.insert(tag);
