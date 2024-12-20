@@ -197,6 +197,9 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
+      // std::cout<<"begin query"<<std::endl;
+      person_count=0;
+      message_count=0;
       auto txn = graph_.GetReadTransaction();
 
       oid_t personid = input.get_long();
@@ -467,12 +470,15 @@ namespace gs
       }
 
       std::vector<person_info> vec;
+      // std::ofstream outfile1;
       vec.reserve(pq.size());
       while (!pq.empty())
       {
         vec.emplace_back(pq.top());
         pq.pop();
       }
+      // outfile1.open("/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/experiment_space/LDBC_SNB/query_access_log/90_ic3_log",std::ios::app);
+      // outfile1<<vec.size()<<std::endl;
       for (size_t idx = vec.size(); idx > 0; --idx)
       {
         auto &p = vec[idx - 1];
@@ -518,6 +524,7 @@ namespace gs
         place_Locatedin_[ye_1.get_neighbor()] = false;
       }
 #endif
+      // std::cout<<"end query"<<std::endl;
       return true;
     }
 
@@ -545,6 +552,8 @@ namespace gs
     vid_t place_num_;
 
     GraphDBSession &graph_;
+    int person_count;
+    int message_count=0;
   };
 
 } // namespace gs

@@ -60,6 +60,9 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
+      // std::cout<<"begin query"<<std::endl;
+      reply_count = 0;
+      message_count=0;
       auto txn = graph_.GetReadTransaction();
 
       oid_t personid = input.get_long();
@@ -106,10 +109,12 @@ namespace gs
       for (; post_ie.is_valid(); post_ie.next())
       {
         auto v = post_ie.get_neighbor();
+        message_count++;
         auto ie = comment_replyOf_post_in.get_edges(v);
         for (; ie.is_valid(); ie.next())
         {
           auto u = ie.get_neighbor();
+          reply_count++;
           if (pq.size() < 20)
           {
             auto item = comment_creationDate_col_.get(u);
@@ -159,10 +164,12 @@ namespace gs
       for (; comment_ie.is_valid(); comment_ie.next())
       {
         auto v = comment_ie.get_neighbor();
+        message_count++;
         auto ie = comment_replyOf_comment_in.get_edges(v);
         for (; ie.is_valid(); ie.next())
         {
           auto u = ie.get_neighbor();
+          reply_count++;
 #endif
           if (pq.size() < 20)
           {
@@ -203,6 +210,7 @@ namespace gs
           }
         }
       }
+
       std::vector<comment_info> vec;
       vec.reserve(pq.size());
       while (!pq.empty())
@@ -214,6 +222,9 @@ namespace gs
       auto comment_hasCreator_person_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
               comment_label_id_, person_label_id_, hasCreator_label_id_);
+      // std::ofstream outfile1;
+      // outfile1.open("/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/experiment_space/LDBC_SNB/query_access_log/100_ic8_log",std::ios::app);
+      // outfile1 << vec.size()<<"|"<<message_count << "|" << reply_count << std::endl;
       for (auto i = vec.size(); i > 0; i--)
       {
         auto &v = vec[i - 1];
@@ -242,6 +253,8 @@ namespace gs
         output.put_buffer_object(item);
 #endif
       }
+
+      // std::cout<<"end query"<<std::endl;
       return true;
     }
 
@@ -260,6 +273,8 @@ namespace gs
     const DateColumn &comment_creationDate_col_;
 
     GraphDBSession &graph_;
+    int reply_count = 0;
+    int message_count=0;
   };
 
 } // namespace gs

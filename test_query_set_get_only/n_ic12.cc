@@ -104,7 +104,11 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
+      // std::cout<<"begin query"<<std::endl;
       auto txn = graph_.GetReadTransaction();
+      person_count=0;
+      message_count=0;
+      vec_count=0;
 
       oid_t personid = input.get_long();
       std::string_view tagclassname = input.get_string();
@@ -182,11 +186,13 @@ namespace gs
           person_label_id_, root, person_label_id_, knows_label_id_);
       for (; oe.is_valid(); oe.next())
       {
+        person_count++;
         auto v = oe.get_neighbor();
         int count = 0;
         auto comment_ie = comment_hasCreator_person_in.get_edges(v);
         for (; comment_ie.is_valid(); comment_ie.next())
         {
+          message_count++;
           auto e2 = comment_replyOf_post_out.get_edge(comment_ie.get_neighbor());
           if (comment_replyOf_post_out.exist1(e2))
           {
@@ -288,6 +294,7 @@ namespace gs
           person_label_id_, root, person_label_id_, knows_label_id_);
       for (; ie.is_valid(); ie.next())
       {
+        person_count++;
         auto v = ie.get_neighbor();
         int count = 0;
         auto comment_ie = comment_hasCreator_person_in.get_edges(v);
@@ -295,6 +302,7 @@ namespace gs
         // gbp::BufferBlock item;
         for (; comment_ie.is_valid(); comment_ie.next())
         {
+          message_count++;
           auto e2 = comment_replyOf_post_out.get_edge(comment_ie.get_neighbor());
           if (comment_replyOf_post_out.exist1(e2))
           {
@@ -342,6 +350,7 @@ namespace gs
         }
       }
 #endif
+
       std::vector<person_info> vec;
       vec.reserve(pq.size());
       while (!pq.empty())
@@ -350,6 +359,8 @@ namespace gs
         pq.pop();
       }
       std::set<vid_t> tmp;
+      vec_count=vec.size();
+
       for (auto i = vec.size(); i > 0; i--)
       {
         auto &v = vec[i - 1];
@@ -426,6 +437,10 @@ namespace gs
         }
         output.put_int(v.reply_count);
       }
+
+      // std::ofstream outfile1;
+      // outfile1.open("/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/experiment_space/LDBC_SNB/query_access_log/100_ic12_log",std::ios::app);
+      // outfile1<<person_count<<"|"<<message_count<<"|"<<vec_count<<std::endl;
       return true;
     }
 
@@ -450,6 +465,9 @@ namespace gs
     const StringColumn &person_firstName_col_;
     const StringColumn &person_lastName_col_;
     std::vector<bool> sub_tagClass_;
+    int person_count;
+    int message_count;
+    int vec_count;
 
     GraphDBSession &graph_;
   };

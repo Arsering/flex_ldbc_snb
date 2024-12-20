@@ -66,6 +66,9 @@ namespace gs
     bool Query(Decoder &input, Encoder &output) override
     {
       auto txn = graph_.GetReadTransaction();
+      person_count=0;
+      post_access_num=0;
+      tag_count=0;
 
       oid_t personid = input.get_long();
       std::string_view tagname = input.get_string();
@@ -94,6 +97,13 @@ namespace gs
 
       get_2d_friends(txn, person_label_id_, knows_label_id_, root,
                      txn.GetVertexNum(person_label_id_), friends_);
+
+      
+      for(int i=0;i<friends_.size();i++){
+        if(friends_[i]==true){
+          person_count+=1;
+        }
+      }
 
       std::vector<int> post_count(tag_num_, 0);
 
@@ -124,8 +134,10 @@ namespace gs
           tag_label_id_, tag_id, post_label_id_, hasTag_label_id_);
       auto post_hasTag_tag_out = txn.GetOutgoingGraphView<grape::EmptyType>(
           post_label_id_, tag_label_id_, hasTag_label_id_);
+
       for (; posts_with_tag.is_valid(); posts_with_tag.next())
       {
+        post_access_num++;
         vid_t post_id = posts_with_tag.get_neighbor();
 
         auto item = post_hasCreator_person_out.get_edge(post_id);
@@ -141,6 +153,7 @@ namespace gs
           }
         }
       }
+
 #endif
 
       post_count[tag_id] = 0;
@@ -204,6 +217,7 @@ namespace gs
         vec.emplace_back(que.top());
         que.pop();
       }
+      tag_count=vec.size();
       for (size_t i = vec.size(); i > 0; i--)
       {
 #if OV
@@ -213,6 +227,10 @@ namespace gs
 #endif
         output.put_int(vec[i - 1].count);
       }
+
+      // std::ofstream outfile1;
+      // outfile1.open("/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/experiment_space/LDBC_SNB/query_access_log/100_ic6_log",std::ios::app);
+      // outfile1<<person_count<<"|"<<post_access_num<<"|"<<tag_count<<std::endl;
       return true;
     }
 
@@ -231,6 +249,9 @@ namespace gs
     const StringColumn &tag_name_col_;
 
     GraphDBSession &graph_;
+    int person_count=0;
+    int post_access_num=0;
+    int tag_count=0;
   };
 
 } // namespace gs

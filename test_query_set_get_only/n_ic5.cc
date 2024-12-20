@@ -57,6 +57,7 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
+      // std::cout<<"begin query"<<std::endl;
       auto txn = graph_.GetReadTransaction();
 
       oid_t personid = input.get_long();
@@ -197,6 +198,7 @@ namespace gs
 #endif
         output.put_int(cur.post_count - 1);
       }
+      // std::cout<<"end query"<<std::endl;
       return true;
     }
 

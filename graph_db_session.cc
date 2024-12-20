@@ -74,6 +74,7 @@ namespace gs
   std::shared_ptr<RefColumnBase> GraphDBSession::get_vertex_id_column(
       uint8_t label) const
   {
+    assert(false);
     return std::make_shared<TypedRefColumn<oid_t>>(
         db_.graph().lf_indexers_[label].get_keys(), StorageStrategy::kMem);
   }

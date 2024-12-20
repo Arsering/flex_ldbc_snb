@@ -1,3 +1,4 @@
+#include <fstream>
 #include <queue>
 #include <string_view>
 
@@ -6,6 +7,8 @@
 #include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
 #include "flex/utils/property/types.h"
 // #include "utils.h"
+
+// #define ZED_PROFILE
 
 namespace gs
 {
@@ -116,6 +119,11 @@ namespace gs
       distance_[root] = 1;
       std::queue<vid_t> q;
       q.push(root);
+
+      // 用于记录每层访问的节点
+      std::vector<vid_t> current_level_nodes;
+      int current_depth = 1;
+      
       while (!q.empty())
       {
         auto u = q.front();
@@ -125,6 +133,18 @@ namespace gs
           if (pq.size() == 20)
             break;
           dep = distance_[u];
+
+          // 打印上一层访问的节点
+          std::ofstream ofs("level_nodes.txt", std::ios::app);
+          ofs << "Depth " << current_depth << ": ";
+          for (const auto& vid : current_level_nodes) {
+            ofs << vid << " ";
+          }
+          ofs << "\n";
+          ofs.close();
+
+          current_level_nodes.clear();
+          current_depth++;
         }
 
 #if OV
@@ -140,6 +160,9 @@ namespace gs
 #endif
           if (distance_[v])
             continue;
+          #ifdef ZED_PROFILE
+          person_count+=1;
+          #endif
           distance_[v] = distance_[u] + 1;
           if (distance_[v] < 4)
           {
@@ -228,9 +251,15 @@ namespace gs
         for (; oe.is_valid(); oe.next())
         {
           auto v = oe.get_neighbor();
+          #ifdef ZED_PROFILE
+          edge_count+=1;
+          #endif
 #endif
           if (distance_[v])
             continue;
+          #ifdef ZED_PROFILE
+          person_count+=1;
+          #endif
           distance_[v] = distance_[u] + 1;
           if (distance_[v] < 4)
           {
@@ -310,7 +339,22 @@ namespace gs
             }
           }
         }
+
+        // 记录当前访问的节点
+        current_level_nodes.push_back(u);
       }
+
+      // 打印最后一层的节点
+      if (!current_level_nodes.empty()) {
+        std::ofstream ofs("level_nodes.txt", std::ios::app);
+        ofs << "Depth " << current_depth << ": ";
+        for (const auto& vid : current_level_nodes) {
+          ofs << vid << " ";
+        }
+        ofs << "\n";
+        ofs.close();
+      }
+
       ans_.reserve(pq.size());
       while (!pq.empty())
       {
@@ -321,6 +365,8 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
+      // std::cout<<"begin query 1"<<std::endl;
+      // std::cout<<"begin query"<<std::endl;
       auto txn = graph_.GetReadTransaction();
 
       oid_t person_id = input.get_long();
@@ -337,6 +383,12 @@ namespace gs
       }
 
       get_friends(txn, root, firstname);
+      std::ofstream ofs("ans.txt",std::ios::app);
+      for(auto &info:ans_){
+        ofs<<info.vid<<" ";
+      }
+      ofs<<"\n";
+      ofs.close();
 
       auto person_isLocatedIn_place_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
@@ -459,6 +511,11 @@ namespace gs
 #endif
         output.put_int_at(cn_offset, company_num);
       }
+      // outfile<<"hello"<<std::endl;
+      #ifdef ZED_PROFILE
+      // std::cout<<"end query,"<<person_count<<","<<edge_count<<std::endl;
+      person_count=0;edge_count=0;
+      #endif
       return true;
     }
 
@@ -486,6 +543,12 @@ namespace gs
     const StringColumn &organisation_name_col_;
 
     GraphDBSession &graph_;
+
+    #ifdef ZED_PROFILE
+    int person_count=0;
+    int edge_count=0;
+    #endif
+
   };
 
 } // namespace gs

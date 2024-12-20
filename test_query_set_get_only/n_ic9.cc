@@ -6,6 +6,8 @@
 #include "flex/utils/property/types.h"
 #include "n_utils.h"
 
+// #define ZED_PROFILE
+
 namespace gs
 {
 
@@ -73,6 +75,9 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
+      #ifdef ZED_PROFILE
+      // std::cout<<"begin query"<<std::endl;
+      #endif
       auto txn = graph_.GetReadTransaction();
 
       oid_t personid = input.get_long();
@@ -101,10 +106,15 @@ namespace gs
           [&](vid_t v)
           {
             {
+              #ifdef ZED_PROFILE
+              person_count+=1;
+              #endif
+
 #if OV
               const auto &edges = post_hasCreator_person_in.get_edges(v);
               for (auto &e : edges)
               {
+                
                 auto u = e.neighbor;
                 auto creation_date =
                     post_creationDate_col_.get_view(u).milli_second;
@@ -160,6 +170,9 @@ namespace gs
               {
                 auto u = edges.get_neighbor();
                 auto item = comment_creationDate_col_.get(u);
+                #ifdef ZED_PROFILE
+                comment_count++;
+                #endif
                 auto creation_date =
                     gbp::BufferBlock::Ref<Date>(item).milli_second;
 #endif
@@ -252,6 +265,11 @@ namespace gs
 #endif
         output.put_long(v.creation_date);
       }
+      #ifdef ZED_PROFILE
+      // std::cout<<"end query,"<<person_count<<","<<comment_count<<std::endl;
+      comment_count=0;
+      person_count=0;
+      #endif
       return true;
     }
 
@@ -270,6 +288,11 @@ namespace gs
     const StringColumn &comment_content_col_;
     const DateColumn &comment_creationDate_col_;
     const DateColumn &post_creationDate_col_;
+
+    #ifdef ZED_PROFILE
+    int comment_count=0;
+    int person_count=0;
+    #endif
 
     GraphDBSession &graph_;
   };

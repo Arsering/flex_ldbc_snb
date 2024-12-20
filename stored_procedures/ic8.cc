@@ -153,6 +153,7 @@ namespace gs
       }
       std::vector<comment_info> vec;
       vec.reserve(pq.size());
+
       while (!pq.empty())
       {
         vec.emplace_back(pq.top());
@@ -174,6 +175,7 @@ namespace gs
         output.put_long(v.comment_id);
         output.put_string_view(comment_content_col_.get_view(v.comment_vid));
       }
+
       return true;
     }
 

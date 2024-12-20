@@ -3,6 +3,8 @@
 #include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
 #include "flex/utils/property/types.h"
 
+#define NEW_ALLOCATOR
+
 namespace gs {
 
 class INS6 : public AppBase {
@@ -33,6 +35,7 @@ class INS6 : public AppBase {
     std::string_view ip_addr = input.get_string();
 
     auto txn = graph_.GetSingleVertexInsertTransaction();
+#ifndef NEW_ALLOCATOR
     if (!txn.AddVertex(
             post_label_id_, postid,
             {Any::From(imagefile), Any::From(Date(creationdate)),
@@ -42,6 +45,17 @@ class INS6 : public AppBase {
       txn.Abort();
       return false;
     }
+#else
+    if (!txn.AddVertex(
+            post_label_id_, postid,person_label_id_,authorpersonid,
+            {Any::From(imagefile), Any::From(Date(creationdate)),
+             Any::From(ip_addr), Any::From(browser), Any::From(language),
+             Any::From(content), Any::From(length)})) {
+      LOG(ERROR) << "Adding vertex POST[" << postid << "] failed...";
+      txn.Abort();
+      return false;
+    }
+#endif
     if (!txn.AddEdge(post_label_id_, postid, person_label_id_, authorpersonid,
                      hasCreator_label_id_, Any())) {
       LOG(ERROR) << "Adding edge POST[" << postid << "] hasCreator PERSON[" << authorpersonid << "] failed...";

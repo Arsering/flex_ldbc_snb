@@ -2,7 +2,7 @@
 #include "flex/engines/graph_db/database/graph_db_session.h"
 #include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
 #include "flex/utils/property/types.h"
-
+#define NEW_ALLOCATOR
 namespace gs {
 
 class INS7 : public AppBase {
@@ -31,6 +31,7 @@ class INS7 : public AppBase {
     CHECK(input.empty());
 
     auto txn = graph_.GetSingleVertexInsertTransaction();
+#ifndef NEW_ALLOCATOR
     if (!txn.AddVertex(
             comment_label_id_, commentid,
             {Any::From(Date(creationdate)), Any::From(ip_addr),
@@ -39,6 +40,16 @@ class INS7 : public AppBase {
       txn.Abort();
       return false;
     }
+#else
+    if (!txn.AddVertex(
+            comment_label_id_, commentid,person_label_id_,authorpersonid,
+            {Any::From(Date(creationdate)), Any::From(ip_addr),
+             Any::From(browser), Any::From(content), Any::From(length)})) {
+      LOG(ERROR) << "Adding vertex COMMENT[" << commentid << "] failed...";
+      txn.Abort();
+      return false;
+    }
+#endif
     if (!txn.AddEdge(comment_label_id_, commentid, person_label_id_,
                      authorpersonid, hasCreator_label_id_, Any())) {
       LOG(ERROR) << "Adding edge COMMENT[" << commentid << "] hasCreator PERSON[" << authorpersonid << "] failed...";

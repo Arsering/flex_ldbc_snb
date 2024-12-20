@@ -16,6 +16,7 @@ class INS4 : public AppBase {
 
   bool Query(Decoder& input, Encoder& output) override {
     oid_t forumid = input.get_long();
+    // std::cout<<"insert forum and forum id is "<<forumid<<std::endl;
     std::string_view forumtitle = input.get_string();
     int64_t creationdate = input.get_long();
     oid_t moderatorpersonid = input.get_long();
