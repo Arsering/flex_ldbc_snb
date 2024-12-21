@@ -25,8 +25,9 @@ set(TARGETS
     n_ic11 n_ic12 n_ic13 n_ic14 n_is1 n_is2 n_is3 n_is4 n_is5 
     n_is6 n_is7 n_ins1 n_ins2 n_ins3 n_ins4 n_ins5 n_ins6 n_ins7 
     n_ins8 
-    n_ic1_batch n_ic2_batch n_ic3_batch n_ic4_batch n_ic5_batch n_ic6_batch n_ic7_batch n_ic8_batch n_ic9_batch n_ic10_batch
-    n_ic11_batch n_ic12_batch n_ic13_batch n_ic14_batch n_is1_batch n_is2_batch n_is3_batch n_is4_batch n_is5_batch n_is6_batch n_is7_batch
+    n_ic1_nocol n_ic2_nocol n_ic3_nocol n_ic4_nocol n_ic5_nocol n_ic6_nocol n_ic7_nocol n_ic8_nocol n_ic9_nocol n_ic10_nocol
+    n_ic11_nocol n_ic12_nocol n_ic13_nocol n_ic14_nocol
+    n_is1_nocol n_is2_nocol n_is3_nocol n_is4_nocol n_is5_nocol n_is6_nocol n_is7_nocol
 )
 
 # 为每个目标创建共享库

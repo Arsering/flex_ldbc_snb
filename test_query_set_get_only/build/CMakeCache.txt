@@ -296,85 +296,85 @@ flex_ldbc_snb_queries_SOURCE_DIR:STATIC=/data-1/yichengzhang/data/latest_gs_bp/g
 n_ic10_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic10_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic10_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic11_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic11_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic11_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic12_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic12_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic12_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic13_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic13_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic13_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic14_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic14_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic14_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic1_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic1_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic1_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic2_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic2_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic2_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic3_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic3_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic3_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic4_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic4_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic4_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic5_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic5_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic5_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic6_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic6_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic6_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic7_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic7_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic7_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic8_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic8_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic8_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ic9_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_ic9_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_ic9_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_ins1_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
@@ -404,43 +404,46 @@ n_ins8_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;gener
 n_is1_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_is1_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_is1_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_is2_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_is2_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_is2_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_is3_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_is3_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_is3_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_is4_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_is4_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_is4_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_is5_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_is5_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_is5_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_is6_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_is6_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_is6_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
 n_is7_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 //Dependencies for the target
-n_is7_batch_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+n_is7_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
+
+//Dependencies for the target
+n_is8_nocol_LIB_DEPENDS:STATIC=general;flex_utils;general;flex_rt_mutable_graph;general;flex_graph_db;
 
 
 ########################

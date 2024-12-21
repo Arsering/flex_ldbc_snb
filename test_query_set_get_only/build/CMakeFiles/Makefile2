@@ -72,56 +72,56 @@ CMAKE_BINARY_DIR = /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_l
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/n_is6_batch.dir/all
-all: CMakeFiles/n_is5_batch.dir/all
+all: CMakeFiles/n_is7_nocol.dir/all
+all: CMakeFiles/n_is4_nocol.dir/all
 all: CMakeFiles/n_ins1.dir/all
 all: CMakeFiles/n_is7.dir/all
-all: CMakeFiles/n_ic8.dir/all
-all: CMakeFiles/n_is5.dir/all
-all: CMakeFiles/n_is2.dir/all
+all: CMakeFiles/n_ic12_nocol.dir/all
 all: CMakeFiles/n_ic9.dir/all
-all: CMakeFiles/n_is1_batch.dir/all
+all: CMakeFiles/n_is5.dir/all
+all: CMakeFiles/n_ic9_nocol.dir/all
+all: CMakeFiles/n_is6_nocol.dir/all
+all: CMakeFiles/n_is2.dir/all
 all: CMakeFiles/n_ic5.dir/all
-all: CMakeFiles/n_ic5_batch.dir/all
 all: CMakeFiles/n_ic13.dir/all
+all: CMakeFiles/n_is3.dir/all
+all: CMakeFiles/n_is5_nocol.dir/all
 all: CMakeFiles/n_is1.dir/all
 all: CMakeFiles/n_ins5.dir/all
 all: CMakeFiles/n_ic11.dir/all
 all: CMakeFiles/n_ic7.dir/all
 all: CMakeFiles/n_is6.dir/all
 all: CMakeFiles/n_ins3.dir/all
+all: CMakeFiles/n_ic10_nocol.dir/all
+all: CMakeFiles/n_ic8.dir/all
+all: CMakeFiles/n_is3_nocol.dir/all
 all: CMakeFiles/n_is4.dir/all
-all: CMakeFiles/n_is3.dir/all
-all: CMakeFiles/n_ic12_batch.dir/all
 all: CMakeFiles/n_ic3.dir/all
-all: CMakeFiles/n_ic12.dir/all
+all: CMakeFiles/n_ic3_nocol.dir/all
 all: CMakeFiles/n_ic4.dir/all
-all: CMakeFiles/n_ic8_batch.dir/all
+all: CMakeFiles/n_ic12.dir/all
+all: CMakeFiles/n_ic1.dir/all
+all: CMakeFiles/n_ic6_nocol.dir/all
 all: CMakeFiles/n_ic6.dir/all
-all: CMakeFiles/n_is4_batch.dir/all
 all: CMakeFiles/n_ic14.dir/all
 all: CMakeFiles/n_ic10.dir/all
 all: CMakeFiles/n_ic2.dir/all
 all: CMakeFiles/n_ins8.dir/all
-all: CMakeFiles/n_ins4.dir/all
-all: CMakeFiles/n_ic1_batch.dir/all
-all: CMakeFiles/n_ins6.dir/all
-all: CMakeFiles/n_is7_batch.dir/all
-all: CMakeFiles/n_ins7.dir/all
-all: CMakeFiles/n_ic2_batch.dir/all
-all: CMakeFiles/n_ic3_batch.dir/all
-all: CMakeFiles/n_is3_batch.dir/all
-all: CMakeFiles/n_ic1.dir/all
-all: CMakeFiles/n_ic4_batch.dir/all
-all: CMakeFiles/n_ic6_batch.dir/all
-all: CMakeFiles/n_ic7_batch.dir/all
-all: CMakeFiles/n_ic9_batch.dir/all
-all: CMakeFiles/n_ic10_batch.dir/all
 all: CMakeFiles/n_ins2.dir/all
-all: CMakeFiles/n_ic11_batch.dir/all
-all: CMakeFiles/n_ic13_batch.dir/all
-all: CMakeFiles/n_ic14_batch.dir/all
-all: CMakeFiles/n_is2_batch.dir/all
+all: CMakeFiles/n_ins4.dir/all
+all: CMakeFiles/n_ins6.dir/all
+all: CMakeFiles/n_ic1_nocol.dir/all
+all: CMakeFiles/n_ic2_nocol.dir/all
+all: CMakeFiles/n_ic4_nocol.dir/all
+all: CMakeFiles/n_ic5_nocol.dir/all
+all: CMakeFiles/n_ic7_nocol.dir/all
+all: CMakeFiles/n_ic8_nocol.dir/all
+all: CMakeFiles/n_ic11_nocol.dir/all
+all: CMakeFiles/n_ic13_nocol.dir/all
+all: CMakeFiles/n_ic14_nocol.dir/all
+all: CMakeFiles/n_is1_nocol.dir/all
+all: CMakeFiles/n_ins7.dir/all
+all: CMakeFiles/n_is2_nocol.dir/all
 
 .PHONY : all
 
@@ -131,112 +131,112 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/n_is6_batch.dir/clean
-clean: CMakeFiles/n_is5_batch.dir/clean
+clean: CMakeFiles/n_is7_nocol.dir/clean
+clean: CMakeFiles/n_is4_nocol.dir/clean
 clean: CMakeFiles/n_ins1.dir/clean
 clean: CMakeFiles/n_is7.dir/clean
-clean: CMakeFiles/n_ic8.dir/clean
-clean: CMakeFiles/n_is5.dir/clean
-clean: CMakeFiles/n_is2.dir/clean
+clean: CMakeFiles/n_ic12_nocol.dir/clean
 clean: CMakeFiles/n_ic9.dir/clean
-clean: CMakeFiles/n_is1_batch.dir/clean
+clean: CMakeFiles/n_is5.dir/clean
+clean: CMakeFiles/n_ic9_nocol.dir/clean
+clean: CMakeFiles/n_is6_nocol.dir/clean
+clean: CMakeFiles/n_is2.dir/clean
 clean: CMakeFiles/n_ic5.dir/clean
-clean: CMakeFiles/n_ic5_batch.dir/clean
 clean: CMakeFiles/n_ic13.dir/clean
+clean: CMakeFiles/n_is3.dir/clean
+clean: CMakeFiles/n_is5_nocol.dir/clean
 clean: CMakeFiles/n_is1.dir/clean
 clean: CMakeFiles/n_ins5.dir/clean
 clean: CMakeFiles/n_ic11.dir/clean
 clean: CMakeFiles/n_ic7.dir/clean
 clean: CMakeFiles/n_is6.dir/clean
 clean: CMakeFiles/n_ins3.dir/clean
+clean: CMakeFiles/n_ic10_nocol.dir/clean
+clean: CMakeFiles/n_ic8.dir/clean
+clean: CMakeFiles/n_is3_nocol.dir/clean
 clean: CMakeFiles/n_is4.dir/clean
-clean: CMakeFiles/n_is3.dir/clean
-clean: CMakeFiles/n_ic12_batch.dir/clean
 clean: CMakeFiles/n_ic3.dir/clean
-clean: CMakeFiles/n_ic12.dir/clean
+clean: CMakeFiles/n_ic3_nocol.dir/clean
 clean: CMakeFiles/n_ic4.dir/clean
-clean: CMakeFiles/n_ic8_batch.dir/clean
+clean: CMakeFiles/n_ic12.dir/clean
+clean: CMakeFiles/n_ic1.dir/clean
+clean: CMakeFiles/n_ic6_nocol.dir/clean
 clean: CMakeFiles/n_ic6.dir/clean
-clean: CMakeFiles/n_is4_batch.dir/clean
 clean: CMakeFiles/n_ic14.dir/clean
 clean: CMakeFiles/n_ic10.dir/clean
 clean: CMakeFiles/n_ic2.dir/clean
 clean: CMakeFiles/n_ins8.dir/clean
-clean: CMakeFiles/n_ins4.dir/clean
-clean: CMakeFiles/n_ic1_batch.dir/clean
-clean: CMakeFiles/n_ins6.dir/clean
-clean: CMakeFiles/n_is7_batch.dir/clean
-clean: CMakeFiles/n_ins7.dir/clean
-clean: CMakeFiles/n_ic2_batch.dir/clean
-clean: CMakeFiles/n_ic3_batch.dir/clean
-clean: CMakeFiles/n_is3_batch.dir/clean
-clean: CMakeFiles/n_ic1.dir/clean
-clean: CMakeFiles/n_ic4_batch.dir/clean
-clean: CMakeFiles/n_ic6_batch.dir/clean
-clean: CMakeFiles/n_ic7_batch.dir/clean
-clean: CMakeFiles/n_ic9_batch.dir/clean
-clean: CMakeFiles/n_ic10_batch.dir/clean
 clean: CMakeFiles/n_ins2.dir/clean
-clean: CMakeFiles/n_ic11_batch.dir/clean
-clean: CMakeFiles/n_ic13_batch.dir/clean
-clean: CMakeFiles/n_ic14_batch.dir/clean
-clean: CMakeFiles/n_is2_batch.dir/clean
+clean: CMakeFiles/n_ins4.dir/clean
+clean: CMakeFiles/n_ins6.dir/clean
+clean: CMakeFiles/n_ic1_nocol.dir/clean
+clean: CMakeFiles/n_ic2_nocol.dir/clean
+clean: CMakeFiles/n_ic4_nocol.dir/clean
+clean: CMakeFiles/n_ic5_nocol.dir/clean
+clean: CMakeFiles/n_ic7_nocol.dir/clean
+clean: CMakeFiles/n_ic8_nocol.dir/clean
+clean: CMakeFiles/n_ic11_nocol.dir/clean
+clean: CMakeFiles/n_ic13_nocol.dir/clean
+clean: CMakeFiles/n_ic14_nocol.dir/clean
+clean: CMakeFiles/n_is1_nocol.dir/clean
+clean: CMakeFiles/n_ins7.dir/clean
+clean: CMakeFiles/n_is2_nocol.dir/clean
 
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/n_is6_batch.dir
+# Target rules for target CMakeFiles/n_is7_nocol.dir
 
 # All Build rule for target.
-CMakeFiles/n_is6_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is6_batch.dir/build.make CMakeFiles/n_is6_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is6_batch.dir/build.make CMakeFiles/n_is6_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=95,96 "Built target n_is6_batch"
-.PHONY : CMakeFiles/n_is6_batch.dir/all
+CMakeFiles/n_is7_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is7_nocol.dir/build.make CMakeFiles/n_is7_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is7_nocol.dir/build.make CMakeFiles/n_is7_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=99,100 "Built target n_is7_nocol"
+.PHONY : CMakeFiles/n_is7_nocol.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/n_is6_batch.dir/rule: cmake_check_build_system
+CMakeFiles/n_is7_nocol.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is6_batch.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is7_nocol.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_is6_batch.dir/rule
+.PHONY : CMakeFiles/n_is7_nocol.dir/rule
 
 # Convenience name for target.
-n_is6_batch: CMakeFiles/n_is6_batch.dir/rule
+n_is7_nocol: CMakeFiles/n_is7_nocol.dir/rule
 
-.PHONY : n_is6_batch
+.PHONY : n_is7_nocol
 
 # clean rule for target.
-CMakeFiles/n_is6_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is6_batch.dir/build.make CMakeFiles/n_is6_batch.dir/clean
-.PHONY : CMakeFiles/n_is6_batch.dir/clean
+CMakeFiles/n_is7_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is7_nocol.dir/build.make CMakeFiles/n_is7_nocol.dir/clean
+.PHONY : CMakeFiles/n_is7_nocol.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/n_is5_batch.dir
+# Target rules for target CMakeFiles/n_is4_nocol.dir
 
 # All Build rule for target.
-CMakeFiles/n_is5_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5_batch.dir/build.make CMakeFiles/n_is5_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5_batch.dir/build.make CMakeFiles/n_is5_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=91,92 "Built target n_is5_batch"
-.PHONY : CMakeFiles/n_is5_batch.dir/all
+CMakeFiles/n_is4_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is4_nocol.dir/build.make CMakeFiles/n_is4_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is4_nocol.dir/build.make CMakeFiles/n_is4_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=87,88 "Built target n_is4_nocol"
+.PHONY : CMakeFiles/n_is4_nocol.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/n_is5_batch.dir/rule: cmake_check_build_system
+CMakeFiles/n_is4_nocol.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is5_batch.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is4_nocol.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_is5_batch.dir/rule
+.PHONY : CMakeFiles/n_is4_nocol.dir/rule
 
 # Convenience name for target.
-n_is5_batch: CMakeFiles/n_is5_batch.dir/rule
+n_is4_nocol: CMakeFiles/n_is4_nocol.dir/rule
 
-.PHONY : n_is5_batch
+.PHONY : n_is4_nocol
 
 # clean rule for target.
-CMakeFiles/n_is5_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5_batch.dir/build.make CMakeFiles/n_is5_batch.dir/clean
-.PHONY : CMakeFiles/n_is5_batch.dir/clean
+CMakeFiles/n_is4_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is4_nocol.dir/build.make CMakeFiles/n_is4_nocol.dir/clean
+.PHONY : CMakeFiles/n_is4_nocol.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/n_ins1.dir
@@ -293,85 +293,31 @@ CMakeFiles/n_is7.dir/clean:
 .PHONY : CMakeFiles/n_is7.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/n_ic8.dir
+# Target rules for target CMakeFiles/n_ic12_nocol.dir
 
 # All Build rule for target.
-CMakeFiles/n_ic8.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8.dir/build.make CMakeFiles/n_ic8.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8.dir/build.make CMakeFiles/n_ic8.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=49,50 "Built target n_ic8"
-.PHONY : CMakeFiles/n_ic8.dir/all
+CMakeFiles/n_ic12_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12_nocol.dir/build.make CMakeFiles/n_ic12_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12_nocol.dir/build.make CMakeFiles/n_ic12_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=13,14 "Built target n_ic12_nocol"
+.PHONY : CMakeFiles/n_ic12_nocol.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/n_ic8.dir/rule: cmake_check_build_system
+CMakeFiles/n_ic12_nocol.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic8.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic12_nocol.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic8.dir/rule
+.PHONY : CMakeFiles/n_ic12_nocol.dir/rule
 
 # Convenience name for target.
-n_ic8: CMakeFiles/n_ic8.dir/rule
+n_ic12_nocol: CMakeFiles/n_ic12_nocol.dir/rule
 
-.PHONY : n_ic8
-
-# clean rule for target.
-CMakeFiles/n_ic8.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8.dir/build.make CMakeFiles/n_ic8.dir/clean
-.PHONY : CMakeFiles/n_ic8.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_is5.dir
-
-# All Build rule for target.
-CMakeFiles/n_is5.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5.dir/build.make CMakeFiles/n_is5.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5.dir/build.make CMakeFiles/n_is5.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=89,90 "Built target n_is5"
-.PHONY : CMakeFiles/n_is5.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_is5.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is5.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_is5.dir/rule
-
-# Convenience name for target.
-n_is5: CMakeFiles/n_is5.dir/rule
-
-.PHONY : n_is5
+.PHONY : n_ic12_nocol
 
 # clean rule for target.
-CMakeFiles/n_is5.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5.dir/build.make CMakeFiles/n_is5.dir/clean
-.PHONY : CMakeFiles/n_is5.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_is2.dir
-
-# All Build rule for target.
-CMakeFiles/n_is2.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2.dir/build.make CMakeFiles/n_is2.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2.dir/build.make CMakeFiles/n_is2.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=77,78 "Built target n_is2"
-.PHONY : CMakeFiles/n_is2.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_is2.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is2.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_is2.dir/rule
-
-# Convenience name for target.
-n_is2: CMakeFiles/n_is2.dir/rule
-
-.PHONY : n_is2
-
-# clean rule for target.
-CMakeFiles/n_is2.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2.dir/build.make CMakeFiles/n_is2.dir/clean
-.PHONY : CMakeFiles/n_is2.dir/clean
+CMakeFiles/n_ic12_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12_nocol.dir/build.make CMakeFiles/n_ic12_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic12_nocol.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/n_ic9.dir
@@ -401,31 +347,112 @@ CMakeFiles/n_ic9.dir/clean:
 .PHONY : CMakeFiles/n_ic9.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/n_is1_batch.dir
+# Target rules for target CMakeFiles/n_is5.dir
 
 # All Build rule for target.
-CMakeFiles/n_is1_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is1_batch.dir/build.make CMakeFiles/n_is1_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is1_batch.dir/build.make CMakeFiles/n_is1_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=75,76 "Built target n_is1_batch"
-.PHONY : CMakeFiles/n_is1_batch.dir/all
+CMakeFiles/n_is5.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5.dir/build.make CMakeFiles/n_is5.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5.dir/build.make CMakeFiles/n_is5.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=89,90 "Built target n_is5"
+.PHONY : CMakeFiles/n_is5.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/n_is1_batch.dir/rule: cmake_check_build_system
+CMakeFiles/n_is5.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is1_batch.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is5.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_is1_batch.dir/rule
+.PHONY : CMakeFiles/n_is5.dir/rule
 
 # Convenience name for target.
-n_is1_batch: CMakeFiles/n_is1_batch.dir/rule
+n_is5: CMakeFiles/n_is5.dir/rule
 
-.PHONY : n_is1_batch
+.PHONY : n_is5
 
 # clean rule for target.
-CMakeFiles/n_is1_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is1_batch.dir/build.make CMakeFiles/n_is1_batch.dir/clean
-.PHONY : CMakeFiles/n_is1_batch.dir/clean
+CMakeFiles/n_is5.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5.dir/build.make CMakeFiles/n_is5.dir/clean
+.PHONY : CMakeFiles/n_is5.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic9_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic9_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic9_nocol.dir/build.make CMakeFiles/n_ic9_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic9_nocol.dir/build.make CMakeFiles/n_ic9_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=55,56 "Built target n_ic9_nocol"
+.PHONY : CMakeFiles/n_ic9_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic9_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic9_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic9_nocol.dir/rule
+
+# Convenience name for target.
+n_ic9_nocol: CMakeFiles/n_ic9_nocol.dir/rule
+
+.PHONY : n_ic9_nocol
+
+# clean rule for target.
+CMakeFiles/n_ic9_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic9_nocol.dir/build.make CMakeFiles/n_ic9_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic9_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_is6_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_is6_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is6_nocol.dir/build.make CMakeFiles/n_is6_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is6_nocol.dir/build.make CMakeFiles/n_is6_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=95,96 "Built target n_is6_nocol"
+.PHONY : CMakeFiles/n_is6_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_is6_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is6_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_is6_nocol.dir/rule
+
+# Convenience name for target.
+n_is6_nocol: CMakeFiles/n_is6_nocol.dir/rule
+
+.PHONY : n_is6_nocol
+
+# clean rule for target.
+CMakeFiles/n_is6_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is6_nocol.dir/build.make CMakeFiles/n_is6_nocol.dir/clean
+.PHONY : CMakeFiles/n_is6_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_is2.dir
+
+# All Build rule for target.
+CMakeFiles/n_is2.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2.dir/build.make CMakeFiles/n_is2.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2.dir/build.make CMakeFiles/n_is2.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=77,78 "Built target n_is2"
+.PHONY : CMakeFiles/n_is2.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_is2.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is2.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_is2.dir/rule
+
+# Convenience name for target.
+n_is2: CMakeFiles/n_is2.dir/rule
+
+.PHONY : n_is2
+
+# clean rule for target.
+CMakeFiles/n_is2.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2.dir/build.make CMakeFiles/n_is2.dir/clean
+.PHONY : CMakeFiles/n_is2.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/n_ic5.dir
@@ -455,33 +482,6 @@ CMakeFiles/n_ic5.dir/clean:
 .PHONY : CMakeFiles/n_ic5.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/n_ic5_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic5_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic5_batch.dir/build.make CMakeFiles/n_ic5_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic5_batch.dir/build.make CMakeFiles/n_ic5_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=39,40 "Built target n_ic5_batch"
-.PHONY : CMakeFiles/n_ic5_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic5_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic5_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic5_batch.dir/rule
-
-# Convenience name for target.
-n_ic5_batch: CMakeFiles/n_ic5_batch.dir/rule
-
-.PHONY : n_ic5_batch
-
-# clean rule for target.
-CMakeFiles/n_ic5_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic5_batch.dir/build.make CMakeFiles/n_ic5_batch.dir/clean
-.PHONY : CMakeFiles/n_ic5_batch.dir/clean
-
-#=============================================================================
 # Target rules for target CMakeFiles/n_ic13.dir
 
 # All Build rule for target.
@@ -507,6 +507,60 @@ n_ic13: CMakeFiles/n_ic13.dir/rule
 CMakeFiles/n_ic13.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic13.dir/build.make CMakeFiles/n_ic13.dir/clean
 .PHONY : CMakeFiles/n_ic13.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_is3.dir
+
+# All Build rule for target.
+CMakeFiles/n_is3.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3.dir/build.make CMakeFiles/n_is3.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3.dir/build.make CMakeFiles/n_is3.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=81,82 "Built target n_is3"
+.PHONY : CMakeFiles/n_is3.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_is3.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is3.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_is3.dir/rule
+
+# Convenience name for target.
+n_is3: CMakeFiles/n_is3.dir/rule
+
+.PHONY : n_is3
+
+# clean rule for target.
+CMakeFiles/n_is3.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3.dir/build.make CMakeFiles/n_is3.dir/clean
+.PHONY : CMakeFiles/n_is3.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_is5_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_is5_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5_nocol.dir/build.make CMakeFiles/n_is5_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5_nocol.dir/build.make CMakeFiles/n_is5_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=91,92 "Built target n_is5_nocol"
+.PHONY : CMakeFiles/n_is5_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_is5_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is5_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_is5_nocol.dir/rule
+
+# Convenience name for target.
+n_is5_nocol: CMakeFiles/n_is5_nocol.dir/rule
+
+.PHONY : n_is5_nocol
+
+# clean rule for target.
+CMakeFiles/n_is5_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is5_nocol.dir/build.make CMakeFiles/n_is5_nocol.dir/clean
+.PHONY : CMakeFiles/n_is5_nocol.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/n_is1.dir
@@ -671,6 +725,87 @@ CMakeFiles/n_ins3.dir/clean:
 .PHONY : CMakeFiles/n_ins3.dir/clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/n_ic10_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic10_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic10_nocol.dir/build.make CMakeFiles/n_ic10_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic10_nocol.dir/build.make CMakeFiles/n_ic10_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=5,6 "Built target n_ic10_nocol"
+.PHONY : CMakeFiles/n_ic10_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic10_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic10_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic10_nocol.dir/rule
+
+# Convenience name for target.
+n_ic10_nocol: CMakeFiles/n_ic10_nocol.dir/rule
+
+.PHONY : n_ic10_nocol
+
+# clean rule for target.
+CMakeFiles/n_ic10_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic10_nocol.dir/build.make CMakeFiles/n_ic10_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic10_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic8.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic8.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8.dir/build.make CMakeFiles/n_ic8.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8.dir/build.make CMakeFiles/n_ic8.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=49,50 "Built target n_ic8"
+.PHONY : CMakeFiles/n_ic8.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic8.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic8.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic8.dir/rule
+
+# Convenience name for target.
+n_ic8: CMakeFiles/n_ic8.dir/rule
+
+.PHONY : n_ic8
+
+# clean rule for target.
+CMakeFiles/n_ic8.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8.dir/build.make CMakeFiles/n_ic8.dir/clean
+.PHONY : CMakeFiles/n_ic8.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_is3_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_is3_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3_nocol.dir/build.make CMakeFiles/n_is3_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3_nocol.dir/build.make CMakeFiles/n_is3_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=83,84 "Built target n_is3_nocol"
+.PHONY : CMakeFiles/n_is3_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_is3_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is3_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_is3_nocol.dir/rule
+
+# Convenience name for target.
+n_is3_nocol: CMakeFiles/n_is3_nocol.dir/rule
+
+.PHONY : n_is3_nocol
+
+# clean rule for target.
+CMakeFiles/n_is3_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3_nocol.dir/build.make CMakeFiles/n_is3_nocol.dir/clean
+.PHONY : CMakeFiles/n_is3_nocol.dir/clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/n_is4.dir
 
 # All Build rule for target.
@@ -696,60 +831,6 @@ n_is4: CMakeFiles/n_is4.dir/rule
 CMakeFiles/n_is4.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is4.dir/build.make CMakeFiles/n_is4.dir/clean
 .PHONY : CMakeFiles/n_is4.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_is3.dir
-
-# All Build rule for target.
-CMakeFiles/n_is3.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3.dir/build.make CMakeFiles/n_is3.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3.dir/build.make CMakeFiles/n_is3.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=81,82 "Built target n_is3"
-.PHONY : CMakeFiles/n_is3.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_is3.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is3.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_is3.dir/rule
-
-# Convenience name for target.
-n_is3: CMakeFiles/n_is3.dir/rule
-
-.PHONY : n_is3
-
-# clean rule for target.
-CMakeFiles/n_is3.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3.dir/build.make CMakeFiles/n_is3.dir/clean
-.PHONY : CMakeFiles/n_is3.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic12_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic12_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12_batch.dir/build.make CMakeFiles/n_ic12_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12_batch.dir/build.make CMakeFiles/n_ic12_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=13,14 "Built target n_ic12_batch"
-.PHONY : CMakeFiles/n_ic12_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic12_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic12_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic12_batch.dir/rule
-
-# Convenience name for target.
-n_ic12_batch: CMakeFiles/n_ic12_batch.dir/rule
-
-.PHONY : n_ic12_batch
-
-# clean rule for target.
-CMakeFiles/n_ic12_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12_batch.dir/build.make CMakeFiles/n_ic12_batch.dir/clean
-.PHONY : CMakeFiles/n_ic12_batch.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/n_ic3.dir
@@ -779,31 +860,31 @@ CMakeFiles/n_ic3.dir/clean:
 .PHONY : CMakeFiles/n_ic3.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/n_ic12.dir
+# Target rules for target CMakeFiles/n_ic3_nocol.dir
 
 # All Build rule for target.
-CMakeFiles/n_ic12.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12.dir/build.make CMakeFiles/n_ic12.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12.dir/build.make CMakeFiles/n_ic12.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=11,12 "Built target n_ic12"
-.PHONY : CMakeFiles/n_ic12.dir/all
+CMakeFiles/n_ic3_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic3_nocol.dir/build.make CMakeFiles/n_ic3_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic3_nocol.dir/build.make CMakeFiles/n_ic3_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=31,32 "Built target n_ic3_nocol"
+.PHONY : CMakeFiles/n_ic3_nocol.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/n_ic12.dir/rule: cmake_check_build_system
+CMakeFiles/n_ic3_nocol.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic12.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic3_nocol.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic12.dir/rule
+.PHONY : CMakeFiles/n_ic3_nocol.dir/rule
 
 # Convenience name for target.
-n_ic12: CMakeFiles/n_ic12.dir/rule
+n_ic3_nocol: CMakeFiles/n_ic3_nocol.dir/rule
 
-.PHONY : n_ic12
+.PHONY : n_ic3_nocol
 
 # clean rule for target.
-CMakeFiles/n_ic12.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12.dir/build.make CMakeFiles/n_ic12.dir/clean
-.PHONY : CMakeFiles/n_ic12.dir/clean
+CMakeFiles/n_ic3_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic3_nocol.dir/build.make CMakeFiles/n_ic3_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic3_nocol.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/n_ic4.dir
@@ -833,31 +914,85 @@ CMakeFiles/n_ic4.dir/clean:
 .PHONY : CMakeFiles/n_ic4.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/n_ic8_batch.dir
+# Target rules for target CMakeFiles/n_ic12.dir
 
 # All Build rule for target.
-CMakeFiles/n_ic8_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8_batch.dir/build.make CMakeFiles/n_ic8_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8_batch.dir/build.make CMakeFiles/n_ic8_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=51,52 "Built target n_ic8_batch"
-.PHONY : CMakeFiles/n_ic8_batch.dir/all
+CMakeFiles/n_ic12.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12.dir/build.make CMakeFiles/n_ic12.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12.dir/build.make CMakeFiles/n_ic12.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=11,12 "Built target n_ic12"
+.PHONY : CMakeFiles/n_ic12.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/n_ic8_batch.dir/rule: cmake_check_build_system
+CMakeFiles/n_ic12.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic8_batch.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic12.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic8_batch.dir/rule
+.PHONY : CMakeFiles/n_ic12.dir/rule
 
 # Convenience name for target.
-n_ic8_batch: CMakeFiles/n_ic8_batch.dir/rule
+n_ic12: CMakeFiles/n_ic12.dir/rule
 
-.PHONY : n_ic8_batch
+.PHONY : n_ic12
 
 # clean rule for target.
-CMakeFiles/n_ic8_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8_batch.dir/build.make CMakeFiles/n_ic8_batch.dir/clean
-.PHONY : CMakeFiles/n_ic8_batch.dir/clean
+CMakeFiles/n_ic12.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic12.dir/build.make CMakeFiles/n_ic12.dir/clean
+.PHONY : CMakeFiles/n_ic12.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic1.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic1.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1.dir/build.make CMakeFiles/n_ic1.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1.dir/build.make CMakeFiles/n_ic1.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=1,2 "Built target n_ic1"
+.PHONY : CMakeFiles/n_ic1.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic1.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic1.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic1.dir/rule
+
+# Convenience name for target.
+n_ic1: CMakeFiles/n_ic1.dir/rule
+
+.PHONY : n_ic1
+
+# clean rule for target.
+CMakeFiles/n_ic1.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1.dir/build.make CMakeFiles/n_ic1.dir/clean
+.PHONY : CMakeFiles/n_ic1.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic6_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic6_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic6_nocol.dir/build.make CMakeFiles/n_ic6_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic6_nocol.dir/build.make CMakeFiles/n_ic6_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=43,44 "Built target n_ic6_nocol"
+.PHONY : CMakeFiles/n_ic6_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic6_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic6_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic6_nocol.dir/rule
+
+# Convenience name for target.
+n_ic6_nocol: CMakeFiles/n_ic6_nocol.dir/rule
+
+.PHONY : n_ic6_nocol
+
+# clean rule for target.
+CMakeFiles/n_ic6_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic6_nocol.dir/build.make CMakeFiles/n_ic6_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic6_nocol.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/n_ic6.dir
@@ -885,33 +1020,6 @@ n_ic6: CMakeFiles/n_ic6.dir/rule
 CMakeFiles/n_ic6.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic6.dir/build.make CMakeFiles/n_ic6.dir/clean
 .PHONY : CMakeFiles/n_ic6.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_is4_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_is4_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is4_batch.dir/build.make CMakeFiles/n_is4_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is4_batch.dir/build.make CMakeFiles/n_is4_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=87,88 "Built target n_is4_batch"
-.PHONY : CMakeFiles/n_is4_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_is4_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is4_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_is4_batch.dir/rule
-
-# Convenience name for target.
-n_is4_batch: CMakeFiles/n_is4_batch.dir/rule
-
-.PHONY : n_is4_batch
-
-# clean rule for target.
-CMakeFiles/n_is4_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is4_batch.dir/build.make CMakeFiles/n_is4_batch.dir/clean
-.PHONY : CMakeFiles/n_is4_batch.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/n_ic14.dir
@@ -1022,6 +1130,33 @@ CMakeFiles/n_ins8.dir/clean:
 .PHONY : CMakeFiles/n_ins8.dir/clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/n_ins2.dir
+
+# All Build rule for target.
+CMakeFiles/n_ins2.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ins2.dir/build.make CMakeFiles/n_ins2.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ins2.dir/build.make CMakeFiles/n_ins2.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=59,60 "Built target n_ins2"
+.PHONY : CMakeFiles/n_ins2.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ins2.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ins2.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ins2.dir/rule
+
+# Convenience name for target.
+n_ins2: CMakeFiles/n_ins2.dir/rule
+
+.PHONY : n_ins2
+
+# clean rule for target.
+CMakeFiles/n_ins2.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ins2.dir/build.make CMakeFiles/n_ins2.dir/clean
+.PHONY : CMakeFiles/n_ins2.dir/clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/n_ins4.dir
 
 # All Build rule for target.
@@ -1047,33 +1182,6 @@ n_ins4: CMakeFiles/n_ins4.dir/rule
 CMakeFiles/n_ins4.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ins4.dir/build.make CMakeFiles/n_ins4.dir/clean
 .PHONY : CMakeFiles/n_ins4.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic1_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic1_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1_batch.dir/build.make CMakeFiles/n_ic1_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1_batch.dir/build.make CMakeFiles/n_ic1_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=23,24 "Built target n_ic1_batch"
-.PHONY : CMakeFiles/n_ic1_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic1_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic1_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic1_batch.dir/rule
-
-# Convenience name for target.
-n_ic1_batch: CMakeFiles/n_ic1_batch.dir/rule
-
-.PHONY : n_ic1_batch
-
-# clean rule for target.
-CMakeFiles/n_ic1_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1_batch.dir/build.make CMakeFiles/n_ic1_batch.dir/clean
-.PHONY : CMakeFiles/n_ic1_batch.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/n_ins6.dir
@@ -1103,31 +1211,274 @@ CMakeFiles/n_ins6.dir/clean:
 .PHONY : CMakeFiles/n_ins6.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/n_is7_batch.dir
+# Target rules for target CMakeFiles/n_ic1_nocol.dir
 
 # All Build rule for target.
-CMakeFiles/n_is7_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is7_batch.dir/build.make CMakeFiles/n_is7_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is7_batch.dir/build.make CMakeFiles/n_is7_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=99,100 "Built target n_is7_batch"
-.PHONY : CMakeFiles/n_is7_batch.dir/all
+CMakeFiles/n_ic1_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1_nocol.dir/build.make CMakeFiles/n_ic1_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1_nocol.dir/build.make CMakeFiles/n_ic1_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=23,24 "Built target n_ic1_nocol"
+.PHONY : CMakeFiles/n_ic1_nocol.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/n_is7_batch.dir/rule: cmake_check_build_system
+CMakeFiles/n_ic1_nocol.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is7_batch.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic1_nocol.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_is7_batch.dir/rule
+.PHONY : CMakeFiles/n_ic1_nocol.dir/rule
 
 # Convenience name for target.
-n_is7_batch: CMakeFiles/n_is7_batch.dir/rule
+n_ic1_nocol: CMakeFiles/n_ic1_nocol.dir/rule
 
-.PHONY : n_is7_batch
+.PHONY : n_ic1_nocol
 
 # clean rule for target.
-CMakeFiles/n_is7_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is7_batch.dir/build.make CMakeFiles/n_is7_batch.dir/clean
-.PHONY : CMakeFiles/n_is7_batch.dir/clean
+CMakeFiles/n_ic1_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1_nocol.dir/build.make CMakeFiles/n_ic1_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic1_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic2_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic2_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic2_nocol.dir/build.make CMakeFiles/n_ic2_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic2_nocol.dir/build.make CMakeFiles/n_ic2_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=27,28 "Built target n_ic2_nocol"
+.PHONY : CMakeFiles/n_ic2_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic2_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic2_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic2_nocol.dir/rule
+
+# Convenience name for target.
+n_ic2_nocol: CMakeFiles/n_ic2_nocol.dir/rule
+
+.PHONY : n_ic2_nocol
+
+# clean rule for target.
+CMakeFiles/n_ic2_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic2_nocol.dir/build.make CMakeFiles/n_ic2_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic2_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic4_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic4_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic4_nocol.dir/build.make CMakeFiles/n_ic4_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic4_nocol.dir/build.make CMakeFiles/n_ic4_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=35,36 "Built target n_ic4_nocol"
+.PHONY : CMakeFiles/n_ic4_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic4_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic4_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic4_nocol.dir/rule
+
+# Convenience name for target.
+n_ic4_nocol: CMakeFiles/n_ic4_nocol.dir/rule
+
+.PHONY : n_ic4_nocol
+
+# clean rule for target.
+CMakeFiles/n_ic4_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic4_nocol.dir/build.make CMakeFiles/n_ic4_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic4_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic5_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic5_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic5_nocol.dir/build.make CMakeFiles/n_ic5_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic5_nocol.dir/build.make CMakeFiles/n_ic5_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=39,40 "Built target n_ic5_nocol"
+.PHONY : CMakeFiles/n_ic5_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic5_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic5_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic5_nocol.dir/rule
+
+# Convenience name for target.
+n_ic5_nocol: CMakeFiles/n_ic5_nocol.dir/rule
+
+.PHONY : n_ic5_nocol
+
+# clean rule for target.
+CMakeFiles/n_ic5_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic5_nocol.dir/build.make CMakeFiles/n_ic5_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic5_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic7_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic7_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic7_nocol.dir/build.make CMakeFiles/n_ic7_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic7_nocol.dir/build.make CMakeFiles/n_ic7_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=47,48 "Built target n_ic7_nocol"
+.PHONY : CMakeFiles/n_ic7_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic7_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic7_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic7_nocol.dir/rule
+
+# Convenience name for target.
+n_ic7_nocol: CMakeFiles/n_ic7_nocol.dir/rule
+
+.PHONY : n_ic7_nocol
+
+# clean rule for target.
+CMakeFiles/n_ic7_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic7_nocol.dir/build.make CMakeFiles/n_ic7_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic7_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic8_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic8_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8_nocol.dir/build.make CMakeFiles/n_ic8_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8_nocol.dir/build.make CMakeFiles/n_ic8_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=51,52 "Built target n_ic8_nocol"
+.PHONY : CMakeFiles/n_ic8_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic8_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic8_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic8_nocol.dir/rule
+
+# Convenience name for target.
+n_ic8_nocol: CMakeFiles/n_ic8_nocol.dir/rule
+
+.PHONY : n_ic8_nocol
+
+# clean rule for target.
+CMakeFiles/n_ic8_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic8_nocol.dir/build.make CMakeFiles/n_ic8_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic8_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic11_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic11_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic11_nocol.dir/build.make CMakeFiles/n_ic11_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic11_nocol.dir/build.make CMakeFiles/n_ic11_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=9,10 "Built target n_ic11_nocol"
+.PHONY : CMakeFiles/n_ic11_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic11_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic11_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic11_nocol.dir/rule
+
+# Convenience name for target.
+n_ic11_nocol: CMakeFiles/n_ic11_nocol.dir/rule
+
+.PHONY : n_ic11_nocol
+
+# clean rule for target.
+CMakeFiles/n_ic11_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic11_nocol.dir/build.make CMakeFiles/n_ic11_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic11_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic13_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic13_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic13_nocol.dir/build.make CMakeFiles/n_ic13_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic13_nocol.dir/build.make CMakeFiles/n_ic13_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=17,18 "Built target n_ic13_nocol"
+.PHONY : CMakeFiles/n_ic13_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic13_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic13_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic13_nocol.dir/rule
+
+# Convenience name for target.
+n_ic13_nocol: CMakeFiles/n_ic13_nocol.dir/rule
+
+.PHONY : n_ic13_nocol
+
+# clean rule for target.
+CMakeFiles/n_ic13_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic13_nocol.dir/build.make CMakeFiles/n_ic13_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic13_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_ic14_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_ic14_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic14_nocol.dir/build.make CMakeFiles/n_ic14_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic14_nocol.dir/build.make CMakeFiles/n_ic14_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=21,22 "Built target n_ic14_nocol"
+.PHONY : CMakeFiles/n_ic14_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_ic14_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic14_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_ic14_nocol.dir/rule
+
+# Convenience name for target.
+n_ic14_nocol: CMakeFiles/n_ic14_nocol.dir/rule
+
+.PHONY : n_ic14_nocol
+
+# clean rule for target.
+CMakeFiles/n_ic14_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic14_nocol.dir/build.make CMakeFiles/n_ic14_nocol.dir/clean
+.PHONY : CMakeFiles/n_ic14_nocol.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/n_is1_nocol.dir
+
+# All Build rule for target.
+CMakeFiles/n_is1_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is1_nocol.dir/build.make CMakeFiles/n_is1_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is1_nocol.dir/build.make CMakeFiles/n_is1_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=75,76 "Built target n_is1_nocol"
+.PHONY : CMakeFiles/n_is1_nocol.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/n_is1_nocol.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is1_nocol.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
+.PHONY : CMakeFiles/n_is1_nocol.dir/rule
+
+# Convenience name for target.
+n_is1_nocol: CMakeFiles/n_is1_nocol.dir/rule
+
+.PHONY : n_is1_nocol
+
+# clean rule for target.
+CMakeFiles/n_is1_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is1_nocol.dir/build.make CMakeFiles/n_is1_nocol.dir/clean
+.PHONY : CMakeFiles/n_is1_nocol.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/n_ins7.dir
@@ -1157,382 +1508,31 @@ CMakeFiles/n_ins7.dir/clean:
 .PHONY : CMakeFiles/n_ins7.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/n_ic2_batch.dir
+# Target rules for target CMakeFiles/n_is2_nocol.dir
 
 # All Build rule for target.
-CMakeFiles/n_ic2_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic2_batch.dir/build.make CMakeFiles/n_ic2_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic2_batch.dir/build.make CMakeFiles/n_ic2_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=27,28 "Built target n_ic2_batch"
-.PHONY : CMakeFiles/n_ic2_batch.dir/all
+CMakeFiles/n_is2_nocol.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2_nocol.dir/build.make CMakeFiles/n_is2_nocol.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2_nocol.dir/build.make CMakeFiles/n_is2_nocol.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=79,80 "Built target n_is2_nocol"
+.PHONY : CMakeFiles/n_is2_nocol.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/n_ic2_batch.dir/rule: cmake_check_build_system
+CMakeFiles/n_is2_nocol.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic2_batch.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is2_nocol.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic2_batch.dir/rule
+.PHONY : CMakeFiles/n_is2_nocol.dir/rule
 
 # Convenience name for target.
-n_ic2_batch: CMakeFiles/n_ic2_batch.dir/rule
+n_is2_nocol: CMakeFiles/n_is2_nocol.dir/rule
 
-.PHONY : n_ic2_batch
-
-# clean rule for target.
-CMakeFiles/n_ic2_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic2_batch.dir/build.make CMakeFiles/n_ic2_batch.dir/clean
-.PHONY : CMakeFiles/n_ic2_batch.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic3_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic3_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic3_batch.dir/build.make CMakeFiles/n_ic3_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic3_batch.dir/build.make CMakeFiles/n_ic3_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=31,32 "Built target n_ic3_batch"
-.PHONY : CMakeFiles/n_ic3_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic3_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic3_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic3_batch.dir/rule
-
-# Convenience name for target.
-n_ic3_batch: CMakeFiles/n_ic3_batch.dir/rule
-
-.PHONY : n_ic3_batch
+.PHONY : n_is2_nocol
 
 # clean rule for target.
-CMakeFiles/n_ic3_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic3_batch.dir/build.make CMakeFiles/n_ic3_batch.dir/clean
-.PHONY : CMakeFiles/n_ic3_batch.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_is3_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_is3_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3_batch.dir/build.make CMakeFiles/n_is3_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3_batch.dir/build.make CMakeFiles/n_is3_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=83,84 "Built target n_is3_batch"
-.PHONY : CMakeFiles/n_is3_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_is3_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is3_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_is3_batch.dir/rule
-
-# Convenience name for target.
-n_is3_batch: CMakeFiles/n_is3_batch.dir/rule
-
-.PHONY : n_is3_batch
-
-# clean rule for target.
-CMakeFiles/n_is3_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is3_batch.dir/build.make CMakeFiles/n_is3_batch.dir/clean
-.PHONY : CMakeFiles/n_is3_batch.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic1.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic1.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1.dir/build.make CMakeFiles/n_ic1.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1.dir/build.make CMakeFiles/n_ic1.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=1,2 "Built target n_ic1"
-.PHONY : CMakeFiles/n_ic1.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic1.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic1.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic1.dir/rule
-
-# Convenience name for target.
-n_ic1: CMakeFiles/n_ic1.dir/rule
-
-.PHONY : n_ic1
-
-# clean rule for target.
-CMakeFiles/n_ic1.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic1.dir/build.make CMakeFiles/n_ic1.dir/clean
-.PHONY : CMakeFiles/n_ic1.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic4_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic4_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic4_batch.dir/build.make CMakeFiles/n_ic4_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic4_batch.dir/build.make CMakeFiles/n_ic4_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=35,36 "Built target n_ic4_batch"
-.PHONY : CMakeFiles/n_ic4_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic4_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic4_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic4_batch.dir/rule
-
-# Convenience name for target.
-n_ic4_batch: CMakeFiles/n_ic4_batch.dir/rule
-
-.PHONY : n_ic4_batch
-
-# clean rule for target.
-CMakeFiles/n_ic4_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic4_batch.dir/build.make CMakeFiles/n_ic4_batch.dir/clean
-.PHONY : CMakeFiles/n_ic4_batch.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic6_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic6_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic6_batch.dir/build.make CMakeFiles/n_ic6_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic6_batch.dir/build.make CMakeFiles/n_ic6_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=43,44 "Built target n_ic6_batch"
-.PHONY : CMakeFiles/n_ic6_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic6_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic6_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic6_batch.dir/rule
-
-# Convenience name for target.
-n_ic6_batch: CMakeFiles/n_ic6_batch.dir/rule
-
-.PHONY : n_ic6_batch
-
-# clean rule for target.
-CMakeFiles/n_ic6_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic6_batch.dir/build.make CMakeFiles/n_ic6_batch.dir/clean
-.PHONY : CMakeFiles/n_ic6_batch.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic7_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic7_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic7_batch.dir/build.make CMakeFiles/n_ic7_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic7_batch.dir/build.make CMakeFiles/n_ic7_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=47,48 "Built target n_ic7_batch"
-.PHONY : CMakeFiles/n_ic7_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic7_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic7_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic7_batch.dir/rule
-
-# Convenience name for target.
-n_ic7_batch: CMakeFiles/n_ic7_batch.dir/rule
-
-.PHONY : n_ic7_batch
-
-# clean rule for target.
-CMakeFiles/n_ic7_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic7_batch.dir/build.make CMakeFiles/n_ic7_batch.dir/clean
-.PHONY : CMakeFiles/n_ic7_batch.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic9_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic9_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic9_batch.dir/build.make CMakeFiles/n_ic9_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic9_batch.dir/build.make CMakeFiles/n_ic9_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=55,56 "Built target n_ic9_batch"
-.PHONY : CMakeFiles/n_ic9_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic9_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic9_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic9_batch.dir/rule
-
-# Convenience name for target.
-n_ic9_batch: CMakeFiles/n_ic9_batch.dir/rule
-
-.PHONY : n_ic9_batch
-
-# clean rule for target.
-CMakeFiles/n_ic9_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic9_batch.dir/build.make CMakeFiles/n_ic9_batch.dir/clean
-.PHONY : CMakeFiles/n_ic9_batch.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic10_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic10_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic10_batch.dir/build.make CMakeFiles/n_ic10_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic10_batch.dir/build.make CMakeFiles/n_ic10_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=5,6 "Built target n_ic10_batch"
-.PHONY : CMakeFiles/n_ic10_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic10_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic10_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic10_batch.dir/rule
-
-# Convenience name for target.
-n_ic10_batch: CMakeFiles/n_ic10_batch.dir/rule
-
-.PHONY : n_ic10_batch
-
-# clean rule for target.
-CMakeFiles/n_ic10_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic10_batch.dir/build.make CMakeFiles/n_ic10_batch.dir/clean
-.PHONY : CMakeFiles/n_ic10_batch.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ins2.dir
-
-# All Build rule for target.
-CMakeFiles/n_ins2.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ins2.dir/build.make CMakeFiles/n_ins2.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ins2.dir/build.make CMakeFiles/n_ins2.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=59,60 "Built target n_ins2"
-.PHONY : CMakeFiles/n_ins2.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ins2.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ins2.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ins2.dir/rule
-
-# Convenience name for target.
-n_ins2: CMakeFiles/n_ins2.dir/rule
-
-.PHONY : n_ins2
-
-# clean rule for target.
-CMakeFiles/n_ins2.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ins2.dir/build.make CMakeFiles/n_ins2.dir/clean
-.PHONY : CMakeFiles/n_ins2.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic11_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic11_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic11_batch.dir/build.make CMakeFiles/n_ic11_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic11_batch.dir/build.make CMakeFiles/n_ic11_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=9,10 "Built target n_ic11_batch"
-.PHONY : CMakeFiles/n_ic11_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic11_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic11_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic11_batch.dir/rule
-
-# Convenience name for target.
-n_ic11_batch: CMakeFiles/n_ic11_batch.dir/rule
-
-.PHONY : n_ic11_batch
-
-# clean rule for target.
-CMakeFiles/n_ic11_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic11_batch.dir/build.make CMakeFiles/n_ic11_batch.dir/clean
-.PHONY : CMakeFiles/n_ic11_batch.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic13_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic13_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic13_batch.dir/build.make CMakeFiles/n_ic13_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic13_batch.dir/build.make CMakeFiles/n_ic13_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=17,18 "Built target n_ic13_batch"
-.PHONY : CMakeFiles/n_ic13_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic13_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic13_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic13_batch.dir/rule
-
-# Convenience name for target.
-n_ic13_batch: CMakeFiles/n_ic13_batch.dir/rule
-
-.PHONY : n_ic13_batch
-
-# clean rule for target.
-CMakeFiles/n_ic13_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic13_batch.dir/build.make CMakeFiles/n_ic13_batch.dir/clean
-.PHONY : CMakeFiles/n_ic13_batch.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_ic14_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_ic14_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic14_batch.dir/build.make CMakeFiles/n_ic14_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic14_batch.dir/build.make CMakeFiles/n_ic14_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=21,22 "Built target n_ic14_batch"
-.PHONY : CMakeFiles/n_ic14_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_ic14_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_ic14_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_ic14_batch.dir/rule
-
-# Convenience name for target.
-n_ic14_batch: CMakeFiles/n_ic14_batch.dir/rule
-
-.PHONY : n_ic14_batch
-
-# clean rule for target.
-CMakeFiles/n_ic14_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_ic14_batch.dir/build.make CMakeFiles/n_ic14_batch.dir/clean
-.PHONY : CMakeFiles/n_ic14_batch.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/n_is2_batch.dir
-
-# All Build rule for target.
-CMakeFiles/n_is2_batch.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2_batch.dir/build.make CMakeFiles/n_is2_batch.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2_batch.dir/build.make CMakeFiles/n_is2_batch.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles --progress-num=79,80 "Built target n_is2_batch"
-.PHONY : CMakeFiles/n_is2_batch.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/n_is2_batch.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/n_is2_batch.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles 0
-.PHONY : CMakeFiles/n_is2_batch.dir/rule
-
-# Convenience name for target.
-n_is2_batch: CMakeFiles/n_is2_batch.dir/rule
-
-.PHONY : n_is2_batch
-
-# clean rule for target.
-CMakeFiles/n_is2_batch.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2_batch.dir/build.make CMakeFiles/n_is2_batch.dir/clean
-.PHONY : CMakeFiles/n_is2_batch.dir/clean
+CMakeFiles/n_is2_nocol.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/n_is2_nocol.dir/build.make CMakeFiles/n_is2_nocol.dir/clean
+.PHONY : CMakeFiles/n_is2_nocol.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
