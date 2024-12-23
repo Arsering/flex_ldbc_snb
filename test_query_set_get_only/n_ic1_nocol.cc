@@ -53,7 +53,7 @@ namespace gs
 
     struct person_info_comparer
     {
-      bool operator()(const person_info &lhs, const person_info &rhs)
+      bool operator()(person_info &lhs,person_info &rhs)
       {
 
         if (lhs.distance < rhs.distance)
@@ -77,8 +77,8 @@ namespace gs
       }
     };
 
-    void get_friends(const ReadTransaction &txn, vid_t root,
-                     const std::string_view &firstname)
+    void get_friends( ReadTransaction &txn, vid_t root,
+                      std::string_view &firstname)
     {
       auto person_knows_person_out = txn.GetOutgoingGraphView<Date>(
           person_label_id_, person_label_id_, knows_label_id_);
@@ -111,7 +111,7 @@ namespace gs
           // 打印上一层访问的节点
           std::ofstream ofs("level_nodes.txt", std::ios::app);
           ofs << "Depth " << current_depth << ": ";
-          for (const auto& vid : current_level_nodes) {
+          for ( auto& vid : current_level_nodes) {
             ofs << vid << " ";
           }
           ofs << "\n";
@@ -234,7 +234,7 @@ namespace gs
       if (!current_level_nodes.empty()) {
         std::ofstream ofs("level_nodes.txt", std::ios::app);
         ofs << "Depth " << current_depth << ": ";
-        for (const auto& vid : current_level_nodes) {
+        for ( auto& vid : current_level_nodes) {
           ofs << vid << " ";
         }
         ofs << "\n";

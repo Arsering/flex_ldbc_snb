@@ -98,34 +98,23 @@ namespace gs
       for (; ie.is_valid(); ie.next())
       {
         friends_[ie.get_neighbor()] = true;
+        oid_t oid;
+        LOG(INFO) << "ie.get_neighbor(): " << txn.GetVertexId(person_label_id_, ie.get_neighbor());
       }
       auto oe = txn.GetOutgoingEdges<Date>(
           person_label_id_, root, person_label_id_, knows_label_id_);
       for (; oe.is_valid(); oe.next())
       {
         friends_[oe.get_neighbor()] = true;
+        oid_t oid;
+        LOG(INFO) << "oe.get_neighbor(): " << txn.GetVertexId(person_label_id_, oe.get_neighbor());
       }
 #endif
       std::vector<person_info> vec;
 
       auto person_likes_post_in = txn.GetIncomingGraphView<Date>(
           post_label_id_, person_label_id_, likes_label_id_);
-#if OV
-      const auto &post_ie = txn.GetIncomingEdges<grape::EmptyType>(
-          person_label_id_, root, post_label_id_, hasCreator_label_id_);
-      for (auto &e : post_ie)
-      {
-        auto pid = e.neighbor;
-        auto message_id = txn.GetVertexId(post_label_id_, pid);
-        const auto &person_ie = person_likes_post_in.get_edges(pid);
-        for (auto &e1 : person_ie)
-        {
-          vec.emplace_back(e1.neighbor, pid, e1.data.milli_second,
-                           txn.GetVertexId(person_label_id_, e1.neighbor),
-                           message_id, true);
-        }
-      }
-#else
+
       auto post_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, post_label_id_, hasCreator_label_id_);
       for (; post_ie.is_valid(); post_ie.next())
@@ -139,28 +128,16 @@ namespace gs
           vec.emplace_back(person_ie.get_neighbor(), pid, ((Date *)item)->milli_second,
                            txn.GetVertexId(person_label_id_, person_ie.get_neighbor()),
                            message_id, true);
+          LOG(INFO)<<"person id is " << txn.GetVertexId(person_label_id_, person_ie.get_neighbor()) << " message id is " << message_id << " is post is " << true;
         }
       }
-#endif
+      LOG(INFO) << "vec size: " << vec.size();
+      // for(auto &v: vec){
+      //   LOG(INFO)<<"person id is " << v.person_id << " message id is " << v.message_id << " is post is " << v.is_post;
+      // }
 
       auto person_likes_comment_in = txn.GetIncomingGraphView<Date>(
           comment_label_id_, person_label_id_, likes_label_id_);
-#if OV
-      const auto &comment_ie = txn.GetIncomingEdges<grape::EmptyType>(
-          person_label_id_, root, comment_label_id_, hasCreator_label_id_);
-      for (auto &e : comment_ie)
-      {
-        auto cid = e.neighbor;
-        auto message_id = txn.GetVertexId(comment_label_id_, cid);
-        const auto &person_ie = person_likes_comment_in.get_edges(cid);
-        for (auto &e1 : person_ie)
-        {
-          vec.emplace_back(e1.neighbor, cid, e1.data.milli_second,
-                           txn.GetVertexId(person_label_id_, e1.neighbor),
-                           message_id, false);
-        }
-      }
-#else
       auto comment_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, comment_label_id_, hasCreator_label_id_);
       for (; comment_ie.is_valid(); comment_ie.next())
@@ -174,9 +151,11 @@ namespace gs
           vec.emplace_back(person_ie.get_neighbor(), cid, ((Date *)item)->milli_second,
                            txn.GetVertexId(person_label_id_, person_ie.get_neighbor()),
                            message_id, false);
+          LOG(INFO)<<"person id is " << txn.GetVertexId(person_label_id_, person_ie.get_neighbor()) << " message id is " << message_id << " is post is " << false;
         }
       }
-#endif
+      LOG(INFO) << "vec size: " << vec.size();
+     
       sort(vec.begin(), vec.end(),
            [&](const person_info &a, const person_info &b)
            {
@@ -190,7 +169,9 @@ namespace gs
              }
              return a.message_id < b.message_id;
            });
-
+      for(auto &v: vec){
+        LOG(INFO)<<"person id is " << v.person_id << " message id is " << v.message_id << " is post is " << v.is_post;
+      }
       person_info_comparer comparer;
       std::priority_queue<person_info, std::vector<person_info>,
                           person_info_comparer>
@@ -211,6 +192,7 @@ namespace gs
           pq.emplace(vec[i]);
         }
       }
+
       std::vector<person_info> tmp;
       tmp.reserve(pq.size());
       while (!pq.empty())
@@ -218,50 +200,23 @@ namespace gs
         tmp.emplace_back(pq.top());
         pq.pop();
       }
+      LOG(INFO) << "tmp size: " << tmp.size();
+      for (auto &v : tmp)
+      {
+        LOG(INFO)<<"person id is " << v.person_id << " message id is " << v.message_id << " is post is " << v.is_post;
+      }
       constexpr int64_t mill_per_min = 60 * 1000l;
       for (auto i = tmp.size(); i > 0; --i)
       {
         const auto &v = tmp[i - 1];
         output.put_long(v.person_id);
-#if OV
-        const auto &firstname = person_firstName_col_.get_view(v.v);
-        output.put_string_view(firstname);
-        const auto &lastname = person_lastName_col_.get_view(v.v);
-        output.put_string_view(lastname);
-#else
         auto firstname = txn.GetVertexProp(person_label_id_, v.v, person_firstName_col_idx_);
         output.put_buffer_object(firstname);
         auto lastname = txn.GetVertexProp(person_label_id_, v.v, person_lastName_col_idx_);
         output.put_buffer_object(lastname);
-
-#endif
         output.put_long(v.creationDate);
         output.put_long(v.message_id);
         // uint32_t x;
-#if OV
-        if (v.is_post)
-        {
-          const auto &content = post_length_col_.get_view(v.mid) == 0
-                                    ? post_imageFile_col_.get_view(v.mid)
-                                    : post_content_col_.get_view(v.mid);
-          output.put_string_view(content);
-          auto min = (v.creationDate -
-                      post_creationDate_col_.get_view(v.mid).milli_second) /
-                     mill_per_min;
-          output.put_int(min);
-        }
-        else
-        {
-          const auto &content = comment_content_col_.get_view(v.mid);
-          output.put_string_view(content);
-          auto min = (v.creationDate -
-                      comment_creationDate_col_.get_view(v.mid).milli_second) /
-                     mill_per_min;
-          output.put_int(min);
-        }
-        output.put_byte(friends_[v.v] ? 0 : 1);
-      }
-#else
         if (v.is_post)
         {
           auto item = txn.GetVertexProp(post_label_id_, v.mid, post_length_col_idx_);
@@ -286,7 +241,6 @@ namespace gs
         }
         output.put_byte(friends_[v.v] ? 0 : 1);
       }
-#endif
       return true;
     }
 

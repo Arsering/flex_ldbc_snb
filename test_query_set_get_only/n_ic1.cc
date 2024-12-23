@@ -55,7 +55,7 @@ namespace gs
     struct person_info
     {
 #if OV
-      person_info(uint8_t distance_, const std::string_view &lastName_, oid_t id_,
+      person_info(uint8_t distance_,  std::string_view &lastName_, oid_t id_,
                   vid_t vid_)
           : distance(distance_), lastName(lastName_), id(id_), vid(vid_) {}
 
@@ -79,7 +79,7 @@ namespace gs
 
     struct person_info_comparer
     {
-      bool operator()(const person_info &lhs, const person_info &rhs)
+      bool operator()( person_info &lhs,  person_info &rhs)
       {
 
         if (lhs.distance < rhs.distance)
@@ -103,8 +103,8 @@ namespace gs
       }
     };
 
-    void get_friends(const ReadTransaction &txn, vid_t root,
-                     const std::string_view &firstname)
+    void get_friends( ReadTransaction &txn, vid_t root,
+                      std::string_view &firstname)
     {
       auto person_knows_person_out = txn.GetOutgoingGraphView<Date>(
           person_label_id_, person_label_id_, knows_label_id_);
@@ -137,7 +137,7 @@ namespace gs
           // 打印上一层访问的节点
           std::ofstream ofs("level_nodes.txt", std::ios::app);
           ofs << "Depth " << current_depth << ": ";
-          for (const auto& vid : current_level_nodes) {
+          for ( auto& vid : current_level_nodes) {
             ofs << vid << " ";
           }
           ofs << "\n";
@@ -148,7 +148,7 @@ namespace gs
         }
 
 #if OV
-        const auto &ie = person_knows_person_in.get_edges(u);
+         auto &ie = person_knows_person_in.get_edges(u);
         for (auto &e : ie)
         {
           auto v = e.neighbor;
@@ -242,7 +242,7 @@ namespace gs
           }
         }
 #if OV
-        const auto &oe = person_knows_person_out.get_edges(u);
+         auto &oe = person_knows_person_out.get_edges(u);
         for (auto &e : oe)
         {
           auto v = e.neighbor;
@@ -348,7 +348,7 @@ namespace gs
       if (!current_level_nodes.empty()) {
         std::ofstream ofs("level_nodes.txt", std::ios::app);
         ofs << "Depth " << current_depth << ": ";
-        for (const auto& vid : current_level_nodes) {
+        for ( auto& vid : current_level_nodes) {
           ofs << vid << " ";
         }
         ofs << "\n";
@@ -447,7 +447,7 @@ namespace gs
         int university_num = 0;
         size_t un_offset = output.skip_int();
 #if OV
-        const auto &universities = person_studyAt_organisation_out.get_edges(v);
+         auto &universities = person_studyAt_organisation_out.get_edges(v);
         for (auto &e1 : universities)
         {
           output.put_string_view(organisation_name_col_.get_view(e1.neighbor));
@@ -480,7 +480,7 @@ namespace gs
         int company_num = 0;
         size_t cn_offset = output.skip_int();
 #if OV
-        const auto &companies = person_workAt_organisation_out.get_edges(v);
+         auto &companies = person_workAt_organisation_out.get_edges(v);
         for (auto &e1 : companies)
         {
           output.put_string_view(organisation_name_col_.get_view(e1.neighbor));
@@ -530,17 +530,17 @@ namespace gs
 
     std::vector<person_info> ans_;
     std::vector<uint8_t> distance_;
-    const StringColumn &person_firstName_col_;
-    const StringColumn &person_lastName_col_;
-    const DateColumn &person_birthday_col_;
-    const DateColumn &person_creationDate_col_;
-    const StringColumn &person_gender_col_;
-    const StringColumn &person_browserUsed_col_;
-    const StringColumn &person_locationIp_col_;
-    const StringColumn &place_name_col_;
-    const StringColumn &person_email_col_;
-    const StringColumn &person_language_col_;
-    const StringColumn &organisation_name_col_;
+     StringColumn &person_firstName_col_;
+     StringColumn &person_lastName_col_;
+     DateColumn &person_birthday_col_;
+     DateColumn &person_creationDate_col_;
+     StringColumn &person_gender_col_;
+     StringColumn &person_browserUsed_col_;
+     StringColumn &person_locationIp_col_;
+     StringColumn &place_name_col_;
+     StringColumn &person_email_col_;
+     StringColumn &person_language_col_;
+     StringColumn &organisation_name_col_;
 
     GraphDBSession &graph_;
 

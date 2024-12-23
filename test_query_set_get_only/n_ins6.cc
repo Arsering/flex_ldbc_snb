@@ -47,7 +47,7 @@ class INS6 : public AppBase {
     }
 #else
     if (!txn.AddVertex(
-            post_label_id_, postid,person_label_id_,authorpersonid,
+            post_label_id_, postid,
             {Any::From(imagefile), Any::From(Date(creationdate)),
              Any::From(ip_addr), Any::From(browser), Any::From(language),
              Any::From(content), Any::From(length)})) {

@@ -42,7 +42,7 @@ class INS7 : public AppBase {
     }
 #else
     if (!txn.AddVertex(
-            comment_label_id_, commentid,person_label_id_,authorpersonid,
+            comment_label_id_, commentid,
             {Any::From(Date(creationdate)), Any::From(ip_addr),
              Any::From(browser), Any::From(content), Any::From(length)})) {
       LOG(ERROR) << "Adding vertex COMMENT[" << commentid << "] failed...";

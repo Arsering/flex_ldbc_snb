@@ -27,8 +27,10 @@ namespace gs
           isSubClassOf_label_id_(
               graph.schema().get_edge_label_id("ISSUBCLASSOF")),
           tagClass_name_col_id_(graph.get_vertex_property_column_id(tagClass_label_id_, "name")),
+          tag_name_col_id_(graph.get_vertex_property_column_id(tag_label_id_, "name")),
           person_firstName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
           person_lastName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
+          tagClass_num_(graph.graph().vertex_num(tagClass_label_id_)),
           graph_(graph) {}
     ~IC12() {}
 
@@ -113,6 +115,7 @@ namespace gs
       {
         return false;
       }
+      tagClass_num_ = txn.GetVertexNum(tagClass_label_id_);
       vid_t tagClass_id = tagClass_num_;
       for (vid_t i = 0; i < tagClass_num_; ++i)
       {
@@ -120,6 +123,9 @@ namespace gs
         if (tagClass_name_col_.get_view(i) == tagclassname)
 #else
         auto tagClass_name = txn.GetVertexProp(tagClass_label_id_, i, tagClass_name_col_id_);
+        std::vector<char> data(tagClass_name.Size());
+        tagClass_name.Copy(data.data(), data.size());
+        LOG(INFO) << "tagClass_name: " << std::string_view(data.data(), data.size());
         if (tagClass_name == tagclassname)
 #endif
         {

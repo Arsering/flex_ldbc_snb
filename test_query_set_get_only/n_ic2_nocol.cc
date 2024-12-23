@@ -91,6 +91,7 @@ namespace gs
       {
         return false;
       }
+      LOG(INFO) << "input pid: " << personid;
       message_info_comparer comparer;
       std::priority_queue<message_info, std::vector<message_info>,
                           message_info_comparer>
@@ -108,10 +109,14 @@ namespace gs
       for (; ie.is_valid(); ie.next())
       {
         auto v = ie.get_neighbor();
+        auto v_oid=txn.GetVertexId(person_label_id_, v);
+        LOG(INFO) << "ie: v_oid: " << v_oid;
         auto posts = post_hasCreator_person_in.get_edges(v);
         for (; posts.is_valid(); posts.next())
         {
           auto pid = posts.get_neighbor();
+          auto pid_oid=txn.GetVertexId(post_label_id_, pid);
+          // LOG(INFO) << "pid_oid: " << pid_oid;
           auto item = txn.GetVertexProp(post_label_id_, pid, post_creationDate_col_id_);
           auto creationDate = gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second;
           if (creationDate < maxdate)
@@ -144,6 +149,8 @@ namespace gs
         for (; comments.is_valid(); comments.next())
         {
           auto cid = comments.get_neighbor();
+          auto cid_oid=txn.GetVertexId(comment_label_id_, cid);
+          // LOG(INFO) << "cid_oid: " << cid_oid;
           auto item = txn.GetVertexProp(comment_label_id_, cid, comment_creationDate_col_id_);
           auto creationDate = gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second;
           if (creationDate < maxdate)
@@ -179,11 +186,15 @@ namespace gs
       for (; oe.is_valid(); oe.next())
       {
         auto v = oe.get_neighbor();
+        auto v_oid=txn.GetVertexId(person_label_id_, v);
+        LOG(INFO) << "oe: v_oid: " << v_oid;
         auto posts = post_hasCreator_person_in.get_edges(v);
 
         for (; posts.is_valid(); posts.next())
         {
           auto pid = posts.get_neighbor();
+          auto pid_oid=txn.GetVertexId(post_label_id_, pid);
+          // LOG(INFO) << "pid_oid: " << pid_oid;
           auto item = txn.GetVertexProp(post_label_id_, pid, post_creationDate_col_id_);
           auto creationDate = gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second;
           item.free();
@@ -217,6 +228,8 @@ namespace gs
         for (; comments.is_valid(); comments.next())
         {
           auto cid = comments.get_neighbor();
+          auto cid_oid=txn.GetVertexId(comment_label_id_, cid);
+          // LOG(INFO) << "cid_oid: " << cid_oid;
           auto item = txn.GetVertexProp(comment_label_id_, cid, comment_creationDate_col_id_);
           auto creationDate = gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second;
           if (creationDate < maxdate)

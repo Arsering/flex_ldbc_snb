@@ -31,7 +31,7 @@ namespace gs
     {
     }
     ~IC10() {}
-    void get_friends(const ReadTransaction &txn, vid_t root, int mon)
+    void get_friends(ReadTransaction &txn, vid_t root, int mon)
     {
       std::vector<vid_t> friends_1d;
       friends_set_[root] = true;

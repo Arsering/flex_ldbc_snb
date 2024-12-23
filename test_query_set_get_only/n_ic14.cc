@@ -20,7 +20,7 @@ namespace gs
   class IC14Impl
   {
   public:
-    IC14Impl(const ReadTransaction &txn, label_t person_label_id,
+    IC14Impl( ReadTransaction &txn, label_t person_label_id,
              label_t post_label_id, label_t comment_label_id,
              label_t hasCreator_label_id, label_t replyOf_label_id)
         : post_hasCreator_person_out_(
@@ -45,11 +45,11 @@ namespace gs
           comment_replyOf_comment_in_(txn.GetIncomingGraphView<grape::EmptyType>(
               comment_label_id, comment_label_id, replyOf_label_id)) {}
 
-    int get_score(vid_t x, vid_t y) const
+    int get_score(vid_t x, vid_t y) 
     {
       int score = 0;
 #if OV
-      const auto &x_ie = comment_hasCreator_person_in_.get_edges(x);
+       auto &x_ie = comment_hasCreator_person_in_.get_edges(x);
       for (auto &e : x_ie)
       {
         auto v = e.neighbor;
@@ -74,7 +74,7 @@ namespace gs
           }
         }
       }
-      const auto &y_ie = comment_hasCreator_person_in_.get_edges(y);
+       auto &y_ie = comment_hasCreator_person_in_.get_edges(y);
       for (auto &e : y_ie)
       {
         auto v = e.neighbor;
@@ -173,7 +173,7 @@ namespace gs
       return score;
     }
 
-    int get_score_1(vid_t root, vid_t x) const
+    int get_score_1(vid_t root, vid_t x) 
     {
       int root_degree =
           comment_hasCreator_person_in_.get_edges(root).estimated_degree() +
@@ -195,7 +195,7 @@ namespace gs
 
       int ret = 0;
 #if OV
-      const auto &comment_ie = comment_hasCreator_person_in_.get_edges(u);
+       auto &comment_ie = comment_hasCreator_person_in_.get_edges(u);
       for (auto &e : comment_ie)
       {
         if (comment_replyOf_post_out_.exist(e.neighbor))
@@ -219,7 +219,7 @@ namespace gs
           }
         }
 
-        const auto &follows_ie =
+         auto &follows_ie =
             comment_replyOf_comment_in_.get_edges(e.neighbor);
         for (auto &f : follows_ie)
         {
@@ -231,10 +231,10 @@ namespace gs
           }
         }
       }
-      const auto &post_ie = post_hasCreator_person_in_.get_edges(u);
+       auto &post_ie = post_hasCreator_person_in_.get_edges(u);
       for (auto &e : post_ie)
       {
-        const auto &follows_ie = comment_replyOf_post_in_.get_edges(e.neighbor);
+         auto &follows_ie = comment_replyOf_post_in_.get_edges(e.neighbor);
         for (auto &f : follows_ie)
         {
           assert(comment_hasCreator_person_out_.exist(f.neighbor));
@@ -319,10 +319,10 @@ namespace gs
       return ret;
     }
 
-    void calc_scores(vid_t root, std::vector<int> &count) const
+    void calc_scores(vid_t root, std::vector<int> &count) 
     {
 #if OV
-      const auto &comment_ie = comment_hasCreator_person_in_.get_edges(root);
+       auto &comment_ie = comment_hasCreator_person_in_.get_edges(root);
       for (auto &e : comment_ie)
       {
         if (comment_replyOf_post_out_.exist(e.neighbor))
@@ -345,7 +345,7 @@ namespace gs
             count[n] += 1;
           }
         }
-        const auto &follows_ie =
+         auto &follows_ie =
             comment_replyOf_comment_in_.get_edges(e.neighbor);
         for (auto &e1 : follows_ie)
         {
@@ -357,10 +357,10 @@ namespace gs
           }
         }
       }
-      const auto &post_ie = post_hasCreator_person_in_.get_edges(root);
+       auto &post_ie = post_hasCreator_person_in_.get_edges(root);
       for (auto &e : post_ie)
       {
-        const auto &follows_ie = comment_replyOf_post_in_.get_edges(e.neighbor);
+         auto &follows_ie = comment_replyOf_post_in_.get_edges(e.neighbor);
         for (auto &f : follows_ie)
         {
           assert(comment_hasCreator_person_out_.exist(f.neighbor));
@@ -467,7 +467,7 @@ namespace gs
           graph_(graph) {}
     ~IC14() {}
 
-    void generate_scores(const ReadTransaction &txn)
+    void generate_scores( ReadTransaction &txn)
     {
       IC14Impl impl(txn, person_label_id_, post_label_id_, comment_label_id_,
                     hasCreator_label_id_, replyOf_label_id_);
@@ -562,8 +562,8 @@ namespace gs
       }
     }
 
-    void dfs(const GraphView<Date> &person_knows_person_out,
-             const GraphView<Date> &person_knows_person_in, vid_t src, vid_t dst,
+    void dfs( GraphView<Date> &person_knows_person_out,
+              GraphView<Date> &person_knows_person_in, vid_t src, vid_t dst,
              std::vector<vid_t> &vec)
     {
       vec.push_back(src);
@@ -574,7 +574,7 @@ namespace gs
         return;
       }
 #if OV
-      const auto &oe = person_knows_person_out.get_edges(src);
+       auto &oe = person_knows_person_out.get_edges(src);
       for (auto &e : oe)
       {
         auto v = e.neighbor;
@@ -583,7 +583,7 @@ namespace gs
           dfs(person_knows_person_out, person_knows_person_in, v, dst, vec);
         }
       }
-      const auto &ie = person_knows_person_in.get_edges(src);
+       auto &ie = person_knows_person_in.get_edges(src);
       for (auto &e : ie)
       {
         auto v = e.neighbor;
@@ -615,8 +615,8 @@ namespace gs
       vec.pop_back();
     }
 
-    void next_tire(const GraphView<Date> &person_knows_person_out,
-                   const GraphView<Date> &person_knows_person_in, int8_t depth,
+    void next_tire( GraphView<Date> &person_knows_person_out,
+                    GraphView<Date> &person_knows_person_in, int8_t depth,
                    std::queue<vid_t> &curr, std::queue<vid_t> &next,
                    std::vector<int8_t> &dis0, std::vector<int8_t> &dis1,
                    std::vector<vid_t> &vec, bool dir = true)
@@ -626,7 +626,7 @@ namespace gs
         auto x = curr.front();
         curr.pop();
 #if OV
-        const auto &oe = person_knows_person_out.get_edges(x);
+         auto &oe = person_knows_person_out.get_edges(x);
         for (auto &e : oe)
         {
           auto v = e.neighbor;
@@ -647,7 +647,7 @@ namespace gs
           }
         }
 #if OV
-        const auto &ie = person_knows_person_in.get_edges(x);
+         auto &ie = person_knows_person_in.get_edges(x);
         for (auto &e : ie)
         {
           auto v = e.neighbor;
@@ -754,7 +754,7 @@ namespace gs
         auto v = q1.front();
         q1.pop();
 #if OV
-        const auto &oe = person_knows_person_out.get_edges(v);
+         auto &oe = person_knows_person_out.get_edges(v);
         for (auto &e : oe)
         {
           if (persons_[e.neighbor])
@@ -800,7 +800,7 @@ namespace gs
         }
 #endif
 #if OV
-        const auto &ie = person_knows_person_in.get_edges(v);
+         auto &ie = person_knows_person_in.get_edges(v);
         for (auto &e : ie)
         {
           if (persons_[e.neighbor])
@@ -856,7 +856,7 @@ namespace gs
         v.push_back(i);
       }
       sort(v.begin(), v.end(),
-           [&](const int a, const int b)
+           [&]( int a,  int b)
            { return scores_[b] < scores_[a]; });
 
       for (size_t i = 0; i < v.size(); i++)
@@ -869,7 +869,7 @@ namespace gs
         }
         double score = scores_[x];
         score = score / 2.0f;
-        output.put_long(*reinterpret_cast<const long *>(&score));
+        output.put_long(*reinterpret_cast< long *>(&score));
       }
       return true;
     }

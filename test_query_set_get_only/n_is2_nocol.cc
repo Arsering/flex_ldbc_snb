@@ -68,6 +68,7 @@ namespace gs
 
       oid_t req = input.get_long();
       CHECK(input.empty());
+      LOG(INFO) << "input oid: " << req;
 
       vid_t root{};
       if (!txn.GetVertexIndex(person_label_id_, req, root))
@@ -221,10 +222,13 @@ namespace gs
       for (; post_ie.is_valid(); post_ie.next())
       {
         auto item = txn.GetVertexProp(post_label_id_, post_ie.get_neighbor(), post_creationDate_col_id_);
+        auto v_oid=txn.GetVertexId(post_label_id_,post_ie.get_neighbor());
+        LOG(INFO)<<"post_ie: v_oid: "<<v_oid;
         auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
 
         if (pq.size() < 10)
         {
+          LOG(INFO)<<"pq size < 10";
           pq.emplace(true, post_ie.get_neighbor(), creationdate,
                      txn.GetVertexId(post_label_id_, post_ie.get_neighbor()));
           current_creationdate = pq.top().creationdate;
@@ -233,6 +237,7 @@ namespace gs
         {
           if (creationdate > current_creationdate)
           {
+            LOG(INFO)<<"creationdate > current_creationdate";
             pq.pop();
             pq.emplace(true, post_ie.get_neighbor(), creationdate,
                        txn.GetVertexId(post_label_id_, post_ie.get_neighbor()));
@@ -241,8 +246,10 @@ namespace gs
           else if (creationdate == current_creationdate)
           {
             auto messageid = txn.GetVertexId(post_label_id_, post_ie.get_neighbor());
+            LOG(INFO)<<"messageid: "<<messageid;
             if (messageid > pq.top().messageid)
             {
+              LOG(INFO)<<"messageid > pq.top().messageid";
               pq.pop();
               pq.emplace(true, post_ie.get_neighbor(), creationdate, messageid);
             }
@@ -257,6 +264,8 @@ namespace gs
         if (pq.size() < 10)
         {
           auto item = txn.GetVertexProp(comment_label_id_, comment_ie.get_neighbor(), comment_creationDate_col_id_);
+           auto v_oid=txn.GetVertexId(comment_label_id_,comment_ie.get_neighbor());
+          LOG(INFO)<<"comment_ie: v_oid: "<<v_oid;
           auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
 
           pq.emplace(false, comment_ie.get_neighbor(), creationdate,
@@ -267,9 +276,11 @@ namespace gs
         {
           auto item = txn.GetVertexProp(comment_label_id_, comment_ie.get_neighbor(), comment_creationDate_col_id_);
           auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
-
+          auto v_oid=txn.GetVertexId(comment_label_id_,comment_ie.get_neighbor());
+          LOG(INFO)<<"comment_ie: v_oid: "<<v_oid;
           if (creationdate > current_creationdate)
           {
+            LOG(INFO)<<"creationdate > current_creationdate";
             pq.pop();
             pq.emplace(false, comment_ie.get_neighbor(), creationdate,
                        txn.GetVertexId(comment_label_id_, comment_ie.get_neighbor()));
@@ -278,6 +289,7 @@ namespace gs
           else if (creationdate == current_creationdate)
           {
             auto messageid = txn.GetVertexId(comment_label_id_, comment_ie.get_neighbor());
+            LOG(INFO)<<"messageid: "<<messageid;
             if (messageid > pq.top().messageid)
             {
               pq.pop();
@@ -292,6 +304,9 @@ namespace gs
       {
         vec.emplace_back(pq.top());
         pq.pop();
+      }
+      for(auto &v:vec){
+        LOG(INFO)<<"messageid: "<<v.messageid;
       }
 
       auto comment_replyOf_post_out =
@@ -311,6 +326,7 @@ namespace gs
         output.put_long(v.creationdate);
         if (v.is_post)
         {
+          LOG(INFO)<<v.messageid<<" is_post";
           auto item = txn.GetVertexProp(post_label_id_, v.v, post_length_col_id_);
           auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? txn.GetVertexProp(post_label_id_, v.v, post_imageFile_col_id_) : txn.GetVertexProp(post_label_id_, v.v, post_content_col_id_);
 
@@ -325,15 +341,21 @@ namespace gs
         }
         else
         {
+          LOG(INFO)<<v.messageid<<" is_comment";
           auto content = txn.GetVertexProp(comment_label_id_, v.v, comment_content_col_id_);
           output.put_buffer_object(content);
 
           vid_t u = v.v;
           while (true)
           {
+            auto u_oid=txn.GetVertexId(comment_label_id_,u);
+            LOG(INFO)<<"now message id is: "<<u_oid;
             auto post_id = comment_replyOf_post_out.get_edge(u);
+            auto post_id_oid=txn.GetVertexId(post_label_id_,gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor);
+            LOG(INFO)<<"post_id_oid: "<<post_id_oid;
             if (comment_replyOf_post_out.exist1(post_id))
             {
+              LOG(INFO)<<"comment_replyOf_post_out.exist1(post_id), post_id_oid: "<<post_id_oid;
               output.put_long(txn.GetVertexId(post_label_id_, gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor));
               auto item = post_hasCreator_person_out.get_edge(gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor);
 
@@ -349,8 +371,9 @@ namespace gs
             else
             {
               auto item = comment_replyOf_comment_out.get_edge(u);
+              auto item_oid=txn.GetVertexId(comment_label_id_,gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor);
+              LOG(INFO)<<"comment_replyOf_comment_out.exist1(comment_id), comment_id_oid: "<<item_oid;
               assert(comment_replyOf_comment_out.exist1(item));
-
               u = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
             }
           }
