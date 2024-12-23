@@ -10,10 +10,10 @@
 namespace gs
 {
 
-  class IC1 : public AppBase
+  class TestQuery1 : public AppBase
   {
   public:
-    IC1(GraphDBSession &graph)
+    TestQuery1(GraphDBSession &graph)
         : person_label_id_(graph.schema().get_vertex_label_id("PERSON")),
           place_label_id_(graph.schema().get_vertex_label_id("PLACE")),
           knows_label_id_(graph.schema().get_edge_label_id("KNOWS")),
@@ -47,7 +47,7 @@ namespace gs
           organisation_name_col_(*(std::dynamic_pointer_cast<StringColumn>(
               graph.get_vertex_property_column(organisation_label_id_, "name")))),
           graph_(graph) {}
-    ~IC1() {}
+    ~TestQuery1() {}
 
     struct person_info
     {
@@ -100,8 +100,7 @@ namespace gs
       }
     };
 
-    void get_friends(const ReadTransaction &txn, vid_t root,
-                     const std::string_view &firstname)
+    void get_friends(const ReadTransaction &txn, vid_t root)
     {
       auto person_knows_person_out = txn.GetOutgoingGraphView<Date>(
           person_label_id_, person_label_id_, knows_label_id_);
@@ -146,10 +145,9 @@ namespace gs
             q.push(v);
           }
 #if OV
-          if (person_firstName_col_.get_view(v) == firstname)
+
 #else
           auto person_firstName_item = person_firstName_col_.get(v);
-          if (person_firstName_item == firstname)
 #endif
           {
             if (pq.size() < 20)
@@ -237,7 +235,6 @@ namespace gs
             q.push(v);
           }
 #if OV
-          if (person_firstName_col_.get_view(v) == firstname)
           {
             if (pq.size() < 20)
             {
@@ -246,7 +243,7 @@ namespace gs
             }
 #else
           auto person_firstName_item = person_firstName_col_.get(v);
-          if (person_firstName_item == firstname)
+
           {
             if (pq.size() < 20)
             {
@@ -324,19 +321,19 @@ namespace gs
       auto txn = graph_.GetReadTransaction();
 
       oid_t person_id = input.get_long();
-      std::string_view firstname = input.get_string();
       CHECK(input.empty());
 
       ans_.clear();
       distance_.clear();
       distance_.resize(txn.GetVertexNum(person_label_id_), 0);
       vid_t root{};
+
       if (!txn.GetVertexIndex(person_label_id_, person_id, root))
       {
         return false;
       }
 
-      get_friends(txn, root, firstname);
+      get_friends(txn, root);
 
       auto person_isLocatedIn_place_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
@@ -495,13 +492,13 @@ extern "C"
 {
   void *CreateApp(gs::GraphDBSession &db)
   {
-    gs::IC1 *app = new gs::IC1(db);
+    gs::TestQuery1 *app = new gs::TestQuery1(db);
     return static_cast<void *>(app);
   }
 
   void DeleteApp(void *app)
   {
-    gs::IC1 *casted = static_cast<gs::IC1 *>(app);
+    gs::TestQuery1 *casted = static_cast<gs::TestQuery1 *>(app);
     delete casted;
   }
 }

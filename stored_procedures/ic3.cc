@@ -177,13 +177,13 @@ namespace gs
           place_label_id_, countryX, place_label_id_, isPartOf_label_id_);
       for (auto &e : xe)
       {
-        place_Locatedin_[e.neighbor] = true;
+        place_Locatedin_[e.neighbor] = true; // 确定哪些place在countryX
       }
       const auto &ye = txn.GetIncomingEdges<grape::EmptyType>(
           place_label_id_, countryY, place_label_id_, isPartOf_label_id_);
       for (auto &e : ye)
       {
-        place_Locatedin_[e.neighbor] = true;
+        place_Locatedin_[e.neighbor] = true; // 确定哪些place在countryY
       }
 
       std::vector<vid_t> friends{};
@@ -191,7 +191,7 @@ namespace gs
       count_.clear();
       count_.resize(person_num_, {});
 
-      get_friends(txn, root, friends);
+      get_friends(txn, root, friends); // 获得root的朋友以及朋友的朋友
       const int64_t milli_sec_per_day = 24 * 60 * 60 * 1000l;
       int64_t end_date = start_date + durationdays * milli_sec_per_day;
       person_info_comparer comparer;

@@ -10,10 +10,10 @@
 namespace gs
 {
 
-  class IC1 : public AppBase
+  class TestQuery2 : public AppBase
   {
   public:
-    IC1(GraphDBSession &graph)
+    TestQuery2(GraphDBSession &graph)
         : person_label_id_(graph.schema().get_vertex_label_id("PERSON")),
           place_label_id_(graph.schema().get_vertex_label_id("PLACE")),
           knows_label_id_(graph.schema().get_edge_label_id("KNOWS")),
@@ -47,7 +47,7 @@ namespace gs
           organisation_name_col_(*(std::dynamic_pointer_cast<StringColumn>(
               graph.get_vertex_property_column(organisation_label_id_, "name")))),
           graph_(graph) {}
-    ~IC1() {}
+    ~TestQuery2() {}
 
     struct person_info
     {
@@ -63,12 +63,11 @@ namespace gs
       oid_t id;
       vid_t vid;
 #else
-      person_info(uint8_t distance_, gbp::BufferBlock lastName_, oid_t id_,
+      person_info(uint8_t distance_, oid_t id_,
                   vid_t vid_)
-          : distance(distance_), lastName(lastName_), id(id_), vid(vid_) {}
+          : distance(distance_), id(id_), vid(vid_) {}
 
       uint8_t distance;
-      gbp::BufferBlock lastName;
       oid_t id;
       vid_t vid;
 #endif
@@ -87,31 +86,18 @@ namespace gs
         {
           return false;
         }
-
-        if (lhs.lastName < rhs.lastName)
-        {
-          return true;
-        }
-        if (lhs.lastName > rhs.lastName)
-        {
-          return false;
-        }
         return lhs.id < rhs.id;
       }
     };
 
-    void get_friends(const ReadTransaction &txn, vid_t root,
-                     const std::string_view &firstname)
+    void get_friends(const ReadTransaction &txn, vid_t root)
     {
       auto person_knows_person_out = txn.GetOutgoingGraphView<Date>(
           person_label_id_, person_label_id_, knows_label_id_);
       auto person_knows_person_in = txn.GetIncomingGraphView<Date>(
           person_label_id_, person_label_id_, knows_label_id_);
 
-      person_info_comparer comparer;
-      std::priority_queue<person_info, std::vector<person_info>,
-                          person_info_comparer>
-          pq(comparer);
+      uint8_t distance_upperbound = 3;
       uint8_t dep = 1;
       distance_[root] = 1;
       std::queue<vid_t> q;
@@ -122,8 +108,6 @@ namespace gs
         q.pop();
         if (dep != distance_[u])
         {
-          if (pq.size() == 20)
-            break;
           dep = distance_[u];
         }
 
@@ -141,81 +125,9 @@ namespace gs
           if (distance_[v])
             continue;
           distance_[v] = distance_[u] + 1;
-          if (distance_[v] < 4)
+          if (distance_[v] < distance_upperbound)
           {
             q.push(v);
-          }
-#if OV
-          if (person_firstName_col_.get_view(v) == firstname)
-#else
-          auto person_firstName_item = person_firstName_col_.get(v);
-          if (person_firstName_item == firstname)
-#endif
-          {
-            if (pq.size() < 20)
-            {
-#if OV
-              pq.emplace(distance_[v], person_lastName_col_.get_view(v),
-                         txn.GetVertexId(person_label_id_, v), v);
-#else
-              pq.emplace(distance_[v], person_lastName_col_.get(v),
-                         txn.GetVertexId(person_label_id_, v), v);
-#endif
-            }
-            else
-            {
-              const person_info &top = pq.top();
-              uint8_t distance = distance_[v];
-              if (distance < top.distance)
-              {
-#if OV
-                pq.emplace(distance, person_lastName_col_.get_view(v),
-                           txn.GetVertexId(person_label_id_, v), v);
-#else
-                pq.emplace(distance, person_lastName_col_.get(v),
-                           txn.GetVertexId(person_label_id_, v), v);
-#endif
-              }
-              else if (distance == top.distance)
-              {
-#if OV
-                std::string_view lastName = person_lastName_col_.get_view(v);
-                if (lastName < top.lastName)
-#else
-                auto lastName_item = person_lastName_col_.get(v);
-
-                if (lastName_item < top.lastName)
-#endif
-                {
-                  pq.pop();
-#if OV
-                  pq.emplace(distance, std::move(lastName),
-                             txn.GetVertexId(person_label_id_, v), v);
-#else
-                  pq.emplace(distance, lastName_item,
-                             txn.GetVertexId(person_label_id_, v), v);
-#endif
-                }
-#if OV
-                else if (lastName == top.lastName)
-#else
-                else if (lastName_item == top.lastName)
-
-#endif
-                {
-                  oid_t id = txn.GetVertexId(person_label_id_, v);
-                  if (id < top.id)
-                  {
-                    pq.pop();
-#if OV
-                    pq.emplace(distance, std::move(lastName), id, v);
-#else
-                    pq.emplace(distance, lastName_item, id, v);
-#endif
-                  }
-                }
-              }
-            }
           }
         }
 #if OV
@@ -232,112 +144,37 @@ namespace gs
           if (distance_[v])
             continue;
           distance_[v] = distance_[u] + 1;
-          if (distance_[v] < 4)
+          if (distance_[v] < distance_upperbound)
           {
             q.push(v);
           }
-#if OV
-          if (person_firstName_col_.get_view(v) == firstname)
-          {
-            if (pq.size() < 20)
-            {
-              pq.emplace(distance_[v], person_lastName_col_.get_view(v),
-                         txn.GetVertexId(person_label_id_, v), v);
-            }
-#else
-          auto person_firstName_item = person_firstName_col_.get(v);
-          if (person_firstName_item == firstname)
-          {
-            if (pq.size() < 20)
-            {
-              pq.emplace(distance_[v], person_lastName_col_.get(v),
-                         txn.GetVertexId(person_label_id_, v), v);
-            }
-#endif
-            else
-            {
-              const person_info &top = pq.top();
-              uint8_t distance = distance_[v];
-              if (distance < top.distance)
-              {
-                pq.pop();
-#if OV
-                pq.emplace(distance, person_lastName_col_.get_view(v),
-                           txn.GetVertexId(person_label_id_, v), v);
-#else
-                pq.emplace(distance, person_lastName_col_.get(v),
-                           txn.GetVertexId(person_label_id_, v), v);
-#endif
-              }
-              else if (distance == top.distance)
-              {
-#if OV
-                std::string_view lastName = person_lastName_col_.get_view(v);
-                if (lastName < top.lastName)
-                {
-                  pq.pop();
-                  pq.emplace(distance, std::move(lastName),
-                             txn.GetVertexId(person_label_id_, v), v);
-                }
-                else if (lastName == top.lastName)
-                {
-                  oid_t id = txn.GetVertexId(person_label_id_, v);
-                  if (id < top.id)
-                  {
-                    pq.pop();
-                    pq.emplace(distance, std::move(lastName), id, v);
-                  }
-                }
-#else
-                auto lastName_item = person_lastName_col_.get(v);
-                if (lastName_item < top.lastName)
-                {
-                  pq.pop();
-                  pq.emplace(distance, lastName_item,
-                             txn.GetVertexId(person_label_id_, v), v);
-                }
-                else if (lastName_item == top.lastName)
-                {
-                  oid_t id = txn.GetVertexId(person_label_id_, v);
-                  if (id < top.id)
-                  {
-                    pq.pop();
-                    pq.emplace(distance, lastName_item, id, v);
-                  }
-                }
-#endif
-              }
-            }
-          }
         }
-      }
-      ans_.reserve(pq.size());
-      while (!pq.empty())
-      {
-        ans_.emplace_back(pq.top());
-        pq.pop();
       }
     }
 
-    bool Query(Decoder &input, Encoder &output) override
+    bool
+    Query(Decoder &input, Encoder &output) override
     {
       auto txn = graph_.GetReadTransaction();
 
       oid_t person_id = input.get_long();
-      std::string_view firstname = input.get_string();
       CHECK(input.empty());
 
       ans_.clear();
       distance_.clear();
       distance_.resize(txn.GetVertexNum(person_label_id_), 0);
       vid_t root{};
+
       if (!txn.GetVertexIndex(person_label_id_, person_id, root))
       {
         return false;
       }
 
-      get_friends(txn, root, firstname);
+      get_friends(txn, root);
+      ans_.clear();
 
+      return true;
+      assert(false);
       auto person_isLocatedIn_place_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
               person_label_id_, place_label_id_, isLocatedIn_label_id_);
@@ -363,7 +200,6 @@ namespace gs
         output.put_string_view(person_locationIp_col_.get_view(v));
 #else
 
-        output.put_buffer_object(info.lastName);
         auto item = person_birthday_col_.get(v);
         output.put_long(gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second);
         item = person_creationDate_col_.get(v);
@@ -495,13 +331,13 @@ extern "C"
 {
   void *CreateApp(gs::GraphDBSession &db)
   {
-    gs::IC1 *app = new gs::IC1(db);
+    gs::TestQuery2 *app = new gs::TestQuery2(db);
     return static_cast<void *>(app);
   }
 
   void DeleteApp(void *app)
   {
-    gs::IC1 *casted = static_cast<gs::IC1 *>(app);
+    gs::TestQuery2 *casted = static_cast<gs::TestQuery2 *>(app);
     delete casted;
   }
 }
