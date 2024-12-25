@@ -24,10 +24,7 @@ set(TARGETS
     n_ic1 n_ic2 n_ic3 n_ic4 n_ic5 n_ic6 n_ic7 n_ic8 n_ic9 n_ic10 
     n_ic11 n_ic12 n_ic13 n_ic14 n_is1 n_is2 n_is3 n_is4 n_is5 
     n_is6 n_is7 n_ins1 n_ins2 n_ins3 n_ins4 n_ins5 n_ins6 n_ins7 
-    n_ins8 
-    n_ic1_nocol n_ic2_nocol n_ic3_nocol n_ic4_nocol n_ic5_nocol n_ic6_nocol n_ic7_nocol n_ic8_nocol n_ic9_nocol n_ic10_nocol
-    n_ic11_nocol n_ic12_nocol n_ic13_nocol n_ic14_nocol
-    n_is1_nocol n_is2_nocol n_is3_nocol n_is4_nocol n_is5_nocol n_is6_nocol n_is7_nocol
+    n_ins8
 )
 
 # 为每个目标创建共享库

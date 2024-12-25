@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/n_ins5.cc" "/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles/n_ins5.dir/n_ins5.cc.o"
+  "/workspaces/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/n_ins5.cc" "/workspaces/graphscope-flex/flex_ldbc_snb/test_query_set_get_only/build/CMakeFiles/n_ins5.dir/n_ins5.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/workspaces/graphscope-flex/flex_ldbc_snb/cgraph_stored_procedures/n_ic10.cc
+queue
+-
+flex/engines/graph_db/app/app_base.h
+/workspaces/graphscope-flex/flex_ldbc_snb/cgraph_stored_procedures/flex/engines/graph_db/app/app_base.h
+flex/engines/graph_db/database/graph_db_session.h
+/workspaces/graphscope-flex/flex_ldbc_snb/cgraph_stored_procedures/flex/engines/graph_db/database/graph_db_session.h
+flex/storages/rt_mutable_graph/mutable_property_fragment.h
+/workspaces/graphscope-flex/flex_ldbc_snb/cgraph_stored_procedures/flex/storages/rt_mutable_graph/mutable_property_fragment.h
+flex/utils/property/types.h
+/workspaces/graphscope-flex/flex_ldbc_snb/cgraph_stored_procedures/flex/utils/property/types.h
+

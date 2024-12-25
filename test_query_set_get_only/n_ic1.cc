@@ -55,7 +55,7 @@ namespace gs
     struct person_info
     {
 #if OV
-      person_info(uint8_t distance_,  std::string_view &lastName_, oid_t id_,
+      person_info(uint8_t distance_, std::string_view &lastName_, oid_t id_,
                   vid_t vid_)
           : distance(distance_), lastName(lastName_), id(id_), vid(vid_) {}
 
@@ -79,7 +79,7 @@ namespace gs
 
     struct person_info_comparer
     {
-      bool operator()( person_info &lhs,  person_info &rhs)
+      bool operator()(person_info &lhs, person_info &rhs)
       {
 
         if (lhs.distance < rhs.distance)
@@ -103,8 +103,8 @@ namespace gs
       }
     };
 
-    void get_friends( ReadTransaction &txn, vid_t root,
-                      std::string_view &firstname)
+    void get_friends(ReadTransaction &txn, vid_t root,
+                     std::string_view &firstname)
     {
       auto person_knows_person_out = txn.GetOutgoingGraphView<Date>(
           person_label_id_, person_label_id_, knows_label_id_);
@@ -123,7 +123,7 @@ namespace gs
       // 用于记录每层访问的节点
       std::vector<vid_t> current_level_nodes;
       int current_depth = 1;
-      
+
       while (!q.empty())
       {
         auto u = q.front();
@@ -137,7 +137,8 @@ namespace gs
           // 打印上一层访问的节点
           std::ofstream ofs("level_nodes.txt", std::ios::app);
           ofs << "Depth " << current_depth << ": ";
-          for ( auto& vid : current_level_nodes) {
+          for (auto &vid : current_level_nodes)
+          {
             ofs << vid << " ";
           }
           ofs << "\n";
@@ -148,7 +149,7 @@ namespace gs
         }
 
 #if OV
-         auto &ie = person_knows_person_in.get_edges(u);
+        auto &ie = person_knows_person_in.get_edges(u);
         for (auto &e : ie)
         {
           auto v = e.neighbor;
@@ -160,9 +161,9 @@ namespace gs
 #endif
           if (distance_[v])
             continue;
-          #ifdef ZED_PROFILE
-          person_count+=1;
-          #endif
+#ifdef ZED_PROFILE
+          person_count += 1;
+#endif
           distance_[v] = distance_[u] + 1;
           if (distance_[v] < 4)
           {
@@ -242,7 +243,7 @@ namespace gs
           }
         }
 #if OV
-         auto &oe = person_knows_person_out.get_edges(u);
+        auto &oe = person_knows_person_out.get_edges(u);
         for (auto &e : oe)
         {
           auto v = e.neighbor;
@@ -251,15 +252,15 @@ namespace gs
         for (; oe.is_valid(); oe.next())
         {
           auto v = oe.get_neighbor();
-          #ifdef ZED_PROFILE
-          edge_count+=1;
-          #endif
+#ifdef ZED_PROFILE
+          edge_count += 1;
+#endif
 #endif
           if (distance_[v])
             continue;
-          #ifdef ZED_PROFILE
-          person_count+=1;
-          #endif
+#ifdef ZED_PROFILE
+          person_count += 1;
+#endif
           distance_[v] = distance_[u] + 1;
           if (distance_[v] < 4)
           {
@@ -345,10 +346,12 @@ namespace gs
       }
 
       // 打印最后一层的节点
-      if (!current_level_nodes.empty()) {
+      if (!current_level_nodes.empty())
+      {
         std::ofstream ofs("level_nodes.txt", std::ios::app);
         ofs << "Depth " << current_depth << ": ";
-        for ( auto& vid : current_level_nodes) {
+        for (auto &vid : current_level_nodes)
+        {
           ofs << vid << " ";
         }
         ofs << "\n";
@@ -365,8 +368,6 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
-      // std::cout<<"begin query 1"<<std::endl;
-      // std::cout<<"begin query"<<std::endl;
       auto txn = graph_.GetReadTransaction();
 
       oid_t person_id = input.get_long();
@@ -383,11 +384,12 @@ namespace gs
       }
 
       get_friends(txn, root, firstname);
-      std::ofstream ofs("ans.txt",std::ios::app);
-      for(auto &info:ans_){
-        ofs<<info.vid<<" ";
+      std::ofstream ofs("ans.txt", std::ios::app);
+      for (auto &info : ans_)
+      {
+        ofs << info.vid << " ";
       }
-      ofs<<"\n";
+      ofs << "\n";
       ofs.close();
 
       auto person_isLocatedIn_place_out =
@@ -447,7 +449,7 @@ namespace gs
         int university_num = 0;
         size_t un_offset = output.skip_int();
 #if OV
-         auto &universities = person_studyAt_organisation_out.get_edges(v);
+        auto &universities = person_studyAt_organisation_out.get_edges(v);
         for (auto &e1 : universities)
         {
           output.put_string_view(organisation_name_col_.get_view(e1.neighbor));
@@ -480,7 +482,7 @@ namespace gs
         int company_num = 0;
         size_t cn_offset = output.skip_int();
 #if OV
-         auto &companies = person_workAt_organisation_out.get_edges(v);
+        auto &companies = person_workAt_organisation_out.get_edges(v);
         for (auto &e1 : companies)
         {
           output.put_string_view(organisation_name_col_.get_view(e1.neighbor));
@@ -511,11 +513,12 @@ namespace gs
 #endif
         output.put_int_at(cn_offset, company_num);
       }
-      // outfile<<"hello"<<std::endl;
-      #ifdef ZED_PROFILE
+// outfile<<"hello"<<std::endl;
+#ifdef ZED_PROFILE
       // std::cout<<"end query,"<<person_count<<","<<edge_count<<std::endl;
-      person_count=0;edge_count=0;
-      #endif
+      person_count = 0;
+      edge_count = 0;
+#endif
       return true;
     }
 
@@ -530,25 +533,24 @@ namespace gs
 
     std::vector<person_info> ans_;
     std::vector<uint8_t> distance_;
-     StringColumn &person_firstName_col_;
-     StringColumn &person_lastName_col_;
-     DateColumn &person_birthday_col_;
-     DateColumn &person_creationDate_col_;
-     StringColumn &person_gender_col_;
-     StringColumn &person_browserUsed_col_;
-     StringColumn &person_locationIp_col_;
-     StringColumn &place_name_col_;
-     StringColumn &person_email_col_;
-     StringColumn &person_language_col_;
-     StringColumn &organisation_name_col_;
+    StringColumn &person_firstName_col_;
+    StringColumn &person_lastName_col_;
+    DateColumn &person_birthday_col_;
+    DateColumn &person_creationDate_col_;
+    StringColumn &person_gender_col_;
+    StringColumn &person_browserUsed_col_;
+    StringColumn &person_locationIp_col_;
+    StringColumn &place_name_col_;
+    StringColumn &person_email_col_;
+    StringColumn &person_language_col_;
+    StringColumn &organisation_name_col_;
 
     GraphDBSession &graph_;
 
-    #ifdef ZED_PROFILE
-    int person_count=0;
-    int edge_count=0;
-    #endif
-
+#ifdef ZED_PROFILE
+    int person_count = 0;
+    int edge_count = 0;
+#endif
   };
 
 } // namespace gs
