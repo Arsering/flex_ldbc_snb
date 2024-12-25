@@ -99,7 +99,7 @@ namespace gs
       {
         friends_[ie.get_neighbor()] = true;
         oid_t oid;
-        LOG(INFO) << "ie.get_neighbor(): " << txn.GetVertexId(person_label_id_, ie.get_neighbor());
+        // LOG(INFO) << "ie.get_neighbor(): " << txn.GetVertexId(person_label_id_, ie.get_neighbor());
       }
       auto oe = txn.GetOutgoingEdges<Date>(
           person_label_id_, root, person_label_id_, knows_label_id_);
@@ -107,7 +107,7 @@ namespace gs
       {
         friends_[oe.get_neighbor()] = true;
         oid_t oid;
-        LOG(INFO) << "oe.get_neighbor(): " << txn.GetVertexId(person_label_id_, oe.get_neighbor());
+        // LOG(INFO) << "oe.get_neighbor(): " << txn.GetVertexId(person_label_id_, oe.get_neighbor());
       }
 #endif
       std::vector<person_info> vec;
@@ -128,10 +128,10 @@ namespace gs
           vec.emplace_back(person_ie.get_neighbor(), pid, ((Date *)item)->milli_second,
                            txn.GetVertexId(person_label_id_, person_ie.get_neighbor()),
                            message_id, true);
-          LOG(INFO)<<"person id is " << txn.GetVertexId(person_label_id_, person_ie.get_neighbor()) << " message id is " << message_id << " is post is " << true;
+          // LOG(INFO)<<"person id is " << txn.GetVertexId(person_label_id_, person_ie.get_neighbor()) << " message id is " << message_id << " is post is " << true;
         }
       }
-      LOG(INFO) << "vec size: " << vec.size();
+      // LOG(INFO) << "vec size: " << vec.size();
       // for(auto &v: vec){
       //   LOG(INFO)<<"person id is " << v.person_id << " message id is " << v.message_id << " is post is " << v.is_post;
       // }
@@ -151,10 +151,10 @@ namespace gs
           vec.emplace_back(person_ie.get_neighbor(), cid, ((Date *)item)->milli_second,
                            txn.GetVertexId(person_label_id_, person_ie.get_neighbor()),
                            message_id, false);
-          LOG(INFO)<<"person id is " << txn.GetVertexId(person_label_id_, person_ie.get_neighbor()) << " message id is " << message_id << " is post is " << false;
+          // LOG(INFO)<<"person id is " << txn.GetVertexId(person_label_id_, person_ie.get_neighbor()) << " message id is " << message_id << " is post is " << false;
         }
       }
-      LOG(INFO) << "vec size: " << vec.size();
+      // LOG(INFO) << "vec size: " << vec.size();
      
       sort(vec.begin(), vec.end(),
            [&](const person_info &a, const person_info &b)
@@ -170,7 +170,7 @@ namespace gs
              return a.message_id < b.message_id;
            });
       for(auto &v: vec){
-        LOG(INFO)<<"person id is " << v.person_id << " message id is " << v.message_id << " is post is " << v.is_post;
+        // LOG(INFO)<<"person id is " << v.person_id << " message id is " << v.message_id << " is post is " << v.is_post;
       }
       person_info_comparer comparer;
       std::priority_queue<person_info, std::vector<person_info>,
@@ -200,10 +200,10 @@ namespace gs
         tmp.emplace_back(pq.top());
         pq.pop();
       }
-      LOG(INFO) << "tmp size: " << tmp.size();
+      // LOG(INFO) << "tmp size: " << tmp.size();
       for (auto &v : tmp)
       {
-        LOG(INFO)<<"person id is " << v.person_id << " message id is " << v.message_id << " is post is " << v.is_post;
+        // LOG(INFO)<<"person id is " << v.person_id << " message id is " << v.message_id << " is post is " << v.is_post;
       }
       constexpr int64_t mill_per_min = 60 * 1000l;
       for (auto i = tmp.size(); i > 0; --i)

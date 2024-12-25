@@ -125,7 +125,7 @@ namespace gs
         auto tagClass_name = txn.GetVertexProp(tagClass_label_id_, i, tagClass_name_col_id_);
         std::vector<char> data(tagClass_name.Size());
         tagClass_name.Copy(data.data(), data.size());
-        LOG(INFO) << "tagClass_name: " << std::string_view(data.data(), data.size());
+        // LOG(INFO) << "tagClass_name: " << std::string_view(data.data(), data.size());
         if (tagClass_name == tagclassname)
 #endif
         {

@@ -91,7 +91,7 @@ namespace gs
       {
         return false;
       }
-      LOG(INFO) << "input pid: " << personid;
+      // LOG(INFO) << "input pid: " << personid;
       message_info_comparer comparer;
       std::priority_queue<message_info, std::vector<message_info>,
                           message_info_comparer>
@@ -110,7 +110,7 @@ namespace gs
       {
         auto v = ie.get_neighbor();
         auto v_oid=txn.GetVertexId(person_label_id_, v);
-        LOG(INFO) << "ie: v_oid: " << v_oid;
+        // LOG(INFO) << "ie: v_oid: " << v_oid;
         auto posts = post_hasCreator_person_in.get_edges(v);
         for (; posts.is_valid(); posts.next())
         {
@@ -187,7 +187,7 @@ namespace gs
       {
         auto v = oe.get_neighbor();
         auto v_oid=txn.GetVertexId(person_label_id_, v);
-        LOG(INFO) << "oe: v_oid: " << v_oid;
+        // LOG(INFO) << "oe: v_oid: " << v_oid;
         auto posts = post_hasCreator_person_in.get_edges(v);
 
         for (; posts.is_valid(); posts.next())
