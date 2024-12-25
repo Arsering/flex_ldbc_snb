@@ -60,6 +60,7 @@ namespace gs
       assert(person_isLocatedIn_place_out.exist1(person_place_bo));
 
       auto person_place = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(person_place_bo).neighbor;
+      LOG(INFO)<<"is1: person_place: "<<person_place<<" "<<txn.GetVertexId(place_label_id_, person_place);
       output.put_long(txn.GetVertexId(place_label_id_, person_place));
 
       return true;

@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC  -g3 -ggdb3 -fno-omit-frame-pointer -O0 -fno-gnu-unique -fPIC -rdynamic -shared -Wl,-soname,libn_ic3.so -o libn_ic3.so CMakeFiles/n_ic3.dir/n_ic3.cc.o   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib -lflex_utils -lflex_rt_mutable_graph -lflex_graph_db 
