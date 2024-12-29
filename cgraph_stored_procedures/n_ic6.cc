@@ -21,7 +21,7 @@ namespace gs
           hasCreator_label_id_(graph.schema().get_edge_label_id("HASCREATOR")),
           hasTag_label_id_(graph.schema().get_edge_label_id("HASTAG")),
           tag_num_(graph.graph().vertex_num(tag_label_id_)),
-          tag_name_col_idx_(graph.get_vertex_property_column_id(tag_label_id_, "name")),
+          tag_name_col_(graph.GetPropertyHandle(tag_label_id_, "name")),
           graph_(graph) {}
 
     ~IC6() {}
@@ -69,7 +69,7 @@ namespace gs
       vid_t tag_id = tag_num_;
       for (vid_t i = 0; i < tag_num_; ++i)
       {
-        auto tag_name_item = txn.GetVertexProp(tag_label_id_, i, tag_name_col_idx_);
+        auto tag_name_item = tag_name_col_.getProperty(i);
         if (tag_name_item == tagname)
         {
           tag_id = i;
@@ -128,7 +128,7 @@ namespace gs
         if (post_count[other_tag_id] > 0)
         {
           que.emplace(post_count[other_tag_id],
-                      txn.GetVertexProp(tag_label_id_, other_tag_id, tag_name_col_idx_));
+                      tag_name_col_.getProperty(other_tag_id));
         }
         ++other_tag_id;
       }
@@ -139,11 +139,11 @@ namespace gs
         if (cur_count > top.count)
         {
           que.pop();
-          que.emplace(cur_count, txn.GetVertexProp(tag_label_id_, other_tag_id, tag_name_col_idx_));
+          que.emplace(cur_count, tag_name_col_.getProperty(other_tag_id));
         }
         else if (cur_count == top.count)
         {
-          auto tag_name_item = txn.GetVertexProp(tag_label_id_, other_tag_id, tag_name_col_idx_);
+          auto tag_name_item = tag_name_col_.getProperty(other_tag_id);
           if (tag_name_item < top.tag_name)
           {
             que.pop();
@@ -184,7 +184,7 @@ namespace gs
     std::vector<bool> friends_;
 
     vid_t tag_num_;
-    int tag_name_col_idx_;
+    cgraph::PropertyHandle tag_name_col_;
 
     GraphDBSession &graph_;
     int person_count=0;

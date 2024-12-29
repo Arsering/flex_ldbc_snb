@@ -1,5 +1,6 @@
 #include "flex/engines/graph_db/app/app_base.h"
 #include "flex/engines/graph_db/database/graph_db_session.h"
+#include "flex/graphscope_bufferpool/include/utils.h"
 #include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
 #include "flex/utils/property/types.h"
 // #include "utils.h"
@@ -15,8 +16,8 @@ namespace gs
           comment_label_id_(graph.schema().get_vertex_label_id("COMMENT")),
           person_label_id_(graph.schema().get_vertex_label_id("PERSON")),
           hasCreator_label_id_(graph.schema().get_edge_label_id("HASCREATOR")),
-          person_firstName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
           graph_(graph) {}
     ~IS5() {}
 
@@ -68,9 +69,9 @@ namespace gs
       const auto &lastname = person_lastName_col_.get_view(v);
       output.put_string_view(lastname);
 #else
-      auto firstname = txn.GetVertexProp(person_label_id_, v, person_firstName_col_id_);
+      auto firstname = person_firstName_col_.getProperty(v);
       output.put_buffer_object(firstname);
-      auto lastname = txn.GetVertexProp(person_label_id_, v, person_lastName_col_id_);
+      auto lastname = person_lastName_col_.getProperty(v);
       output.put_buffer_object(lastname);
 
 #endif
@@ -83,8 +84,8 @@ namespace gs
     label_t person_label_id_;
     label_t hasCreator_label_id_;
 
-    int person_firstName_col_id_;
-    int person_lastName_col_id_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
 
     GraphDBSession &graph_;
   };

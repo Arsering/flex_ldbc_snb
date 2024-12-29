@@ -22,11 +22,11 @@ namespace gs
           hasCreator_label_id_(graph.schema().get_edge_label_id("HASCREATOR")),
           isLocatedIn_label_id_(graph.schema().get_edge_label_id("ISLOCATEDIN")),
           isPartOf_label_id_(graph.schema().get_edge_label_id("ISPARTOF")),
-          post_creationDate_col_idx_(graph.get_vertex_property_column_id(post_label_id_, "creationDate")),
-          comment_creationDate_col_idx_(graph.get_vertex_property_column_id(comment_label_id_, "creationDate")),
-          person_firstName_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
-          place_name_col_idx_(graph.get_vertex_property_column_id(place_label_id_, "name")),
+          post_creationDate_col_(graph.GetPropertyHandle(post_label_id_, "creationDate")),
+          comment_creationDate_col_(graph.GetPropertyHandle(comment_label_id_, "creationDate")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
+          place_name_col_(graph.GetPropertyHandle(place_label_id_, "name")),
           place_num_(graph.graph().vertex_num(place_label_id_)),
           graph_(graph)
     {
@@ -215,7 +215,7 @@ namespace gs
       vid_t countryY = place_num_;
       for (vid_t i = 0; i < place_num_; ++i)
       {
-        auto place_name_item = txn.GetVertexProp(place_label_id_, i, place_name_col_idx_);
+        auto place_name_item = place_name_col_.getProperty(i);
 
         if (place_name_item == countryxname)
         {
@@ -266,7 +266,7 @@ namespace gs
           place_label_id_, countryX, post_label_id_, isLocatedIn_label_id_);
       for (; postex.is_valid(); postex.next())
       {
-        auto item = txn.GetVertexProp(post_label_id_, postex.get_neighbor(), post_creationDate_col_idx_);
+        auto item = post_creationDate_col_.getProperty(postex.get_neighbor());
         auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
         if (start_date <= creationDate && creationDate < end_date)
         {
@@ -285,7 +285,7 @@ namespace gs
           place_label_id_, countryX, comment_label_id_, isLocatedIn_label_id_);
       for (; commentex.is_valid(); commentex.next())
       {
-        auto item = txn.GetVertexProp(comment_label_id_, commentex.get_neighbor(), comment_creationDate_col_idx_);
+        auto item = comment_creationDate_col_.getProperty(commentex.get_neighbor());
         auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
         if (start_date <= creationDate && creationDate < end_date)
         {
@@ -304,7 +304,7 @@ namespace gs
           place_label_id_, countryY, post_label_id_, isLocatedIn_label_id_);
       for (; postey.is_valid(); postey.next())
       {
-        auto item = txn.GetVertexProp(post_label_id_, postey.get_neighbor(), post_creationDate_col_idx_);
+        auto item = post_creationDate_col_.getProperty(postey.get_neighbor());
         auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
         item.free();
         if (start_date <= creationDate && creationDate < end_date)
@@ -324,7 +324,7 @@ namespace gs
           place_label_id_, countryY, comment_label_id_, isLocatedIn_label_id_);
       for (; commentey.is_valid(); commentey.next())
       {
-        auto item = txn.GetVertexProp(comment_label_id_, commentey.get_neighbor(), comment_creationDate_col_idx_);
+        auto item = comment_creationDate_col_.getProperty(commentey.get_neighbor());
         auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
         item.free();
         if (start_date <= creationDate && creationDate < end_date)
@@ -388,10 +388,10 @@ namespace gs
         auto v = p.otherPerson_vid;
         output.put_long(p.otherPerson_id);
 
-        auto name = txn.GetVertexProp(person_label_id_, v, person_firstName_col_idx_);
+        auto name = person_firstName_col_.getProperty(v);
         output.put_buffer_object(name);
 
-        name = txn.GetVertexProp(person_label_id_, v, person_lastName_col_idx_);
+        name = person_lastName_col_.getProperty(v);
         output.put_buffer_object(name);
 
         output.put_long(count_[v].first);
@@ -431,11 +431,11 @@ namespace gs
     vid_t person_num_;
     std::vector<std::pair<int, int>> count_;
 
-    int post_creationDate_col_idx_;
-    int comment_creationDate_col_idx_;
-    int person_firstName_col_idx_;
-    int person_lastName_col_idx_;
-    int place_name_col_idx_;
+    cgraph::PropertyHandle post_creationDate_col_;
+    cgraph::PropertyHandle comment_creationDate_col_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
+    cgraph::PropertyHandle place_name_col_;
 
     vid_t place_num_;
 

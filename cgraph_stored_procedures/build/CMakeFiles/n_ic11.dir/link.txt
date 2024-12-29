@@ -1,1 +1,1 @@
-/usr/bin/c++ -fPIC  -g3 -ggdb3 -fno-omit-frame-pointer -O0 -fno-gnu-unique -fPIC -rdynamic  -shared -Wl,-soname,libn_ic11.so -o libn_ic11.so CMakeFiles/n_ic11.dir/n_ic11.cc.o   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib -lflex_utils -lflex_rt_mutable_graph -lflex_graph_db 
+/usr/bin/c++ -fPIC  -fno-omit-frame-pointer -O2 -fno-gnu-unique -fPIC -rdynamic -shared -Wl,-soname,libn_ic11.so -o libn_ic11.so CMakeFiles/n_ic11.dir/n_ic11.cc.o   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib -lflex_utils -lflex_rt_mutable_graph -lflex_graph_db 

@@ -20,10 +20,10 @@ namespace gs
               graph.schema().get_vertex_label_id("ORGANISATION")),
           workAt_label_id_(graph.schema().get_edge_label_id("WORKAT")),
           knows_label_id_(graph.schema().get_edge_label_id("KNOWS")),
-          person_firstName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
-          organisation_name_col_id_(graph.get_vertex_property_column_id(organisation_label_id_, "name")),
-          place_name_col_id_(graph.get_vertex_property_column_id(place_label_id_, "name")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
+          organisation_name_col_(graph.GetPropertyHandle(organisation_label_id_, "name")),
+          place_name_col_(graph.GetPropertyHandle(place_label_id_, "name")),
           place_num_(graph.graph().vertex_num(place_label_id_)),
           graph_(graph) {}
 
@@ -173,7 +173,7 @@ namespace gs
 #if OV
         if (place_name_col_.get_view(i) == countryname)
 #else
-        auto place_name_item = txn.GetVertexProp(place_label_id_, i, place_name_col_id_);
+        auto place_name_item = place_name_col_.getProperty(i);
         if (place_name_item == countryname)
 #endif
         {
@@ -216,7 +216,7 @@ namespace gs
         auto person_ie = person_workAt_organisation_in.get_edges(company);
         for (; person_ie.is_valid(); person_ie.next())
         {
-          auto name = txn.GetVertexProp(organisation_label_id_, company, organisation_name_col_id_);
+          auto name = organisation_name_col_.getProperty(company);
           auto data_item = person_ie.get_data();
           auto wf = *((int *)data_item);
           if (wf < workfromyear)
@@ -279,9 +279,9 @@ namespace gs
         output.put_string_view(lastname);
         output.put_string_view(p.company_name);
 #else
-        auto firstname = txn.GetVertexProp(person_label_id_, p.person_vid, person_firstName_col_id_);
+        auto firstname = person_firstName_col_.getProperty(p.person_vid);
         output.put_buffer_object(firstname);
-        auto lastname = txn.GetVertexProp(person_label_id_, p.person_vid, person_lastName_col_id_);
+        auto lastname = person_lastName_col_.getProperty(p.person_vid);
         output.put_buffer_object(lastname);
         output.put_buffer_object(p.company_name);
 
@@ -300,10 +300,10 @@ namespace gs
 
     label_t knows_label_id_;
 
-    int person_firstName_col_id_;
-    int person_lastName_col_id_;
-    int organisation_name_col_id_;
-    int place_name_col_id_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
+    cgraph::PropertyHandle organisation_name_col_;
+    cgraph::PropertyHandle place_name_col_;
 
     vid_t place_num_;
 

@@ -17,10 +17,10 @@ namespace gs
           replyOf_label_id_(graph.schema().get_edge_label_id("REPLYOF")),
           hasCreator_label_id_(graph.schema().get_edge_label_id("HASCREATOR")),
           knows_label_id_(graph.schema().get_edge_label_id("KNOWS")),
-          person_firstName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
-          comment_creationDate_col_id_(graph.get_vertex_property_column_id(comment_label_id_, "creationDate")),
-          comment_content_col_id_(graph.get_vertex_property_column_id(comment_label_id_, "content")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
+          comment_creationDate_col_(graph.GetPropertyHandle(comment_label_id_, "creationDate")),
+          comment_content_col_(graph.GetPropertyHandle(comment_label_id_, "content")),
           graph_(graph) {}
 
     ~IS7() {}
@@ -112,7 +112,7 @@ namespace gs
 
           auto comment_creator = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
-          item = txn.GetVertexProp(comment_label_id_, comment_v, comment_creationDate_col_id_);
+          item = comment_creationDate_col_.getProperty(comment_v);
           auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
           comments.emplace_back(
               comment_v, comment_creator,
@@ -136,7 +136,7 @@ namespace gs
 
           auto comment_creator = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
 
-          item = txn.GetVertexProp(comment_label_id_, comment_v, comment_creationDate_col_id_);
+          item = comment_creationDate_col_.getProperty(comment_v);
           auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
 #endif
           comments.emplace_back(
@@ -199,12 +199,12 @@ namespace gs
         output.put_string_view(person_firstName_col_.get_view(a.pid));
         output.put_string_view(person_lastName_col_.get_view(a.pid));
 #else
-        auto item = txn.GetVertexProp(comment_label_id_, a.commentid, comment_content_col_id_);
+        auto item = comment_content_col_.getProperty(a.commentid);
         output.put_buffer_object(item);
         output.put_long(a.personid);
-        item = txn.GetVertexProp(person_label_id_, a.pid, person_firstName_col_id_);
+        item = person_firstName_col_.getProperty(a.pid);
         output.put_buffer_object(item);
-        item = txn.GetVertexProp(person_label_id_, a.pid, person_lastName_col_id_);
+        item = person_lastName_col_.getProperty(a.pid);
         output.put_buffer_object(item);
 
 #endif
@@ -223,10 +223,10 @@ namespace gs
     label_t hasCreator_label_id_;
     label_t knows_label_id_;
 
-    int person_firstName_col_id_;
-    int person_lastName_col_id_;
-    int comment_creationDate_col_id_;
-    int comment_content_col_id_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
+    cgraph::PropertyHandle comment_creationDate_col_;
+    cgraph::PropertyHandle comment_content_col_;
 
     std::vector<bool> friends_;
 

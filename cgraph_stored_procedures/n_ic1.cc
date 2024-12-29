@@ -25,17 +25,17 @@ namespace gs
               graph.schema().get_vertex_label_id("ORGANISATION")),
           workAt_label_id_(graph.schema().get_edge_label_id("WORKAT")),
           studyAt_label_id_(graph.schema().get_edge_label_id("STUDYAT")),
-          person_firstName_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
-          person_birthday_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "birthday")),
-          person_creationDate_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "creationDate")),
-          person_gender_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "gender")),
-          person_browserUsed_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "browserUsed")),
-          person_locationIp_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "locationIP")),
-          place_name_col_idx_(graph.get_vertex_property_column_id(place_label_id_, "name")),
-          person_email_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "email")),
-          person_language_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "language")),
-          organisation_name_col_idx_(graph.get_vertex_property_column_id(organisation_label_id_, "name")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
+          person_birthday_col_(graph.GetPropertyHandle(person_label_id_, "birthday")),
+          person_creationDate_col_(graph.GetPropertyHandle(person_label_id_, "creationDate")),
+          person_gender_col_(graph.GetPropertyHandle(person_label_id_, "gender")),
+          person_browserUsed_col_(graph.GetPropertyHandle(person_label_id_, "browserUsed")),
+          person_locationIp_col_(graph.GetPropertyHandle(person_label_id_, "locationIP")),
+          place_name_col_(graph.GetPropertyHandle(place_label_id_, "name")),
+          person_email_col_(graph.GetPropertyHandle(person_label_id_, "email")),
+          person_language_col_(graph.GetPropertyHandle(person_label_id_, "language")),
+          organisation_name_col_(graph.GetPropertyHandle(organisation_label_id_, "name")),
           graph_(graph) {}
     ~IC1() {}
 
@@ -109,13 +109,13 @@ namespace gs
           dep = distance_[u];
 
           // 打印上一层访问的节点
-          std::ofstream ofs("level_nodes.txt", std::ios::app);
-          ofs << "Depth " << current_depth << ": ";
-          for ( auto& vid : current_level_nodes) {
-            ofs << vid << " ";
-          }
-          ofs << "\n";
-          ofs.close();
+          // std::ofstream ofs("level_nodes.txt", std::ios::app);
+          // ofs << "Depth " << current_depth << ": ";
+          // for ( auto& vid : current_level_nodes) {
+          //   ofs << vid << " ";
+          // }
+          // ofs << "\n";
+          // ofs.close();
 
           current_level_nodes.clear();
           current_depth++;
@@ -134,12 +134,12 @@ namespace gs
           {
             q.push(v);
           }
-          auto person_firstName_item = txn.GetVertexProp(person_label_id_, v, person_firstName_col_idx_);
+          auto person_firstName_item = person_firstName_col_.getProperty(v);
           if (person_firstName_item == firstname)
           {
             if (pq.size() < 20)
             {
-              pq.emplace(distance_[v], txn.GetVertexProp(person_label_id_, v, person_lastName_col_idx_),
+              pq.emplace(distance_[v], person_lastName_col_.getProperty(v),
                          txn.GetVertexId(person_label_id_, v), v);
             }
             else
@@ -148,12 +148,12 @@ namespace gs
               uint8_t distance = distance_[v];
               if (distance < top.distance)
               {
-                pq.emplace(distance, txn.GetVertexProp(person_label_id_, v, person_lastName_col_idx_),
+                pq.emplace(distance, person_lastName_col_.getProperty(v),
                            txn.GetVertexId(person_label_id_, v), v);
               }
               else if (distance == top.distance)
               {
-                auto lastName_item = txn.GetVertexProp(person_label_id_, v, person_lastName_col_idx_);
+                auto lastName_item = person_lastName_col_.getProperty(v);
 
                 if (lastName_item < top.lastName)
                 {
@@ -185,12 +185,12 @@ namespace gs
           {
             q.push(v);
           }
-          auto person_firstName_item = txn.GetVertexProp(person_label_id_, v, person_firstName_col_idx_);
+          auto person_firstName_item = person_firstName_col_.getProperty(v);
           if (person_firstName_item == firstname)
           {
             if (pq.size() < 20)
             {
-              pq.emplace(distance_[v], txn.GetVertexProp(person_label_id_, v, person_lastName_col_idx_),
+              pq.emplace(distance_[v], person_lastName_col_.getProperty(v),
                          txn.GetVertexId(person_label_id_, v), v);
             }
             else
@@ -200,12 +200,12 @@ namespace gs
               if (distance < top.distance)
               {
                 pq.pop();
-                pq.emplace(distance, txn.GetVertexProp(person_label_id_, v, person_lastName_col_idx_),
+                pq.emplace(distance, person_lastName_col_.getProperty(v),
                            txn.GetVertexId(person_label_id_, v), v);
               }
               else if (distance == top.distance)
               {
-                auto lastName_item = txn.GetVertexProp(person_label_id_, v, person_lastName_col_idx_);
+                auto lastName_item = person_lastName_col_.getProperty(v);
                 if (lastName_item < top.lastName)
                 {
                   pq.pop();
@@ -231,15 +231,15 @@ namespace gs
       }
 
       // 打印最后一层的节点
-      if (!current_level_nodes.empty()) {
-        std::ofstream ofs("level_nodes.txt", std::ios::app);
-        ofs << "Depth " << current_depth << ": ";
-        for ( auto& vid : current_level_nodes) {
-          ofs << vid << " ";
-        }
-        ofs << "\n";
-        ofs.close();
-      }
+      // if (!current_level_nodes.empty()) {
+      //   std::ofstream ofs("level_nodes.txt", std::ios::app);
+      //   ofs << "Depth " << current_depth << ": ";
+      //   for ( auto& vid : current_level_nodes) {
+      //     ofs << vid << " ";
+      //   }
+      //   ofs << "\n";
+      //   ofs.close();
+      // }
 
       ans_.reserve(pq.size());
       while (!pq.empty())
@@ -265,16 +265,17 @@ namespace gs
       vid_t root{};
       if (!txn.GetVertexIndex(person_label_id_, person_id, root))
       {
+        assert(false);
         return false;
       }
 
       get_friends(txn, root, firstname);
-      std::ofstream ofs("ans.txt",std::ios::app);
-      for(auto &info:ans_){
-        ofs<<info.vid<<" ";
-      }
-      ofs<<"\n";
-      ofs.close();
+      // std::ofstream ofs("ans.txt",std::ios::app);
+      // for(auto &info:ans_){
+      //   ofs<<info.vid<<" ";
+      // }
+      // ofs<<"\n";
+      // ofs.close();
 
       auto person_isLocatedIn_place_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
@@ -294,31 +295,31 @@ namespace gs
         output.put_int(info.distance - 1);
 
         output.put_buffer_object(info.lastName);
-        auto item = txn.GetVertexProp(person_label_id_, v, person_birthday_col_idx_);
+        auto item = person_birthday_col_.getProperty(v);
         output.put_long(gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second);
-        item = txn.GetVertexProp(person_label_id_, v, person_creationDate_col_idx_);
+        item = person_creationDate_col_.getProperty(v);
         output.put_long(gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second);
-        item = txn.GetVertexProp(person_label_id_, v, person_gender_col_idx_);
+        item = person_gender_col_.getProperty(v);
         output.put_buffer_object(item);
-        item = txn.GetVertexProp(person_label_id_, v, person_browserUsed_col_idx_);
+        item = person_browserUsed_col_.getProperty(v);
         output.put_buffer_object(item);
-        item = txn.GetVertexProp(person_label_id_, v, person_locationIp_col_idx_);
+        item = person_locationIp_col_.getProperty(v);
         output.put_buffer_object(item);
         item = person_isLocatedIn_place_out.get_edge(v);
         assert(person_isLocatedIn_place_out.exist1(item));
         auto person_place = gbp::BufferBlock::RefSingle<MutableNbr<grape::EmptyType>>(item).neighbor;
-        item = txn.GetVertexProp(place_label_id_, person_place, place_name_col_idx_);
+        item = place_name_col_.getProperty(person_place);
         output.put_buffer_object(item);
-        item = txn.GetVertexProp(person_label_id_, v, person_email_col_idx_);
+        item = person_email_col_.getProperty(v);
         output.put_buffer_object(item);
-        item = txn.GetVertexProp(person_label_id_, v, person_language_col_idx_);
+        item = person_language_col_.getProperty(v);
         output.put_buffer_object(item);
         int university_num = 0;
         size_t un_offset = output.skip_int();
         auto universities = person_studyAt_organisation_out.get_edges(v);
         for (; universities.is_valid(); universities.next())
         {
-          auto item = txn.GetVertexProp(organisation_label_id_, universities.get_neighbor(), organisation_name_col_idx_);
+          auto item = organisation_name_col_.getProperty(universities.get_neighbor());
           output.put_buffer_object(item);
           auto item_t = universities.get_data();
           output.put_int(*((int *)item_t));
@@ -327,7 +328,7 @@ namespace gs
 
           auto univ_place =
               gbp::BufferBlock::RefSingle<MutableNbr<grape::EmptyType>>(item).neighbor;
-          item = txn.GetVertexProp(place_label_id_, univ_place, place_name_col_idx_);
+          item = place_name_col_.getProperty(univ_place);
           output.put_buffer_object(item);
           university_num++;
         }
@@ -337,7 +338,7 @@ namespace gs
         auto companies = person_workAt_organisation_out.get_edges(v);
         for (; companies.is_valid(); companies.next())
         {
-          auto item = txn.GetVertexProp(organisation_label_id_, companies.get_neighbor(), organisation_name_col_idx_);
+          auto item = organisation_name_col_.getProperty(companies.get_neighbor());
           output.put_buffer_object(item);
           auto item_t = companies.get_data();
           output.put_int(*((int *)item_t));
@@ -346,7 +347,7 @@ namespace gs
 
           auto company_place =
               gbp::BufferBlock::RefSingle<MutableNbr<grape::EmptyType>>(item).neighbor;
-          item = txn.GetVertexProp(place_label_id_, company_place, place_name_col_idx_);
+          item = place_name_col_.getProperty(company_place);
           output.put_buffer_object(item);
           company_num++;
         }
@@ -367,17 +368,18 @@ namespace gs
     std::vector<person_info> ans_;
     std::vector<uint8_t> distance_;
 
-    int person_firstName_col_idx_;
-    int person_lastName_col_idx_;
-    int person_birthday_col_idx_;
-    int person_creationDate_col_idx_;
-    int person_gender_col_idx_;
-    int person_browserUsed_col_idx_;
-    int person_locationIp_col_idx_;
-    int place_name_col_idx_;
-    int person_email_col_idx_;
-    int person_language_col_idx_;
-    int organisation_name_col_idx_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
+    cgraph::PropertyHandle person_birthday_col_;
+    cgraph::PropertyHandle person_creationDate_col_;
+    cgraph::PropertyHandle person_gender_col_;
+    cgraph::PropertyHandle person_browserUsed_col_;
+    cgraph::PropertyHandle person_locationIp_col_;
+    cgraph::PropertyHandle place_name_col_;
+    cgraph::PropertyHandle person_email_col_;
+    cgraph::PropertyHandle person_language_col_;
+    cgraph::PropertyHandle organisation_name_col_;
+
     GraphDBSession &graph_;
 
     #ifdef ZED_PROFILE

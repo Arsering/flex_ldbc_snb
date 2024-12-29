@@ -12,8 +12,8 @@ namespace gs
     IS3(GraphDBSession &graph)
         : person_label_id_(graph.schema().get_vertex_label_id("PERSON")),
           knows_label_id_(graph.schema().get_edge_label_id("KNOWS")),
-          person_firstName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
           graph_(graph) {}
 
     ~IS3() {}
@@ -109,9 +109,9 @@ namespace gs
       {
         output.put_long(v.person_id);
         output.put_long(v.creationdate);
-        auto firstname = txn.GetVertexProp(person_label_id_, v.v, person_firstName_col_id_);
+        auto firstname = person_firstName_col_.getProperty(v.v);
         output.put_buffer_object(firstname);
-        auto lastname = txn.GetVertexProp(person_label_id_, v.v, person_lastName_col_id_);
+        auto lastname = person_lastName_col_.getProperty(v.v);
         output.put_buffer_object(lastname);
       }
 #endif
@@ -122,8 +122,8 @@ namespace gs
     label_t person_label_id_;
     label_t knows_label_id_;
 
-    int person_firstName_col_id_;
-    int person_lastName_col_id_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
 
     GraphDBSession &graph_;
   };

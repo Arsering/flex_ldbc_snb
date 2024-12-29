@@ -3,6 +3,7 @@
 #include "flex/engines/graph_db/app/app_base.h"
 #include "flex/engines/graph_db/database/graph_db_session.h"
 #include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
+#include "flex/storages/rt_mutable_graph/vertex.h"
 #include "flex/utils/property/types.h"
 // #include "utils.h"
 
@@ -20,14 +21,14 @@ namespace gs
           person_label_id_(graph.schema().get_vertex_label_id("PERSON")),
           hasCreator_label_id_(graph.schema().get_edge_label_id("HASCREATOR")),
           replyOf_label_id_(graph.schema().get_edge_label_id("REPLYOF")),
-          post_creationDate_col_id_(graph.get_vertex_property_column_id(post_label_id_, "creationDate")),
-          comment_creationDate_col_id_(graph.get_vertex_property_column_id(comment_label_id_, "creationDate")),
-          person_firstName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
-          post_content_col_id_(graph.get_vertex_property_column_id(post_label_id_, "content")),
-          post_imageFile_col_id_(graph.get_vertex_property_column_id(post_label_id_, "imageFile")),
-          post_length_col_id_(graph.get_vertex_property_column_id(post_label_id_, "length")),
-          comment_content_col_id_(graph.get_vertex_property_column_id(comment_label_id_, "content")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
+          post_creationDate_col_(graph.GetPropertyHandle(post_label_id_, "creationDate")),
+          comment_creationDate_col_(graph.GetPropertyHandle(comment_label_id_, "creationDate")),
+          post_content_col_(graph.GetPropertyHandle(post_label_id_, "content")),
+          post_imageFile_col_(graph.GetPropertyHandle(post_label_id_, "imageFile")),
+          post_length_col_(graph.GetPropertyHandle(post_label_id_, "length")),
+          comment_content_col_(graph.GetPropertyHandle(comment_label_id_, "content")),
           graph_(graph) {}
 
     struct message_info
@@ -220,8 +221,7 @@ namespace gs
 
       for (; post_ie.is_valid(); post_ie.next())
       {
-        auto item = txn.GetVertexProp(post_label_id_, post_ie.get_neighbor(), post_creationDate_col_id_);
-        auto v_oid = txn.GetVertexId(post_label_id_, post_ie.get_neighbor());
+        auto item=post_creationDate_col_.getProperty(post_ie.get_neighbor());
         auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
 
         if (pq.size() < 10)
@@ -258,8 +258,7 @@ namespace gs
       {
         if (pq.size() < 10)
         {
-          auto item = txn.GetVertexProp(comment_label_id_, comment_ie.get_neighbor(), comment_creationDate_col_id_);
-          auto v_oid = txn.GetVertexId(comment_label_id_, comment_ie.get_neighbor());
+          auto item = comment_creationDate_col_.getProperty(comment_ie.get_neighbor());
           auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
 
           pq.emplace(false, comment_ie.get_neighbor(), creationdate,
@@ -268,9 +267,8 @@ namespace gs
         }
         else
         {
-          auto item = txn.GetVertexProp(comment_label_id_, comment_ie.get_neighbor(), comment_creationDate_col_id_);
+          auto item = comment_creationDate_col_.getProperty(comment_ie.get_neighbor());
           auto creationdate = gbp::BufferBlock::Ref<gs::Date>(item).milli_second;
-          auto v_oid = txn.GetVertexId(comment_label_id_, comment_ie.get_neighbor());
           if (creationdate > current_creationdate)
           {
             pq.pop();
@@ -316,29 +314,31 @@ namespace gs
 
         if (v.is_post)
         {
-          auto item = txn.GetVertexProp(post_label_id_, v.v, post_length_col_id_);
-          auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? txn.GetVertexProp(post_label_id_, v.v, post_imageFile_col_id_) : txn.GetVertexProp(post_label_id_, v.v, post_content_col_id_);
-
+          // auto item = txn.GetVertexProp(post_label_id_, v.v, post_length_col_id_);
+          auto item=post_length_col_.getProperty(v.v);
+          // auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? txn.GetVertexProp(post_label_id_, v.v, post_imageFile_col_id_) : txn.GetVertexProp(post_label_id_, v.v, post_content_col_id_);
+          auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? post_imageFile_col_.getProperty(v.v) : post_content_col_.getProperty(v.v);
           output.put_buffer_object(content);
           output.put_long(v.messageid);
           output.put_long(req);
-          auto firstname = txn.GetVertexProp(person_label_id_, root, person_firstName_col_id_);
+          // auto firstname = txn.GetVertexProp(person_label_id_, root, person_firstName_col_id_);
+          auto firstname = person_firstName_col_.getProperty(root);
           output.put_buffer_object(firstname);
 
-          auto lastname = txn.GetVertexProp(person_label_id_, root, person_lastName_col_id_);
+          // auto lastname = txn.GetVertexProp(person_label_id_, root, person_lastName_col_id_);
+          auto lastname = person_lastName_col_.getProperty(root);
           output.put_buffer_object(lastname);
         }
         else
         {
-          auto content = txn.GetVertexProp(comment_label_id_, v.v, comment_content_col_id_);
+          // auto content = txn.GetVertexProp(comment_label_id_, v.v, comment_content_col_id_);
+          auto content = comment_content_col_.getProperty(v.v);
           output.put_buffer_object(content);
 
           vid_t u = v.v;
           while (true)
           {
-            auto u_oid = txn.GetVertexId(comment_label_id_, u);
             auto post_id = comment_replyOf_post_out.get_edge(u);
-            auto post_id_oid = txn.GetVertexId(post_label_id_, gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor);
             if (comment_replyOf_post_out.exist1(post_id))
             {
               output.put_long(txn.GetVertexId(post_label_id_, gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(post_id).neighbor));
@@ -346,17 +346,17 @@ namespace gs
 
               u = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
               output.put_long(txn.GetVertexId(person_label_id_, u));
-              auto firstname = txn.GetVertexProp(person_label_id_, u, person_firstName_col_id_);
-
+              // auto firstname = txn.GetVertexProp(person_label_id_, u, person_firstName_col_id_);
+              auto firstname = person_firstName_col_.getProperty(u);
               output.put_buffer_object(firstname);
-              auto lastname = txn.GetVertexProp(person_label_id_, u, person_lastName_col_id_);
+              // auto lastname = txn.GetVertexProp(person_label_id_, u, person_lastName_col_id_);
+              auto lastname = person_lastName_col_.getProperty(u);
               output.put_buffer_object(lastname);
               break;
             }
             else
             {
               auto item = comment_replyOf_comment_out.get_edge(u);
-              auto item_oid = txn.GetVertexId(comment_label_id_, gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor);
               assert(comment_replyOf_comment_out.exist1(item));
               u = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
             }
@@ -375,14 +375,14 @@ namespace gs
     label_t hasCreator_label_id_;
     label_t replyOf_label_id_;
 
-    int person_firstName_col_id_;
-    int person_lastName_col_id_;
-    int post_creationDate_col_id_;
-    int comment_creationDate_col_id_;
-    int post_content_col_id_;
-    int post_imageFile_col_id_;
-    int post_length_col_id_;
-    int comment_content_col_id_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
+    cgraph::PropertyHandle post_creationDate_col_;
+    cgraph::PropertyHandle comment_creationDate_col_;
+    cgraph::PropertyHandle post_content_col_;
+    cgraph::PropertyHandle post_imageFile_col_;
+    cgraph::PropertyHandle post_length_col_;
+    cgraph::PropertyHandle comment_content_col_;
 
     GraphDBSession &graph_;
   };

@@ -17,10 +17,10 @@ namespace gs
           comment_label_id_(graph.schema().get_vertex_label_id("COMMENT")),
           hasCreator_label_id_(graph.schema().get_edge_label_id("HASCREATOR")),
           replyOf_label_id_(graph.schema().get_edge_label_id("REPLYOF")),
-          comment_creationDate_col_idx_(graph.get_vertex_property_column_id(comment_label_id_, "creationDate")),
-          person_firstName_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
-          comment_content_col_idx_(graph.get_vertex_property_column_id(comment_label_id_, "content")),
+          comment_creationDate_col_(graph.GetPropertyHandle(comment_label_id_, "creationDate")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
+          comment_content_col_(graph.GetPropertyHandle(comment_label_id_, "content")),
           graph_(graph) {}
 
     ~IC8() {}
@@ -112,14 +112,14 @@ namespace gs
           reply_count++;
           if (pq.size() < 20)
           {
-            auto item = txn.GetVertexProp(comment_label_id_, u, comment_creationDate_col_idx_);
+            auto item = comment_creationDate_col_.getProperty(u);
             pq.emplace(u, gbp::BufferBlock::Ref<Date>(item).milli_second,
                        txn.GetVertexId(comment_label_id_, u));
           }
           else
           {
             const auto &top = pq.top();
-            auto item = txn.GetVertexProp(comment_label_id_, u, comment_creationDate_col_idx_);
+            auto item = comment_creationDate_col_.getProperty(u);
             int64_t creationDate =
                 gbp::BufferBlock::Ref<Date>(item).milli_second;
 #endif
@@ -172,7 +172,7 @@ namespace gs
             pq.emplace(u, comment_creationDate_col_.get_view(u).milli_second,
                        txn.GetVertexId(comment_label_id_, u));
 #else
-            auto item = txn.GetVertexProp(comment_label_id_, u, comment_creationDate_col_idx_);
+            auto item = comment_creationDate_col_.getProperty(u);
             pq.emplace(u, gbp::BufferBlock::Ref<Date>(item).milli_second,
                        txn.GetVertexId(comment_label_id_, u));
             item.free();
@@ -185,7 +185,7 @@ namespace gs
             int64_t creationDate =
                 comment_creationDate_col_.get_view(u).milli_second;
 #else
-            auto item = txn.GetVertexProp(comment_label_id_, u, comment_creationDate_col_idx_);
+            auto item = comment_creationDate_col_.getProperty(u);
             int64_t creationDate =
                 gbp::BufferBlock::Ref<Date>(item).milli_second;
 #endif
@@ -228,13 +228,13 @@ namespace gs
 
         auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
         output.put_long(txn.GetVertexId(person_label_id_, p));
-        item = txn.GetVertexProp(person_label_id_, p, person_firstName_col_idx_);
+        item = person_firstName_col_.getProperty(p);
         output.put_buffer_object(item);
-        item = txn.GetVertexProp(person_label_id_, p, person_lastName_col_idx_);
+        item = person_lastName_col_.getProperty(p);
         output.put_buffer_object(item);
         output.put_long(v.creationDate);
         output.put_long(v.comment_id);
-        item = txn.GetVertexProp(comment_label_id_, v.comment_vid, comment_content_col_idx_);
+        item = comment_content_col_.getProperty(v.comment_vid);
         output.put_buffer_object(item);
       }
 
@@ -250,10 +250,10 @@ namespace gs
     label_t hasCreator_label_id_;
     label_t replyOf_label_id_;
 
-    int person_firstName_col_idx_;
-    int person_lastName_col_idx_;
-    int comment_content_col_idx_;
-    int comment_creationDate_col_idx_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
+    cgraph::PropertyHandle comment_content_col_;
+    cgraph::PropertyHandle comment_creationDate_col_;
 
     GraphDBSession &graph_;
     int reply_count = 0;

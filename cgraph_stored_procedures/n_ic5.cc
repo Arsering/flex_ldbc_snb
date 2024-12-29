@@ -20,7 +20,7 @@ namespace gs
           hasCreator_label_id_(graph.schema().get_edge_label_id("HASCREATOR")),
           hasMember_label_id_(graph.schema().get_edge_label_id("HASMEMBER")),
           containerOf_label_id_(graph.schema().get_edge_label_id("CONTAINEROF")),
-          forum_title_col_idx_(graph.get_vertex_property_column_id(forum_label_id_, "title")),
+          forum_title_col_(graph.GetPropertyHandle(forum_label_id_, "title")),
           graph_(graph) {}
 
     ~IC5() {}
@@ -171,7 +171,7 @@ namespace gs
       for (size_t i = vec.size(); i > 0; i--)
       {
         auto &cur = vec[i - 1];
-        auto forum_title = txn.GetVertexProp(forum_label_id_, cur.forum_lid, forum_title_col_idx_);
+        auto forum_title = forum_title_col_.getProperty(cur.forum_lid);
         output.put_buffer_object(forum_title);
         output.put_int(cur.post_count - 1);
       }
@@ -188,7 +188,7 @@ namespace gs
     label_t hasCreator_label_id_;
     label_t hasMember_label_id_;
     label_t containerOf_label_id_;
-    int forum_title_col_idx_;
+    cgraph::PropertyHandle forum_title_col_;
 
     std::vector<int> post_count_;
     std::vector<vid_t> forum_list_;

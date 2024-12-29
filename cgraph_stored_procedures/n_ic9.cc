@@ -20,14 +20,14 @@ namespace gs
           comment_label_id_(graph.schema().get_vertex_label_id("COMMENT")),
           hasCreator_label_id_(graph.schema().get_edge_label_id("HASCREATOR")),
           knows_label_id_(graph.schema().get_edge_label_id("KNOWS")),
-          post_creationDate_col_id_(graph.get_vertex_property_column_id(post_label_id_, "creationDate")),
-          comment_creationDate_col_id_(graph.get_vertex_property_column_id(comment_label_id_, "creationDate")),
-          person_firstName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
-          post_content_col_id_(graph.get_vertex_property_column_id(post_label_id_, "content")),
-          post_imageFile_col_id_(graph.get_vertex_property_column_id(post_label_id_, "imageFile")),
-          post_length_col_id_(graph.get_vertex_property_column_id(post_label_id_, "length")),
-          comment_content_col_id_(graph.get_vertex_property_column_id(comment_label_id_, "content")),
+          post_creationDate_col_(graph.GetPropertyHandle(post_label_id_, "creationDate")),
+          comment_creationDate_col_(graph.GetPropertyHandle(comment_label_id_, "creationDate")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
+          post_content_col_(graph.GetPropertyHandle(post_label_id_, "content")),
+          post_imageFile_col_(graph.GetPropertyHandle(post_label_id_, "imageFile")),
+          post_length_col_(graph.GetPropertyHandle(post_label_id_, "length")),
+          comment_content_col_(graph.GetPropertyHandle(comment_label_id_, "content")),
           graph_(graph) {}
     ~IC9() {}
 
@@ -105,7 +105,7 @@ namespace gs
               for (; edges.is_valid(); edges.next())
               {
                 auto u = edges.get_neighbor();
-                auto item = txn.GetVertexProp(post_label_id_, u, post_creationDate_col_id_);
+                auto item = post_creationDate_col_.getProperty(u);
                 auto creation_date =
                     gbp::BufferBlock::Ref<Date>(item).milli_second;
                 if (creation_date < maxdate)
@@ -150,7 +150,7 @@ namespace gs
               for (; edges.is_valid(); edges.next())
               {
                 auto u = edges.get_neighbor();
-                auto item = txn.GetVertexProp(comment_label_id_, u, comment_creationDate_col_id_);
+                auto item = comment_creationDate_col_.getProperty(u);
                 #ifdef ZED_PROFILE
                 comment_count++;
                 #endif
@@ -207,10 +207,10 @@ namespace gs
         auto lastname = person_lastName_col_.get_view(person_lid);
         output.put_string_view(lastname);
 #else
-        auto firstname = txn.GetVertexProp(person_label_id_, person_lid, person_firstName_col_id_);
+        auto firstname = person_firstName_col_.getProperty(person_lid);
         output.put_buffer_object(firstname);
 
-        auto lastname = txn.GetVertexProp(person_label_id_, person_lid, person_lastName_col_id_);
+        auto lastname = person_lastName_col_.getProperty(person_lid);
         output.put_buffer_object(lastname);
 
 #endif
@@ -232,14 +232,14 @@ namespace gs
 #else
         if (v.is_comment)
         {
-          auto content = txn.GetVertexProp(comment_label_id_, v.message_vid, comment_content_col_id_);
+          auto content = comment_content_col_.getProperty(v.message_vid);
           output.put_buffer_object(content);
         }
         else
         {
           vid_t post_lid = v.message_vid;
-          auto item = txn.GetVertexProp(post_label_id_, post_lid, post_length_col_id_);
-          auto post_content = gbp::BufferBlock::Ref<int>(item) == 0 ? txn.GetVertexProp(post_label_id_, post_lid, post_imageFile_col_id_) : txn.GetVertexProp(post_label_id_, post_lid, post_content_col_id_);
+          auto item = post_length_col_.getProperty(post_lid);
+          auto post_content = gbp::BufferBlock::Ref<int>(item) == 0 ? post_imageFile_col_.getProperty(post_lid) : post_content_col_.getProperty(post_lid);
 
           output.put_buffer_object(post_content);
         }
@@ -261,14 +261,15 @@ namespace gs
     label_t hasCreator_label_id_;
     label_t knows_label_id_;
 
-    int post_content_col_id_;
-    int post_imageFile_col_id_;
-    int post_length_col_id_;
-    int person_firstName_col_id_;
-    int person_lastName_col_id_;
-    int comment_content_col_id_;
-    int comment_creationDate_col_id_;
-    int post_creationDate_col_id_;
+    cgraph::PropertyHandle post_content_col_;
+    cgraph::PropertyHandle post_imageFile_col_;
+    cgraph::PropertyHandle post_length_col_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
+    cgraph::PropertyHandle comment_content_col_;
+    cgraph::PropertyHandle comment_creationDate_col_;
+    cgraph::PropertyHandle post_creationDate_col_;
+
 
     #ifdef ZED_PROFILE
     int comment_count=0;

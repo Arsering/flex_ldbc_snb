@@ -12,12 +12,12 @@ namespace gs
     IS4(GraphDBSession &graph)
         : post_label_id_(graph.schema().get_vertex_label_id("POST")),
           comment_label_id_(graph.schema().get_vertex_label_id("COMMENT")),
-          post_creationDate_col_id_(graph.get_vertex_property_column_id(post_label_id_, "creationDate")),
-          comment_creationDate_col_id_(graph.get_vertex_property_column_id(comment_label_id_, "creationDate")),
-          post_content_col_id_(graph.get_vertex_property_column_id(post_label_id_, "content")),
-          post_imageFile_col_id_(graph.get_vertex_property_column_id(post_label_id_, "imageFile")),
-          post_length_col_id_(graph.get_vertex_property_column_id(post_label_id_, "length")),
-          comment_content_col_id_(graph.get_vertex_property_column_id(comment_label_id_, "content")),
+          post_creationDate_col_(graph.GetPropertyHandle(post_label_id_, "creationDate")),
+          comment_creationDate_col_(graph.GetPropertyHandle(comment_label_id_, "creationDate")),
+          post_content_col_(graph.GetPropertyHandle(post_label_id_, "content")),
+          post_imageFile_col_(graph.GetPropertyHandle(post_label_id_, "imageFile")),
+          post_length_col_(graph.GetPropertyHandle(post_label_id_, "length")),
+          comment_content_col_(graph.GetPropertyHandle(comment_label_id_, "content")),
           graph_(graph) {}
     ~IS4() {}
 
@@ -49,20 +49,20 @@ namespace gs
 #else
       if (txn.GetVertexIndex(post_label_id_, id, lid))
       {
-        auto item = txn.GetVertexProp(post_label_id_, lid, post_creationDate_col_id_);
+        auto item = post_creationDate_col_.getProperty(lid);
         output.put_long(gbp::BufferBlock::Ref<gs::Date>(item).milli_second);
 
-        item = txn.GetVertexProp(post_label_id_, lid, post_length_col_id_);
-        auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? txn.GetVertexProp(post_label_id_, lid, post_imageFile_col_id_) : txn.GetVertexProp(post_label_id_, lid, post_content_col_id_);
+        item = post_length_col_.getProperty(lid);
+        auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? post_imageFile_col_.getProperty(lid) : post_content_col_.getProperty(lid);
         output.put_buffer_object(content);
         return true;
       }
       else if (txn.GetVertexIndex(comment_label_id_, id, lid))
       {
-        auto item = txn.GetVertexProp(comment_label_id_, lid, comment_creationDate_col_id_);
+        auto item = comment_creationDate_col_.getProperty(lid);
         output.put_long(gbp::BufferBlock::Ref<gs::Date>(item).milli_second);
 
-        auto content = txn.GetVertexProp(comment_label_id_, lid, comment_content_col_id_);
+        auto content = comment_content_col_.getProperty(lid);
         output.put_buffer_object(content);
         return true;
       }
@@ -74,12 +74,12 @@ namespace gs
     label_t post_label_id_;
     label_t comment_label_id_;
 
-    int post_creationDate_col_id_;
-    int comment_creationDate_col_id_;
-    int post_content_col_id_;
-    int post_imageFile_col_id_;
-    int post_length_col_id_;
-    int comment_content_col_id_;
+    cgraph::PropertyHandle post_creationDate_col_;
+    cgraph::PropertyHandle comment_creationDate_col_;
+    cgraph::PropertyHandle post_content_col_;
+    cgraph::PropertyHandle post_imageFile_col_;
+    cgraph::PropertyHandle post_length_col_;
+    cgraph::PropertyHandle comment_content_col_;
 
     GraphDBSession &graph_;
   };

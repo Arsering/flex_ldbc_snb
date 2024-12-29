@@ -19,8 +19,8 @@ namespace gs
           knows_label_id_(graph.schema().get_edge_label_id("KNOWS")),
           hasCreator_label_id_(graph.schema().get_edge_label_id("HASCREATOR")),
           hasTag_label_id_(graph.schema().get_edge_label_id("HASTAG")),
-          post_creationDate_col_idx_(graph.get_vertex_property_column_id(post_label_id_, "creationDate")),
-          tag_name_col_idx_(graph.get_vertex_property_column_id(tag_label_id_, "name")),
+          post_creationDate_col_(graph.GetPropertyHandle(post_label_id_, "creationDate")),
+          tag_name_col_(graph.GetPropertyHandle(tag_label_id_, "name")),
           graph_(graph) {}
 
     ~IC4() {}
@@ -83,7 +83,7 @@ namespace gs
         auto ie = post_hasCreator_person_in.get_edges(v);
         for (; ie.is_valid(); ie.next())
         {
-          auto item = txn.GetVertexProp(post_label_id_, ie.get_neighbor(), post_creationDate_col_idx_);
+          auto item = post_creationDate_col_.getProperty(ie.get_neighbor());
           auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
           auto post_id = ie.get_neighbor();
           if (creationDate < end_date)
@@ -120,7 +120,7 @@ namespace gs
         int count = post_count[tag_id];
         if (count)
         {
-          que.emplace(count, txn.GetVertexProp(tag_label_id_, tag_id, tag_name_col_idx_));
+          que.emplace(count, tag_name_col_.getProperty(tag_id));
         }
         ++tag_id;
       }
@@ -133,11 +133,11 @@ namespace gs
           if (count > top.count)
           {
             que.pop();
-            que.emplace(count, txn.GetVertexProp(tag_label_id_, tag_id, tag_name_col_idx_));
+            que.emplace(count, tag_name_col_.getProperty(tag_id));
           }
           else if (count == top.count)
           {
-            auto tag_name_item = txn.GetVertexProp(tag_label_id_, tag_id, tag_name_col_idx_);
+            auto tag_name_item = tag_name_col_.getProperty(tag_id);
             if (tag_name_item < top.tag_name)
             {
               que.pop();
@@ -176,8 +176,8 @@ namespace gs
 
     vid_t tag_num_;
 
-    int post_creationDate_col_idx_;
-    int tag_name_col_idx_;
+    cgraph::PropertyHandle post_creationDate_col_;
+    cgraph::PropertyHandle tag_name_col_;
 
     GraphDBSession &graph_;
   };

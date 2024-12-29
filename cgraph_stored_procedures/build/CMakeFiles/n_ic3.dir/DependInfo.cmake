@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/workspaces/graphscope-flex/flex_ldbc_snb/cgraph_stored_procedures/n_ic3.cc" "/workspaces/graphscope-flex/flex_ldbc_snb/cgraph_stored_procedures/build/CMakeFiles/n_ic3.dir/n_ic3.cc.o"
+  "/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/cgraph_stored_procedures/n_ic3.cc" "/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/flex_ldbc_snb/cgraph_stored_procedures/build/CMakeFiles/n_ic3.dir/n_ic3.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

@@ -1,1 +1,1 @@
-/usr/bin/c++ -fPIC  -g3 -ggdb3 -fno-omit-frame-pointer -O0 -fno-gnu-unique -fPIC -rdynamic  -shared -Wl,-soname,libn_is2.so -o libn_is2.so CMakeFiles/n_is2.dir/n_is2.cc.o   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib -lflex_utils -lflex_rt_mutable_graph -lflex_graph_db 
+/usr/bin/c++ -fPIC  -fno-omit-frame-pointer -O2 -fno-gnu-unique -fPIC -rdynamic -shared -Wl,-soname,libn_is2.so -o libn_is2.so CMakeFiles/n_is2.dir/n_is2.cc.o   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib -lflex_utils -lflex_rt_mutable_graph -lflex_graph_db 

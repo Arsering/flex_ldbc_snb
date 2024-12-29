@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.1)
 project(flex_ldbc_snb_queries)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -ggdb3 -fno-omit-frame-pointer -O0 -fno-gnu-unique -fPIC -rdynamic")
-
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -ggdb3 -fno-omit-frame-pointer -O0 -fno-gnu-unique -fPIC -rdynamic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -O2 -fno-gnu-unique -fPIC -rdynamic")
 # 设置FLEX_HOME路径
 set(FLEX_HOME "/usr/local" CACHE PATH "Path to FLEX installation")
 

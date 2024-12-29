@@ -14,13 +14,13 @@ namespace gs
         : person_label_id_(graph.schema().get_vertex_label_id("PERSON")),
           place_label_id_(graph.schema().get_vertex_label_id("PLACE")),
           isLocatedIn_label_id_(graph.schema().get_edge_label_id("ISLOCATEDIN")),
-          person_firstName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
-          person_birthday_col_id_(graph.get_vertex_property_column_id(person_label_id_, "birthday")),
-          person_creationDate_col_id_(graph.get_vertex_property_column_id(person_label_id_, "creationDate")),
-          person_gender_col_id_(graph.get_vertex_property_column_id(person_label_id_, "gender")),
-          person_browserUsed_col_id_(graph.get_vertex_property_column_id(person_label_id_, "browserUsed")),
-          person_locationIp_col_id_(graph.get_vertex_property_column_id(person_label_id_, "locationIP")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
+          person_birthday_col_(graph.GetPropertyHandle(person_label_id_, "birthday")),
+          person_creationDate_col_(graph.GetPropertyHandle(person_label_id_, "creationDate")),
+          person_gender_col_(graph.GetPropertyHandle(person_label_id_, "gender")),
+          person_browserUsed_col_(graph.GetPropertyHandle(person_label_id_, "browserUsed")),
+          person_locationIp_col_(graph.GetPropertyHandle(person_label_id_, "locationIP")),
           graph_(graph) {}
     ~IS1() {}
 
@@ -36,16 +36,16 @@ namespace gs
       {
         return false;
       }
-      const auto firstname = txn.GetVertexProp(person_label_id_, root, person_firstName_col_id_);
-      const auto lastname = txn.GetVertexProp(person_label_id_, root, person_lastName_col_id_);
-      const auto gender = txn.GetVertexProp(person_label_id_, root, person_gender_col_id_);
+      const auto firstname = person_firstName_col_.getProperty(root);
+      const auto lastname = person_lastName_col_.getProperty(root);
+      const auto gender = person_gender_col_.getProperty(root);
       auto person_isLocatedIn_place_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
               person_label_id_, place_label_id_, isLocatedIn_label_id_);
-      const auto locationIp = txn.GetVertexProp(person_label_id_, root, person_locationIp_col_id_);
-      auto creationdate = txn.GetVertexProp(person_label_id_, root, person_creationDate_col_id_);
-      auto birthday = txn.GetVertexProp(person_label_id_, root, person_birthday_col_id_);
-      auto browser_used = txn.GetVertexProp(person_label_id_, root, person_browserUsed_col_id_);
+      const auto locationIp = person_locationIp_col_.getProperty(root);
+      auto creationdate = person_creationDate_col_.getProperty(root);
+      auto birthday = person_birthday_col_.getProperty(root);
+      auto browser_used = person_browserUsed_col_.getProperty(root);
 
       output.put_buffer_object(firstname);
       output.put_buffer_object(lastname);
@@ -70,13 +70,13 @@ namespace gs
     label_t place_label_id_;
     label_t isLocatedIn_label_id_;
 
-    int person_firstName_col_id_;
-    int person_lastName_col_id_;
-    int person_birthday_col_id_;
-    int person_creationDate_col_id_;
-    int person_gender_col_id_;
-    int person_browserUsed_col_id_;
-    int person_locationIp_col_id_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
+    cgraph::PropertyHandle person_birthday_col_;
+    cgraph::PropertyHandle person_creationDate_col_;
+    cgraph::PropertyHandle person_gender_col_;
+    cgraph::PropertyHandle person_browserUsed_col_;
+    cgraph::PropertyHandle person_locationIp_col_;
 
     GraphDBSession &graph_;
   };

@@ -19,9 +19,9 @@ namespace gs
           containerOf_label_id_(graph.schema().get_edge_label_id("CONTAINEROF")),
           hasModerator_label_id_(
               graph.schema().get_edge_label_id("HASMODERATOR")),
-          person_firstName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
-          forum_title_col_id_(graph.get_vertex_property_column_id(forum_label_id_, "title")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
+          forum_title_col_(graph.GetPropertyHandle(forum_label_id_, "title")),
           graph_(graph) {}
     ~IS6() {}
 
@@ -111,7 +111,7 @@ namespace gs
       output.put_string_view(person_firstName_col_.get_view(p));
       output.put_string_view(person_lastName_col_.get_view(p));
 #else
-      auto item = txn.GetVertexProp(forum_label_id_, u, forum_title_col_id_);
+      auto item = forum_title_col_.getProperty(u);
       output.put_buffer_object(item);
       // auto p = forum_hasModerator_person_out.get_edge(u).neighbor;
       item = forum_hasModerator_person_out.get_edge(u);
@@ -119,9 +119,9 @@ namespace gs
 
       auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
       output.put_long(txn.GetVertexId(person_label_id_, p));
-      item = txn.GetVertexProp(person_label_id_, p, person_firstName_col_id_);
+      item = person_firstName_col_.getProperty(p);
       output.put_buffer_object(item);
-      item = txn.GetVertexProp(person_label_id_, p, person_lastName_col_id_);
+      item = person_lastName_col_.getProperty(p);
       output.put_buffer_object(item);
 
 #endif
@@ -137,9 +137,10 @@ namespace gs
     label_t containerOf_label_id_;
     label_t hasModerator_label_id_;
 
-    int person_firstName_col_id_;
-    int person_lastName_col_id_;
-    int forum_title_col_id_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
+    cgraph::PropertyHandle forum_title_col_;
+
 
     GraphDBSession &graph_;
   };

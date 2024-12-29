@@ -18,14 +18,14 @@ namespace gs
           comment_label_id_(graph.schema().get_vertex_label_id("COMMENT")),
           likes_label_id_(graph.schema().get_edge_label_id("LIKES")),
           hasCreator_label_id_(graph.schema().get_edge_label_id("HASCREATOR")),
-          person_firstName_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_idx_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
-          post_content_col_idx_(graph.get_vertex_property_column_id(post_label_id_, "content")),
-          post_imageFile_col_idx_(graph.get_vertex_property_column_id(post_label_id_, "imageFile")),
-          post_length_col_idx_(graph.get_vertex_property_column_id(post_label_id_, "length")),
-          comment_content_col_idx_(graph.get_vertex_property_column_id(comment_label_id_, "content")),
-          post_creationDate_col_idx_(graph.get_vertex_property_column_id(post_label_id_, "creationDate")),
-          comment_creationDate_col_idx_(graph.get_vertex_property_column_id(comment_label_id_, "creationDate")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
+          post_content_col_(graph.GetPropertyHandle(post_label_id_, "content")),
+          post_imageFile_col_(graph.GetPropertyHandle(post_label_id_, "imageFile")),
+          post_length_col_(graph.GetPropertyHandle(post_label_id_, "length")),
+          comment_content_col_(graph.GetPropertyHandle(comment_label_id_, "content")),
+          post_creationDate_col_(graph.GetPropertyHandle(post_label_id_, "creationDate")),
+          comment_creationDate_col_(graph.GetPropertyHandle(comment_label_id_, "creationDate")),
           graph_(graph) {}
     ~IC7() {}
 
@@ -191,20 +191,20 @@ namespace gs
       {
         const auto &v = tmp[i - 1];
         output.put_long(v.person_id);
-        auto firstname = txn.GetVertexProp(person_label_id_, v.v, person_firstName_col_idx_);
+        auto firstname = person_firstName_col_.getProperty(v.v);
         output.put_buffer_object(firstname);
-        auto lastname = txn.GetVertexProp(person_label_id_, v.v, person_lastName_col_idx_);
+        auto lastname = person_lastName_col_.getProperty(v.v);
         output.put_buffer_object(lastname);
         output.put_long(v.creationDate);
         output.put_long(v.message_id);
         // uint32_t x;
         if (v.is_post)
         {
-          auto item = txn.GetVertexProp(post_label_id_, v.mid, post_length_col_idx_);
-          auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? txn.GetVertexProp(post_label_id_, v.mid, post_imageFile_col_idx_) : txn.GetVertexProp(post_label_id_, v.mid, post_content_col_idx_);
+          auto item = post_length_col_.getProperty(v.mid);
+          auto content = gbp::BufferBlock::Ref<int>(item) == 0 ? post_imageFile_col_.getProperty(v.mid) : post_content_col_.getProperty(v.mid);
 
           output.put_buffer_object(content);
-          item = txn.GetVertexProp(post_label_id_, v.mid, post_creationDate_col_idx_);
+          item = post_creationDate_col_.getProperty(v.mid);
           auto min = (v.creationDate -
                       gbp::BufferBlock::Ref<Date>(item).milli_second) /
                      mill_per_min;
@@ -212,9 +212,9 @@ namespace gs
         }
         else
         {
-          auto content = txn.GetVertexProp(comment_label_id_, v.mid, comment_content_col_idx_);
+          auto content = comment_content_col_.getProperty(v.mid);
           output.put_buffer_object(content);
-          auto item = txn.GetVertexProp(comment_label_id_, v.mid, comment_creationDate_col_idx_);
+          auto item = comment_creationDate_col_.getProperty(v.mid);
           auto min = (v.creationDate -
                       gbp::BufferBlock::Ref<Date>(item).milli_second) /
                      mill_per_min;
@@ -233,14 +233,14 @@ namespace gs
     label_t likes_label_id_;
     label_t hasCreator_label_id_;
 
-    int person_firstName_col_idx_;
-    int person_lastName_col_idx_;
-    int post_content_col_idx_;
-    int post_imageFile_col_idx_;
-    int post_length_col_idx_;
-    int comment_content_col_idx_;
-    int post_creationDate_col_idx_;
-    int comment_creationDate_col_idx_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
+    cgraph::PropertyHandle post_content_col_;
+    cgraph::PropertyHandle post_imageFile_col_;
+    cgraph::PropertyHandle post_length_col_;
+    cgraph::PropertyHandle comment_content_col_;
+    cgraph::PropertyHandle post_creationDate_col_;
+    cgraph::PropertyHandle comment_creationDate_col_;
 
     std::vector<oid_t> persons_;
     std::vector<oid_t> messages_;

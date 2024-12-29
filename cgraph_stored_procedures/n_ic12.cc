@@ -26,10 +26,10 @@ namespace gs
           hasType_label_id_(graph.schema().get_edge_label_id("HASTYPE")),
           isSubClassOf_label_id_(
               graph.schema().get_edge_label_id("ISSUBCLASSOF")),
-          tagClass_name_col_id_(graph.get_vertex_property_column_id(tagClass_label_id_, "name")),
-          tag_name_col_id_(graph.get_vertex_property_column_id(tag_label_id_, "name")),
-          person_firstName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "firstName")),
-          person_lastName_col_id_(graph.get_vertex_property_column_id(person_label_id_, "lastName")),
+          tagClass_name_col_(graph.GetPropertyHandle(tagClass_label_id_, "name")),
+          tag_name_col_(graph.GetPropertyHandle(tag_label_id_, "name")),
+          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
+          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
           tagClass_num_(graph.graph().vertex_num(tagClass_label_id_)),
           graph_(graph) {}
     ~IC12() {}
@@ -122,7 +122,7 @@ namespace gs
 #if OV
         if (tagClass_name_col_.get_view(i) == tagclassname)
 #else
-        auto tagClass_name = txn.GetVertexProp(tagClass_label_id_, i, tagClass_name_col_id_);
+        auto tagClass_name = tagClass_name_col_.getProperty(i);
         std::vector<char> data(tagClass_name.Size());
         tagClass_name.Copy(data.data(), data.size());
         if (tagClass_name == tagclassname)
@@ -368,9 +368,9 @@ namespace gs
         output.put_string_view(person_firstName_col_.get_view(v.person_vid));
         output.put_string_view(person_lastName_col_.get_view(v.person_vid));
 #else
-        auto item = txn.GetVertexProp(person_label_id_, v.person_vid, person_firstName_col_id_);
+        auto item = person_firstName_col_.getProperty(v.person_vid);
         output.put_buffer_object(item);
-        item = txn.GetVertexProp(person_label_id_, v.person_vid, person_lastName_col_id_);
+        item = person_lastName_col_.getProperty(v.person_vid);
         output.put_buffer_object(item);
 
 #endif
@@ -429,7 +429,7 @@ namespace gs
 #if OV
           output.put_string_view(tag_name_col_.get_view(tag));
 #else
-          auto item = txn.GetVertexProp(tag_label_id_, tag, tag_name_col_id_);
+          auto item = tag_name_col_.getProperty(tag);
           output.put_buffer_object(item);
 
 #endif
@@ -458,10 +458,10 @@ namespace gs
     label_t isSubClassOf_label_id_;
     vid_t tagClass_num_;
 
-    int tag_name_col_id_;
-    int tagClass_name_col_id_;
-    int person_firstName_col_id_;
-    int person_lastName_col_id_;
+    cgraph::PropertyHandle tag_name_col_;
+    cgraph::PropertyHandle tagClass_name_col_;
+    cgraph::PropertyHandle person_firstName_col_;
+    cgraph::PropertyHandle person_lastName_col_;
 
     std::vector<bool> sub_tagClass_;
     int person_count;
