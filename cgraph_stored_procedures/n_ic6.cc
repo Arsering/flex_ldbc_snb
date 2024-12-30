@@ -53,9 +53,6 @@ namespace gs
     bool Query(Decoder &input, Encoder &output) override
     {
       auto txn = graph_.GetReadTransaction();
-      person_count=0;
-      post_access_num=0;
-      tag_count=0;
 
       oid_t personid = input.get_long();
       std::string_view tagname = input.get_string();
@@ -81,13 +78,6 @@ namespace gs
       get_2d_friends(txn, person_label_id_, knows_label_id_, root,
                      txn.GetVertexNum(person_label_id_), friends_);
 
-      
-      for(int i=0;i<friends_.size();i++){
-        if(friends_[i]==true){
-          person_count+=1;
-        }
-      }
-
       std::vector<int> post_count(tag_num_, 0);
 
       auto post_hasCreator_person_out =
@@ -100,7 +90,6 @@ namespace gs
 
       for (; posts_with_tag.is_valid(); posts_with_tag.next())
       {
-        post_access_num++;
         vid_t post_id = posts_with_tag.get_neighbor();
 
         auto item = post_hasCreator_person_out.get_edge(post_id);
@@ -159,7 +148,6 @@ namespace gs
         vec.emplace_back(que.top());
         que.pop();
       }
-      tag_count=vec.size();
       for (size_t i = vec.size(); i > 0; i--)
       {
         output.put_buffer_object(vec[i - 1].tag_name);
@@ -187,9 +175,6 @@ namespace gs
     cgraph::PropertyHandle tag_name_col_;
 
     GraphDBSession &graph_;
-    int person_count=0;
-    int post_access_num=0;
-    int tag_count=0;
   };
 
 } // namespace gs

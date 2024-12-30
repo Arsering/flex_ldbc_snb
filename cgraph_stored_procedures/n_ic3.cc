@@ -229,14 +229,18 @@ namespace gs
       assert(countryX != place_num_);
       assert(countryY != place_num_);
 
-      auto xe = txn.GetIncomingEdges<grape::EmptyType>(
-          place_label_id_, countryX, place_label_id_, isPartOf_label_id_);
+      auto place_isPartOf_place_in=txn.GetIncomingGraphView<grape::EmptyType>(place_label_id_, place_label_id_, isPartOf_label_id_);
+
+      // auto xe = txn.GetIncomingEdges<grape::EmptyType>(
+      //     place_label_id_, countryX, place_label_id_, isPartOf_label_id_);
+      auto xe = place_isPartOf_place_in.get_edges(countryX);
       for (; xe.is_valid(); xe.next())
       {
         place_Locatedin_[xe.get_neighbor()] = true;
       }
-      auto ye = txn.GetIncomingEdges<grape::EmptyType>(
-          place_label_id_, countryY, place_label_id_, isPartOf_label_id_);
+      // auto ye = txn.GetIncomingEdges<grape::EmptyType>(
+      //     place_label_id_, countryY, place_label_id_, isPartOf_label_id_);
+      auto ye = place_isPartOf_place_in.get_edges(countryY);
       for (; ye.is_valid(); ye.next())
       {
         place_Locatedin_[ye.get_neighbor()] = true;
@@ -262,8 +266,12 @@ namespace gs
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
               comment_label_id_, person_label_id_, hasCreator_label_id_);
 
-      auto postex = txn.GetIncomingEdges<grape::EmptyType>(
-          place_label_id_, countryX, post_label_id_, isLocatedIn_label_id_);
+      auto post_isLocatedIn_place_in=txn.GetIncomingGraphView<grape::EmptyType>(place_label_id_, post_label_id_, isLocatedIn_label_id_);
+      auto comment_isLocatedIn_place_in=txn.GetIncomingGraphView<grape::EmptyType>(place_label_id_,comment_label_id_,  isLocatedIn_label_id_);
+
+      // auto postex = txn.GetIncomingEdges<grape::EmptyType>(
+      //     place_label_id_, countryX, post_label_id_, isLocatedIn_label_id_);
+      auto postex = post_isLocatedIn_place_in.get_edges(countryX);
       for (; postex.is_valid(); postex.next())
       {
         auto item = post_creationDate_col_.getProperty(postex.get_neighbor());
@@ -281,8 +289,9 @@ namespace gs
         }
       }
 
-      auto commentex = txn.GetIncomingEdges<grape::EmptyType>(
-          place_label_id_, countryX, comment_label_id_, isLocatedIn_label_id_);
+      // auto commentex = txn.GetIncomingEdges<grape::EmptyType>(
+      //     place_label_id_, countryX, comment_label_id_, isLocatedIn_label_id_);
+      auto commentex = comment_isLocatedIn_place_in.get_edges(countryX);
       for (; commentex.is_valid(); commentex.next())
       {
         auto item = comment_creationDate_col_.getProperty(commentex.get_neighbor());
@@ -300,8 +309,9 @@ namespace gs
         }
       }
 
-      auto postey = txn.GetIncomingEdges<grape::EmptyType>(
-          place_label_id_, countryY, post_label_id_, isLocatedIn_label_id_);
+      // auto postey = txn.GetIncomingEdges<grape::EmptyType>(
+      //     place_label_id_, countryY, post_label_id_, isLocatedIn_label_id_);
+      auto postey = post_isLocatedIn_place_in.get_edges(countryY);
       for (; postey.is_valid(); postey.next())
       {
         auto item = post_creationDate_col_.getProperty(postey.get_neighbor());
@@ -320,8 +330,9 @@ namespace gs
           }
         }
       }
-      auto commentey = txn.GetIncomingEdges<grape::EmptyType>(
-          place_label_id_, countryY, comment_label_id_, isLocatedIn_label_id_);
+      // auto commentey = txn.GetIncomingEdges<grape::EmptyType>(
+      //     place_label_id_, countryY, comment_label_id_, isLocatedIn_label_id_);
+      auto commentey = comment_isLocatedIn_place_in.get_edges(countryY);
       for (; commentey.is_valid(); commentey.next())
       {
         auto item = comment_creationDate_col_.getProperty(commentey.get_neighbor());
@@ -398,15 +409,16 @@ namespace gs
         output.put_long(count_[v].second);
         output.put_long(p.count);
       }
-      auto xe_1 = txn.GetIncomingEdges<grape::EmptyType>(
-          place_label_id_, countryX, place_label_id_, isPartOf_label_id_);
-      auto ye_1 = txn.GetIncomingEdges<grape::EmptyType>(
-          place_label_id_, countryY, place_label_id_, isPartOf_label_id_);
-
+      // auto xe_1 = txn.GetIncomingEdges<grape::EmptyType>(
+      //     place_label_id_, countryX, place_label_id_, isPartOf_label_id_);
+      // auto ye_1 = txn.GetIncomingEdges<grape::EmptyType>(
+      //     place_label_id_, countryY, place_label_id_, isPartOf_label_id_);
+      auto xe_1 = place_isPartOf_place_in.get_edges(countryX);
       for (; xe_1.is_valid(); xe_1.next())
       {
         place_Locatedin_[xe_1.get_neighbor()] = false;
       }
+      auto ye_1 = place_isPartOf_place_in.get_edges(countryY);
       for (; ye_1.is_valid(); ye_1.next())
       {
         place_Locatedin_[ye_1.get_neighbor()] = false;

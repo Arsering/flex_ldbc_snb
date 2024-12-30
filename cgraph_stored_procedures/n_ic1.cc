@@ -230,17 +230,6 @@ namespace gs
         current_level_nodes.push_back(u);
       }
 
-      // 打印最后一层的节点
-      // if (!current_level_nodes.empty()) {
-      //   std::ofstream ofs("level_nodes.txt", std::ios::app);
-      //   ofs << "Depth " << current_depth << ": ";
-      //   for ( auto& vid : current_level_nodes) {
-      //     ofs << vid << " ";
-      //   }
-      //   ofs << "\n";
-      //   ofs.close();
-      // }
-
       ans_.reserve(pq.size());
       while (!pq.empty())
       {
@@ -251,8 +240,6 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
-      // std::cout<<"begin query 1"<<std::endl;
-      // std::cout<<"begin query"<<std::endl;
       auto txn = graph_.GetReadTransaction();
 
       oid_t person_id = input.get_long();
@@ -270,12 +257,6 @@ namespace gs
       }
 
       get_friends(txn, root, firstname);
-      // std::ofstream ofs("ans.txt",std::ios::app);
-      // for(auto &info:ans_){
-      //   ofs<<info.vid<<" ";
-      // }
-      // ofs<<"\n";
-      // ofs.close();
 
       auto person_isLocatedIn_place_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(

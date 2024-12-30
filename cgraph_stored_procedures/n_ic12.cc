@@ -359,7 +359,7 @@ namespace gs
       }
       std::set<vid_t> tmp;
       vec_count = vec.size();
-
+      // auto post_hasTag_tag_out=txn.GetOutgoingGraphView<grape::EmptyType>(post_label_id_, tag_label_id_, hasTag_label_id_);
       for (auto i = vec.size(); i > 0; i--)
       {
         auto &v = vec[i - 1];
@@ -405,8 +405,9 @@ namespace gs
           auto e2 = comment_replyOf_post_out.get_edge(comment_ie.get_neighbor());
           if (comment_replyOf_post_out.exist1(e2))
           {
-            auto tag_e = txn.GetOutgoingEdges<grape::EmptyType>(
-                post_label_id_, gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor, tag_label_id_, hasTag_label_id_);
+            // auto tag_e = txn.GetOutgoingEdges<grape::EmptyType>(
+            //     post_label_id_, gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor, tag_label_id_, hasTag_label_id_);
+            auto tag_e = post_hasTag_tag_out.get_edges(gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(e2).neighbor);
             for (; tag_e.is_valid(); tag_e.next())
             {
               auto tag = tag_e.get_neighbor();

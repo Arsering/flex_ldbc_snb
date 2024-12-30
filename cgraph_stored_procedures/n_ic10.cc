@@ -91,15 +91,17 @@ namespace gs
       }
     }
 #else
-      auto oe = txn.GetOutgoingEdges<Date>(
-          person_label_id_, root, person_label_id_, knows_label_id_);
+      auto person_knows_person_out=txn.GetOutgoingGraphView<Date>(person_label_id_, person_label_id_, knows_label_id_);
+      auto person_knows_person_in=txn.GetIncomingGraphView<Date>(person_label_id_, person_label_id_, knows_label_id_);
+      auto oe = person_knows_person_out.get_edges(root);
       for (; oe.is_valid(); oe.next())
       {
         friends_1d.emplace_back(oe.get_neighbor());
         friends_set_[oe.get_neighbor()] = true;
       }
-      auto ie = txn.GetIncomingEdges<Date>(
-          person_label_id_, root, person_label_id_, knows_label_id_);
+      // auto ie = txn.GetIncomingEdges<Date>(
+      //     person_label_id_, root, person_label_id_, knows_label_id_);
+      auto ie = person_knows_person_in.get_edges(root);
       for (; ie.is_valid(); ie.next())
       {
         friends_1d.emplace_back(ie.get_neighbor());
@@ -107,8 +109,9 @@ namespace gs
       }
       for (auto v : friends_1d)
       {
-        auto oe1 = txn.GetOutgoingEdges<Date>(
-            person_label_id_, v, person_label_id_, knows_label_id_);
+        // auto oe1 = txn.GetOutgoingEdges<Date>(
+        //     person_label_id_, v, person_label_id_, knows_label_id_);
+        auto oe1 = person_knows_person_out.get_edges(v);
         for (; oe1.is_valid(); oe1.next())
         {
           auto u = oe1.get_neighbor();
@@ -127,8 +130,9 @@ namespace gs
             }
           }
         }
-        auto ie1 = txn.GetIncomingEdges<Date>(
-            person_label_id_, v, person_label_id_, knows_label_id_);
+          // auto ie1 = txn.GetIncomingEdges<Date>(
+          //     person_label_id_, v, person_label_id_, knows_label_id_);
+        auto ie1 = person_knows_person_in.get_edges(v);
         for (; ie1.is_valid(); ie1.next())
         {
           auto u = ie1.get_neighbor();
