@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <queue>
 #include <string_view>
 
@@ -83,6 +84,8 @@ namespace gs
     //   auto post_hasCreator_person_out =
     //       txn.GetOutgoingSingleGraphView<grape::EmptyType>(
     //           post_label_id_, person_label_id_, hasCreator_label_id_);
+
+      size_t access_post_count=0;
       auto post_hasCreator_person_in =
           txn.GetIncomingGraphView<grape::EmptyType>(
               person_label_id_, post_label_id_, hasCreator_label_id_);
@@ -96,6 +99,7 @@ namespace gs
         }
         auto post_ie=post_hasCreator_person_in.get_edges(i);
         for(;post_ie.is_valid();post_ie.next()){
+          access_post_count++;
           auto post_id=post_ie.get_neighbor();
           auto tag_oe=post_hasTag_tag_out.get_edges(post_id);
           std::set<vid_t> tag_ids;
@@ -114,6 +118,9 @@ namespace gs
           }
         }
       }
+      std::ofstream outfile;
+      outfile.open("/data-1/yichengzhang/data/latest_gs_bp/update-graphscope-flex/graphscope-flex/experiment_space/LDBC_SNB/ic6_new_access_post_count",std::ios::app);
+      outfile<<access_post_count<<std::endl;
 
     //   for (; posts_with_tag.is_valid(); posts_with_tag.next())
     //   {

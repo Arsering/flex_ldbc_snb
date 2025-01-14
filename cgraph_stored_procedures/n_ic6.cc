@@ -87,7 +87,7 @@ namespace gs
           tag_label_id_, tag_id, post_label_id_, hasTag_label_id_);
       auto post_hasTag_tag_out = txn.GetOutgoingGraphView<grape::EmptyType>(
           post_label_id_, tag_label_id_, hasTag_label_id_);
-
+      size_t access_post_count=0;
       for (; posts_with_tag.is_valid(); posts_with_tag.next())
       {
         vid_t post_id = posts_with_tag.get_neighbor();
@@ -96,6 +96,7 @@ namespace gs
         assert(post_hasCreator_person_out.exist1(item));
 
         auto creator = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        access_post_count++;
         if (friends_[creator])
         {
           auto oe = post_hasTag_tag_out.get_edges(post_id);
@@ -105,6 +106,9 @@ namespace gs
           }
         }
       }
+      std::ofstream outfile;
+      outfile.open("/data-1/yichengzhang/data/latest_gs_bp/update-graphscope-flex/graphscope-flex/experiment_space/LDBC_SNB/ic6_access_post_count",std::ios::app);
+      outfile<<access_post_count<<std::endl;
 
       post_count[tag_id] = 0;
 

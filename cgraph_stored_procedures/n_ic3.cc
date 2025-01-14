@@ -258,7 +258,7 @@ namespace gs
       std::priority_queue<person_info, std::vector<person_info>,
                           person_info_comparer>
           pq(comparer);
-
+      int64_t message_count=0;
       auto post_hasCreator_person_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
               post_label_id_, person_label_id_, hasCreator_label_id_);
@@ -276,6 +276,7 @@ namespace gs
       {
         auto item = post_creationDate_col_.getProperty(postex.get_neighbor());
         auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
+        message_count++;
         if (start_date <= creationDate && creationDate < end_date)
         {
           auto item = post_hasCreator_person_out.get_edge(postex.get_neighbor());
@@ -296,6 +297,7 @@ namespace gs
       {
         auto item = comment_creationDate_col_.getProperty(commentex.get_neighbor());
         auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
+        message_count++;
         if (start_date <= creationDate && creationDate < end_date)
         {
           auto item = comment_hasCreator_person_out.get_edge(commentex.get_neighbor());
@@ -316,6 +318,7 @@ namespace gs
       {
         auto item = post_creationDate_col_.getProperty(postey.get_neighbor());
         auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
+        message_count++;
         item.free();
         if (start_date <= creationDate && creationDate < end_date)
         {
@@ -337,6 +340,7 @@ namespace gs
       {
         auto item = comment_creationDate_col_.getProperty(commentey.get_neighbor());
         auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
+        message_count++;
         item.free();
         if (start_date <= creationDate && creationDate < end_date)
         {
@@ -352,6 +356,9 @@ namespace gs
           }
         }
       }
+      std::ofstream outfile;
+      outfile.open("/data-1/yichengzhang/data/latest_gs_bp/update-graphscope-flex/graphscope-flex/experiment_space/LDBC_SNB/ic3_message_count",std::ios::app);
+      outfile<<message_count<<std::endl;
 
       for (auto v : friends)
       {

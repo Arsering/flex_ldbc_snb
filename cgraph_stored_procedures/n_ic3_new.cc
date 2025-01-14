@@ -1,3 +1,5 @@
+#include <cstddef>
+#include <fstream>
 #include <queue>
 #include <string_view>
 
@@ -268,7 +270,7 @@ namespace gs
 
       // auto post_isLocatedIn_place_in=txn.GetIncomingGraphView<grape::EmptyType>(place_label_id_, post_label_id_, isLocatedIn_label_id_);
       // auto comment_isLocatedIn_place_in=txn.GetIncomingGraphView<grape::EmptyType>(place_label_id_,comment_label_id_,  isLocatedIn_label_id_);
-
+      size_t message_count=0;
       auto post_hasCreator_person_in = txn.GetIncomingGraphView<grape::EmptyType>(person_label_id_, post_label_id_, hasCreator_label_id_);
       auto comment_hasCreator_person_in = txn.GetIncomingGraphView<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_);
       auto post_isLocatedIn_place_out = txn.GetOutgoingSingleGraphView<grape::EmptyType>(post_label_id_, place_label_id_, isLocatedIn_label_id_);
@@ -279,6 +281,7 @@ namespace gs
         for(;post_ie.is_valid();post_ie.next()){
           auto post_id=post_ie.get_neighbor();
           auto creationDate=gbp::BufferBlock::Ref<Date>(post_creationDate_col_.getProperty(post_id)).milli_second;
+          message_count++;
           if(start_date<=creationDate&&creationDate<end_date){
             auto item=post_isLocatedIn_place_out.get_edge(post_id);
             assert(post_isLocatedIn_place_out.exist1(item));
@@ -297,6 +300,7 @@ namespace gs
         for(;comment_ie.is_valid();comment_ie.next()){
           auto comment_id=comment_ie.get_neighbor();
           auto creationDate=gbp::BufferBlock::Ref<Date>(comment_creationDate_col_.getProperty(comment_id)).milli_second;
+          message_count++;
           if(start_date<=creationDate&&creationDate<end_date){
             auto item=comment_isLocatedIn_place_out.get_edge(comment_id);
             assert(comment_isLocatedIn_place_out.exist1(item));
@@ -309,6 +313,9 @@ namespace gs
           }
         }
       }
+      std::ofstream outfile;
+      outfile.open("/data-1/yichengzhang/data/latest_gs_bp/update-graphscope-flex/graphscope-flex/experiment_space/LDBC_SNB/ic3_new_message_count",std::ios::app);
+      outfile<<message_count<<std::endl;
 
       for (auto v : friends)
       {
