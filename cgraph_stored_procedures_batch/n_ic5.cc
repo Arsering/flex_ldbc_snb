@@ -79,23 +79,15 @@ namespace gs
       std::vector<vid_t> friends;
       get_1d_2d_neighbors(txn, person_label_id_, knows_label_id_, root, person_num, friends); 
       
-      auto forum_hasMember_person_in_items=txn.BatchGetEdgePropsFromSrcVids<Date>(person_label_id_, forum_label_id_, hasMember_label_id_, friends, false);
-      auto post_hasCreator_person_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, post_label_id_, hasCreator_label_id_, friends, false);
-      
+      auto forum_hasMember_person_in_items=txn.BatchGetEdgePropsFromSrcVids<Date>(person_label_id_, forum_label_id_, hasMember_label_id_, friends, false);      
       std::vector<std::pair<size_t,size_t>> person_post_index;
       person_post_index.reserve(friends.size());
       std::vector<vid_t> post_vids;
-      for(int i=0;i<friends.size();i++){
-        person_post_index.push_back(std::make_pair(post_vids.size(), post_vids.size()));
-        person_post_index[i].first=post_vids.size();
-        for(int j=0;j<post_hasCreator_person_in_items[i].size();j++){
-          post_vids.push_back(post_hasCreator_person_in_items[i][j]);
-        }
-        person_post_index[i].second=post_vids.size();
-      }
-      
-      auto forum_containerOf_post_in_items=txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(post_label_id_, forum_label_id_, containerOf_label_id_, post_vids, false);
-
+      auto post_hasCreator_person_in = txn.GetIncomingGraphView<grape::EmptyType>(
+          person_label_id_, post_label_id_, hasCreator_label_id_);
+      auto forum_containerOf_post_in =
+          txn.GetIncomingSingleGraphView<grape::EmptyType>(
+              post_label_id_, forum_label_id_, containerOf_label_id_);
       for(int i=0;i<friends.size();i++){
         for(int j=0;j<forum_hasMember_person_in_items[i].size();j++){
           auto forum=forum_hasMember_person_in_items[i][j];
@@ -111,13 +103,34 @@ namespace gs
         if(person_forum_list_.empty()){
           continue;
         }
-        for(int j=person_post_index[i].first;j<person_post_index[i].second;j++){
+
+        auto post_person_ie = post_hasCreator_person_in.get_edges(friends[i]);
+        post_vids.clear();
+        for(;post_person_ie.is_valid();post_person_ie.next()){
+          post_vids.push_back(post_person_ie.get_neighbor());
+        }
+        auto forum_containerOf_post_in_items=txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(post_label_id_, forum_label_id_, containerOf_label_id_, post_vids, false);
+        for(int j=0;j<post_vids.size();j++){
           auto item=forum_containerOf_post_in_items[j];
           assert(txn.check_edge_exist(item));
           if(person_forum_set_[item[0].first]){
             ++post_count_[item[0].first];
           }
         }
+        // auto post_person_ie = post_hasCreator_person_in.get_edges(friends[i]);
+        // for (; post_person_ie.is_valid(); post_person_ie.next())
+        // {
+        //   auto p = post_person_ie.get_neighbor();
+        //   // assert(forum_containerOf_post_in.exist(p));
+        //   auto item = forum_containerOf_post_in.get_edge(p);
+        //   assert(forum_containerOf_post_in.exist1(item));
+        //   auto f = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
+        //   if (person_forum_set_[f])
+        //   {
+        //     ++post_count_[f];
+        //   }
+        // }
+
         for(auto v:person_forum_list_){
           person_forum_set_[v]=false;
         }
