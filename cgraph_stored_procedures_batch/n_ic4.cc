@@ -75,24 +75,26 @@ namespace gs
 
       // auto post_hasCreator_person_in = txn.GetIncomingGraphView<grape::EmptyType>(
       //     person_label_id_, post_label_id_, hasCreator_label_id_);
-      auto post_hasCreator_person_in=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, post_label_id_, hasCreator_label_id_, friends_, false);
-      std::vector<std::pair<size_t,size_t>> person_post_index;
-      std::vector<vid_t> post_vids;
-      person_post_index.reserve(friends_.size());
-      for(int i=0;i<friends_.size();i++){
-        person_post_index.push_back(std::make_pair(post_vids.size(), post_vids.size()));
-        person_post_index[i].first=post_vids.size();
-        for(int j=0;j<post_hasCreator_person_in[i].size();j++){
-          post_vids.push_back(post_hasCreator_person_in[i][j]);
-        }
-        person_post_index[i].second=post_vids.size();
-      }
+      // auto post_hasCreator_person_in=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, post_label_id_, hasCreator_label_id_, friends_, false);
+      
+      std::vector<std::pair<int,int>> person_post_index;
+      auto post_vids=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(person_label_id_, post_label_id_, hasCreator_label_id_, friends_, person_post_index, false);
+      // std::vector<vid_t> post_vids;
+      // person_post_index.reserve(friends_.size());
+      // for(int i=0;i<friends_.size();i++){
+      //   person_post_index.push_back(std::make_pair(post_vids.size(), post_vids.size()));
+      //   person_post_index[i].first=post_vids.size();
+      //   for(int j=0;j<post_hasCreator_person_in[i].size();j++){
+      //     post_vids.push_back(post_hasCreator_person_in[i][j]);
+      //   }
+      //   person_post_index[i].second=post_vids.size();
+      // }
       auto post_creationDates=txn.BatchGetVertexPropsFromVids(post_label_id_, post_vids, {post_creationDate_col_});
       auto post_hasTag_tag_out=txn.BatchGetVidsNeighbors<grape::EmptyType>(post_label_id_, tag_label_id_, hasTag_label_id_, post_vids, true);
 
       for (int i=0;i<friends_.size();i++){
         for (int j=person_post_index[i].first;j<person_post_index[i].second;j++){
-          auto item = post_creationDate_col_.getProperty(post_vids[j]);
+          auto item = post_creationDates[0][j];
           auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
           if (creationDate < end_date)
           {

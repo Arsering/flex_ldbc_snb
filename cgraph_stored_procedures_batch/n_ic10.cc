@@ -146,18 +146,8 @@ namespace gs
       std::priority_queue<person_info, std::vector<person_info>,
                           person_info_comparer>
           pq(comparer);
-
-      auto post_hasCreator_person_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, post_label_id_,  hasCreator_label_id_, friends_list_, false);
       std::vector<std::pair<int,int>> person_post_index;
-      std::vector<vid_t> post_vids;
-      for (int i=0;i<friends_list_.size();i++){
-        person_post_index.emplace_back(0,0);
-        person_post_index[i].first=post_vids.size();
-        for (int j=0;j<post_hasCreator_person_in_items[i].size();j++){
-          post_vids.emplace_back(post_hasCreator_person_in_items[i][j]);
-        }
-        person_post_index[i].second=post_vids.size();
-      }
+      auto post_vids=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(person_label_id_, post_label_id_,  hasCreator_label_id_, friends_list_, person_post_index, false);
       auto post_hasTag_tag_out_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(post_label_id_, tag_label_id_, hasTag_label_id_, post_vids, true);
       for (int i=0;i<friends_list_.size();i++){
         int score = 0;

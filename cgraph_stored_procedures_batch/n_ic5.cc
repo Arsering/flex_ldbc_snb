@@ -80,8 +80,6 @@ namespace gs
       get_1d_2d_neighbors(txn, person_label_id_, knows_label_id_, root, person_num, friends); 
       
       auto forum_hasMember_person_in_items=txn.BatchGetEdgePropsFromSrcVids<Date>(person_label_id_, forum_label_id_, hasMember_label_id_, friends, false);      
-      std::vector<std::pair<size_t,size_t>> person_post_index;
-      person_post_index.reserve(friends.size());
       std::vector<vid_t> post_vids;
       auto post_hasCreator_person_in = txn.GetIncomingGraphView<grape::EmptyType>(
           person_label_id_, post_label_id_, hasCreator_label_id_);
@@ -117,19 +115,6 @@ namespace gs
             ++post_count_[item[0].first];
           }
         }
-        // auto post_person_ie = post_hasCreator_person_in.get_edges(friends[i]);
-        // for (; post_person_ie.is_valid(); post_person_ie.next())
-        // {
-        //   auto p = post_person_ie.get_neighbor();
-        //   // assert(forum_containerOf_post_in.exist(p));
-        //   auto item = forum_containerOf_post_in.get_edge(p);
-        //   assert(forum_containerOf_post_in.exist1(item));
-        //   auto f = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
-        //   if (person_forum_set_[f])
-        //   {
-        //     ++post_count_[f];
-        //   }
-        // }
 
         for(auto v:person_forum_list_){
           person_forum_set_[v]=false;

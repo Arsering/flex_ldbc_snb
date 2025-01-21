@@ -98,28 +98,10 @@ namespace gs
       {
         vids.push_back(oe.get_neighbor());
       }
-      auto posts = txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, post_label_id_, hasCreator_label_id_, vids, false);
-      auto comments = txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, vids, false);
-      std::vector<std::pair<size_t,size_t>> person_post_index;
-      std::vector<std::pair<size_t,size_t>> person_comment_index;
-      std::vector<vid_t> post_vids;
-      std::vector<vid_t> comment_vids;
-      person_post_index.resize(vids.size());
-      for(int i=0;i<vids.size();i++){
-        person_post_index[i].first=post_vids.size();
-        for(int j=0;j<posts[i].size();j++){
-          post_vids.push_back(posts[i][j]);
-        }
-        person_post_index[i].second=post_vids.size();
-      }
-      person_comment_index.resize(vids.size());
-      for(int i=0;i<vids.size();i++){
-        person_comment_index[i].first=comment_vids.size();
-        for(int j=0;j<comments[i].size();j++){
-          comment_vids.push_back(comments[i][j]);
-        }
-        person_comment_index[i].second=comment_vids.size();
-      }
+      std::vector<std::pair<int,int>> person_post_index;
+      std::vector<std::pair<int,int>> person_comment_index;
+      auto post_vids = txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(person_label_id_, post_label_id_, hasCreator_label_id_, vids, person_post_index, false);
+      auto comment_vids = txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, vids, person_comment_index, false);
       auto post_creationDates=txn.BatchGetVertexPropsFromVids(post_label_id_, post_vids, {post_creationDate_col_});
       auto comment_creationDates=txn.BatchGetVertexPropsFromVids(comment_label_id_, comment_vids, {comment_creationDate_col_});
       auto person_oids=txn.BatchGetVertexIds(person_label_id_, vids);

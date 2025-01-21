@@ -151,18 +151,19 @@ namespace gs
       for(; ie.is_valid(); ie.next()){
         person_vids.push_back(ie.get_neighbor());
       }
-      auto comment_hasCreator_person_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, person_vids, false);
+      // auto comment_hasCreator_person_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, person_vids, false);
       std::vector<std::pair<int,int>> person_comment_index;
-      std::vector<vid_t> comment_vids;
-      for(int i=0;i<person_vids.size();i++){
-        person_comment_index.push_back(std::make_pair(i,0));
-        person_comment_index[i].first=comment_vids.size();  
-        auto comment_ie=comment_hasCreator_person_in_items[i];
-        for(int j=0;j<comment_ie.size();j++){
-          comment_vids.push_back(comment_ie[j]);
-        }
-        person_comment_index[i].second=comment_vids.size();
-      }
+      // std::vector<vid_t> comment_vids;
+      auto comment_vids=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, person_vids, person_comment_index, false);
+      // for(int i=0;i<person_vids.size();i++){
+      //   person_comment_index.push_back(std::make_pair(i,0));
+      //   person_comment_index[i].first=comment_vids.size();  
+      //   auto comment_ie=comment_hasCreator_person_in_items[i];
+      //   for(int j=0;j<comment_ie.size();j++){
+      //     comment_vids.push_back(comment_ie[j]);
+      //   }
+      //   person_comment_index[i].second=comment_vids.size();
+      // }
       auto comment_replyOf_post_out_items=txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(comment_label_id_, post_label_id_, replyOf_label_id_, comment_vids, true);
       
       for (int i=0;i<person_vids.size();i++){
@@ -229,18 +230,20 @@ namespace gs
       vec_count = vec.size();
       auto person_props=txn.BatchGetVertexPropsFromVids(person_label_id_, res_person_vids, {person_firstName_col_,person_lastName_col_});
       
-      auto res_comment_hasCreator_person_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, res_person_vids, false);
-      std::vector<std::pair<size_t,size_t>> res_person_comment_index;
-      std::vector<vid_t> res_comment_vids;
-      for(int i=0;i<res_person_vids.size();i++){
-        res_person_comment_index.push_back(std::make_pair(res_comment_vids.size(),res_comment_vids.size()));
-        res_person_comment_index[i].first=res_comment_vids.size();
-        auto comment_ie=res_comment_hasCreator_person_in_items[i];
-        for(int j=0;j<comment_ie.size();j++){
-          res_comment_vids.push_back(comment_ie[j]);
-        }
-        res_person_comment_index[i].second=res_comment_vids.size();
-      }
+      // auto res_comment_hasCreator_person_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, res_person_vids, false);
+      std::vector<std::pair<int,int>> res_person_comment_index;
+      // std::vector<vid_t> res_comment_vids;
+      auto res_comment_vids=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, res_person_vids, res_person_comment_index, false);
+      // auto res_comment_hasCreator_person_in_items=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, res_person_vids, res_person_comment_index, false);
+      // for(int i=0;i<res_person_vids.size();i++){
+      //   res_person_comment_index.push_back(std::make_pair(res_comment_vids.size(),res_comment_vids.size()));
+        // res_person_comment_index[i].first=res_comment_vids.size();
+        // auto comment_ie=res_comment_hasCreator_person_in_items[i];
+        // for(int j=0;j<comment_ie.size();j++){
+        //   res_comment_vids.push_back(comment_ie[j]);
+        // }
+        // res_person_comment_index[i].second=res_comment_vids.size();
+        // }
       auto res_comment_replyOf_post_out_items=txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(comment_label_id_, post_label_id_, replyOf_label_id_, res_comment_vids, true);
       std::vector<vid_t> res_post_vids;
       std::map<int,int> comment_post_index;

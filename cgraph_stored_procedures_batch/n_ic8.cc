@@ -86,22 +86,23 @@ namespace gs
         auto v = post_ie.get_neighbor();
         post_vids.push_back(v);
       }
-      auto comment_replyOf_post_in_item=txn.BatchGetVidsNeighbors<grape::EmptyType>(post_label_id_,comment_label_id_,replyOf_label_id_,post_vids,false);
-      std::vector<vid_t> post_replies;
-      std::vector<std::pair<size_t,size_t>> post_reply_index;
-      post_reply_index.resize(post_vids.size());
-      for(int i=0;i<post_vids.size();i++){
-        post_reply_index[i].first=post_replies.size();
-        for(int j=0;j<comment_replyOf_post_in_item[i].size();j++){
-          post_replies.push_back(comment_replyOf_post_in_item[i][j]);
-        }
-        post_reply_index[i].second=post_replies.size();
-      }
+      // auto comment_replyOf_post_in_item=txn.BatchGetVidsNeighbors<grape::EmptyType>(post_label_id_,comment_label_id_,replyOf_label_id_,post_vids,false);
+      // std::vector<vid_t> post_replies;
+      std::vector<std::pair<int,int>> post_reply_index;
+      auto post_replies=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(post_label_id_,comment_label_id_,replyOf_label_id_,post_vids,post_reply_index,false);
+      // post_reply_index.resize(post_vids.size());
+      // for(int i=0;i<post_vids.size();i++){
+      //   post_reply_index[i].first=post_replies.size();
+      //   for(int j=0;j<comment_replyOf_post_in_item[i].size();j++){
+      //     post_replies.push_back(comment_replyOf_post_in_item[i][j]);
+      //   }
+      //   post_reply_index[i].second=post_replies.size();
+      // }
       auto post_replies_creationDates=txn.BatchGetVertexPropsFromVids(comment_label_id_,post_replies,{comment_creationDate_col_});
       auto post_replies_oids=txn.BatchGetVertexIds(comment_label_id_,post_replies);
       for(int i=0;i<post_vids.size();i++){
         message_count++;
-        auto item=comment_replyOf_post_in_item[i];
+        // auto item=comment_replyOf_post_in_item[i];
         for(auto j=post_reply_index[i].first;j<post_reply_index[i].second;j++){
           auto u=post_replies[j];
           reply_count++;
@@ -134,22 +135,23 @@ namespace gs
       for(;comment_ie.is_valid();comment_ie.next()){
         comment_vids.push_back(comment_ie.get_neighbor());
       }
-      auto comment_replyOf_comment_in_item=txn.BatchGetVidsNeighbors<grape::EmptyType>(comment_label_id_,comment_label_id_,replyOf_label_id_,comment_vids,false);
-      std::vector<vid_t> comment_replies;
-      std::vector<std::pair<size_t,size_t>> comment_reply_index;
-      comment_reply_index.resize(comment_vids.size());
-      for(int i=0;i<comment_vids.size();i++){
-        comment_reply_index[i].first=comment_replies.size();
-        for(int j=0;j<comment_replyOf_comment_in_item[i].size();j++){
-          comment_replies.push_back(comment_replyOf_comment_in_item[i][j]);
-        }
-        comment_reply_index[i].second=comment_replies.size();
-      }
+      // auto comment_replyOf_comment_in_item=txn.BatchGetVidsNeighbors<grape::EmptyType>(comment_label_id_,comment_label_id_,replyOf_label_id_,comment_vids,false);
+      // std::vector<vid_t> comment_replies;
+      std::vector<std::pair<int,int>> comment_reply_index;
+      auto comment_replies=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(comment_label_id_,comment_label_id_,replyOf_label_id_,comment_vids,comment_reply_index,false);
+      // comment_reply_index.resize(comment_vids.size());
+      // for(int i=0;i<comment_vids.size();i++){
+      //   comment_reply_index[i].first=comment_replies.size();
+      //   for(int j=0;j<comment_replyOf_comment_in_item[i].size();j++){
+      //     comment_replies.push_back(comment_replyOf_comment_in_item[i][j]);
+      //   }
+      //   comment_reply_index[i].second=comment_replies.size();
+      // }
       auto comment_replies_creationDates=txn.BatchGetVertexPropsFromVids(comment_label_id_,comment_replies,{comment_creationDate_col_});
       auto comment_replies_oids=txn.BatchGetVertexIds(comment_label_id_,comment_replies);
       for(int i=0;i<comment_vids.size();i++){
         message_count++;
-        auto item=comment_replyOf_comment_in_item[i];
+        // auto item=comment_replyOf_comment_in_item[i];
         for(auto j=comment_reply_index[i].first;j<comment_reply_index[i].second;j++){
           auto u=comment_replies[j];
           reply_count++;

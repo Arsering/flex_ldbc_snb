@@ -93,32 +93,34 @@ namespace gs
       
       get_1d_2d_neighbors(txn,person_label_id_,knows_label_id_,root,person_num,person_vids);
       
-      auto post_hasCreator_person_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, post_label_id_, hasCreator_label_id_, person_vids, false);
-      auto comment_hasCreator_person_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, person_vids, false);
+      // auto post_hasCreator_person_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, post_label_id_, hasCreator_label_id_, person_vids, false);
+      // auto comment_hasCreator_person_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, person_vids, false);
       
-      std::vector<std::pair<size_t,size_t>> person_post_index;
-      person_post_index.reserve(person_vids.size());
-      std::vector<vid_t> post_vids;
-      for(int i=0;i<person_vids.size();i++){
-        person_post_index.push_back(std::make_pair(post_vids.size(), post_vids.size()));
-        person_post_index[i].first=post_vids.size();
-        for(int j=0;j<post_hasCreator_person_in_items[i].size();j++){
-          post_vids.push_back(post_hasCreator_person_in_items[i][j]);
-        }
-        person_post_index[i].second=post_vids.size();
-      }
+      std::vector<std::pair<int,int>> person_post_index;
+      std::vector<std::pair<int,int>> person_comment_index;
+      auto post_vids=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(person_label_id_,post_label_id_,hasCreator_label_id_,person_vids,person_post_index,false);
+      auto comment_vids=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(person_label_id_,comment_label_id_,hasCreator_label_id_,person_vids,person_comment_index,false);
+      // person_post_index.reserve(person_vids.size());
+      // std::vector<vid_t> post_vids;
+      // for(int i=0;i<person_vids.size();i++){
+      //   person_post_index.push_back(std::make_pair(post_vids.size(), post_vids.size()));
+      //   person_post_index[i].first=post_vids.size();
+      //   for(int j=0;j<post_hasCreator_person_in_items[i].size();j++){
+      //     post_vids.push_back(post_hasCreator_person_in_items[i][j]);
+      //   }
+      //   person_post_index[i].second=post_vids.size();
+      // }
       
-      std::vector<std::pair<size_t,size_t>> person_comment_index;
-      person_comment_index.reserve(person_vids.size());
-      std::vector<vid_t> comment_vids;
-      for(int i=0;i<person_vids.size();i++){
-        person_comment_index.push_back(std::make_pair(comment_vids.size(), comment_vids.size()));
-        person_comment_index[i].first=comment_vids.size();
-        for(int j=0;j<comment_hasCreator_person_in_items[i].size();j++){
-          comment_vids.push_back(comment_hasCreator_person_in_items[i][j]);
-        }
-        person_comment_index[i].second=comment_vids.size();
-      }
+      // person_comment_index.reserve(person_vids.size());
+      // std::vector<vid_t> comment_vids;
+      // for(int i=0;i<person_vids.size();i++){
+      //   person_comment_index.push_back(std::make_pair(comment_vids.size(), comment_vids.size()));
+      //   person_comment_index[i].first=comment_vids.size();
+      //   for(int j=0;j<comment_hasCreator_person_in_items[i].size();j++){
+      //     comment_vids.push_back(comment_hasCreator_person_in_items[i][j]);
+      //   }
+      //   person_comment_index[i].second=comment_vids.size();
+      // }
 
       auto post_creationDate_col_items=txn.BatchGetVertexPropsFromVids(post_label_id_, post_vids, {post_creationDate_col_});
       // auto post_oids=txn.BatchGetVertexIds(post_label_id_, post_vids);
