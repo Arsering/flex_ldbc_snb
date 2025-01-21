@@ -102,7 +102,7 @@ namespace gs
           continue;
         }
 
-        auto post_person_ie = post_hasCreator_person_in.get_edges(friends[i]);
+        auto post_person_ie = post_hasCreator_person_in.get_edges(friends[i]);//这里这样做是因为不是所有的person都会获取他的post
         post_vids.clear();
         for(;post_person_ie.is_valid();post_person_ie.next()){
           post_vids.push_back(post_person_ie.get_neighbor());

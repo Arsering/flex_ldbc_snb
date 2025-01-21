@@ -104,21 +104,29 @@ namespace gs
       }
       // auto post_person_likes_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(post_label_id_,person_label_id_,  likes_label_id_, post_vids, false);
       auto post_person_likes_in_items=txn.BatchGetEdgePropsFromSrcVids<Date>(post_label_id_,person_label_id_,  likes_label_id_, post_vids, false);
+      auto person_likes_post_items=txn.BatchGetEdgePropsFromSrcVids<Date>(post_label_id_,person_label_id_, likes_label_id_, post_vids, false);
       auto post_oids=txn.BatchGetVertexIds(post_label_id_, post_vids);
       for (int i=0;i<post_vids.size();i++){
         auto likes_persons = post_person_likes_in_items[i];
         auto pid = post_vids[i];
         auto message_id = post_oids[i];
-        auto person_ie = person_likes_post_in.get_edges(pid);
-        for (int j=0;j<likes_persons.size();j++){
-          auto item = likes_persons[j];
+        // auto person_ie = person_likes_post_in.get_edges(pid);
+        auto person_ie=person_likes_post_items[i];
+        // for (int j=0;j<likes_persons.size();j++){
+        //   auto item = likes_persons[j];
+        //   vec.emplace_back(item.first, pid, item.second.milli_second,
+        //                    txn.GetVertexId(person_label_id_, item.first),
+        //                    message_id, true);
+        // }
+        for(int j=0;j<person_ie.size();j++){
+          auto item=person_ie[j];
           vec.emplace_back(item.first, pid, item.second.milli_second,
                            txn.GetVertexId(person_label_id_, item.first),
                            message_id, true);
         }
       }
-      auto person_likes_comment_in = txn.GetIncomingGraphView<Date>(
-          comment_label_id_, person_label_id_, likes_label_id_);
+      // auto person_likes_comment_in = txn.GetIncomingGraphView<Date>(
+      //     comment_label_id_, person_label_id_, likes_label_id_);
       auto comment_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, comment_label_id_, hasCreator_label_id_);
       std::vector<vid_t> comment_vids;
@@ -131,7 +139,7 @@ namespace gs
         auto likes_persons = comment_person_likes_in_items[i];
         auto cid = comment_vids[i];
         auto message_id = comment_oids[i];
-        auto person_ie = person_likes_comment_in.get_edges(cid);
+        // auto person_ie = person_likes_comment_in.get_edges(cid);
         for (int j=0;j<likes_persons.size();j++){
           auto item = likes_persons[j];
           vec.emplace_back(item.first, cid, item.second.milli_second,

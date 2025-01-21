@@ -128,12 +128,6 @@ namespace gs
           pq(comparer);
       sub_tagClass_.clear();
 
-      auto comment_hasCreator_person_in =
-          txn.GetIncomingGraphView<grape::EmptyType>(
-              person_label_id_, comment_label_id_, hasCreator_label_id_);
-      auto comment_replyOf_post_out =
-          txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-              comment_label_id_, post_label_id_, replyOf_label_id_);
       auto post_hasTag_tag_out = txn.GetOutgoingGraphView<grape::EmptyType>(
           post_label_id_, tag_label_id_, hasTag_label_id_);
       auto tag_hasType_tagClass_out =

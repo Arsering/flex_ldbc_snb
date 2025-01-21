@@ -23,27 +23,11 @@ namespace gs
     IC14Impl(ReadTransaction &txn, label_t person_label_id,
              label_t post_label_id, label_t comment_label_id,
              label_t hasCreator_label_id, label_t replyOf_label_id)
-        : post_hasCreator_person_out_(
-              txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-                  post_label_id, person_label_id, hasCreator_label_id)),
-          comment_hasCreator_person_out_(
-              txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-                  comment_label_id, person_label_id, hasCreator_label_id)),
-          post_hasCreator_person_in_(txn.GetIncomingGraphView<grape::EmptyType>(
+        : post_hasCreator_person_in_(txn.GetIncomingGraphView<grape::EmptyType>(
               person_label_id, post_label_id, hasCreator_label_id)),
           comment_hasCreator_person_in_(
               txn.GetIncomingGraphView<grape::EmptyType>(
-                  person_label_id, comment_label_id, hasCreator_label_id)),
-          comment_replyOf_post_out_(
-              txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-                  comment_label_id, post_label_id, replyOf_label_id)),
-          comment_replyOf_comment_out_(
-              txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-                  comment_label_id, comment_label_id, replyOf_label_id)),
-          comment_replyOf_post_in_(txn.GetIncomingGraphView<grape::EmptyType>(
-              post_label_id, comment_label_id, replyOf_label_id)),
-          comment_replyOf_comment_in_(txn.GetIncomingGraphView<grape::EmptyType>(
-              comment_label_id, comment_label_id, replyOf_label_id)) {}
+                  person_label_id, comment_label_id, hasCreator_label_id)){}
 
     int get_score(ReadTransaction &txn, vid_t x, vid_t y, label_t person_label_id, label_t comment_label_id, label_t post_label_id, label_t replyOf_label_id, label_t hasCreator_label_id)
     {
@@ -323,15 +307,8 @@ namespace gs
     }
 
   private:
-    SingleGraphView<grape::EmptyType> post_hasCreator_person_out_;
-    SingleGraphView<grape::EmptyType> comment_hasCreator_person_out_;
     GraphView<grape::EmptyType> comment_hasCreator_person_in_;
     GraphView<grape::EmptyType> post_hasCreator_person_in_;
-
-    SingleGraphView<grape::EmptyType> comment_replyOf_post_out_;
-    SingleGraphView<grape::EmptyType> comment_replyOf_comment_out_;
-    GraphView<grape::EmptyType> comment_replyOf_post_in_;
-    GraphView<grape::EmptyType> comment_replyOf_comment_in_;
   };
 
   class IC14 : public AppBase

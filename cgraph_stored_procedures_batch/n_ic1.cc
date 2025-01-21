@@ -249,16 +249,6 @@ namespace gs
 
       get_friends(txn, root, firstname);
 
-      auto person_isLocatedIn_place_out =
-          txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-              person_label_id_, place_label_id_, isLocatedIn_label_id_);
-      auto person_studyAt_organisation_out = txn.GetOutgoingGraphView<int>(
-          person_label_id_, organisation_label_id_, studyAt_label_id_);
-      auto person_workAt_organisation_out = txn.GetOutgoingGraphView<int>(
-          person_label_id_, organisation_label_id_, workAt_label_id_);
-      auto organisation_isLocatedIn_place_out =
-          txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-              organisation_label_id_, place_label_id_, isLocatedIn_label_id_);
       std::vector<cgraph::PropertyHandle> person_property_handles;
       std::vector<vid_t> person_vids;
       for(auto &info:ans_){
