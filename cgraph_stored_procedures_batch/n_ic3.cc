@@ -191,15 +191,26 @@ namespace gs
       assert(countryX != place_num_);
       assert(countryY != place_num_);
 
+      // //debug
+      // std::ofstream outfile;
+      // outfile.open("/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/experiment_space/LDBC_SNB/shells/batch_ic3_log",std::ios::app);
+      // outfile<<"ic3: "<<std::endl;
+
       auto place_isPartOf_place_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(place_label_id_, place_label_id_, isPartOf_label_id_, {countryX, countryY}, false);
       auto xe = place_isPartOf_place_in_items[0];
       for (int i=0;i<xe.size();i++)
       {
+          // //debug
+          // outfile<<xe[i]<<std::endl;
+
         place_Locatedin_[xe[i]] = true;
       }
       auto ye = place_isPartOf_place_in_items[1];
       for (int i=0;i<ye.size();i++)
       {
+        //debug
+        // outfile<<ye[i]<<std::endl;
+
         place_Locatedin_[ye[i]] = true;
       }
       
@@ -222,17 +233,19 @@ namespace gs
       auto comment_hasCreator_person_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
               comment_label_id_, person_label_id_, hasCreator_label_id_);
-
+      
+      //这里x和y要分开处理
       auto postxy=txn.BatchGetVidsNeighbors<grape::EmptyType>(place_label_id_, post_label_id_, isLocatedIn_label_id_, {countryX, countryY}, false);
       std::vector<vid_t> post_vids;
       std::vector<vid_t> filtered_post_vids;
+      int post_x_size=postxy[0].size();
       for(int i=0;i<postxy.size();i++){
         for(int j=0;j<postxy[i].size();j++){
           post_vids.push_back(postxy[i][j]);
         }
       }
       auto post_creationDate_items=txn.BatchGetVertexPropsFromVids(post_label_id_, post_vids, {post_creationDate_col_});
-      for (int i=0;i<post_vids.size();i++){
+      for (int i=0;i<post_x_size;i++){
         auto item=post_creationDate_items[0][i];
         auto creationDate=gbp::BufferBlock::Ref<Date>(item).milli_second;
         if (start_date <= creationDate && creationDate < end_date)
@@ -247,19 +260,23 @@ namespace gs
         auto p=item[0].first;
         if (friends_[p])
         {
+          //debug
+          // outfile<<"post "<<p<<std::endl;
+
           count_[p].first += 1;
         }
       }
       auto commentxy=txn.BatchGetVidsNeighbors<grape::EmptyType>(place_label_id_, comment_label_id_, isLocatedIn_label_id_, {countryX, countryY}, false);
       std::vector<vid_t> comment_vids;
       std::vector<vid_t> filtered_comment_vids;
+      int comment_x_size=commentxy[0].size();
       for(int i=0;i<commentxy.size();i++){
         for(int j=0;j<commentxy[i].size();j++){
           comment_vids.push_back(commentxy[i][j]);
         }
       }
       auto comment_creationDate_items=txn.BatchGetVertexPropsFromVids(comment_label_id_, comment_vids, {comment_creationDate_col_});
-      for (int i=0;i<comment_vids.size();i++){
+      for (int i=0;i<comment_x_size;i++){
         auto item=comment_creationDate_items[0][i];
         auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
         if (start_date <= creationDate && creationDate < end_date)
@@ -274,9 +291,59 @@ namespace gs
         auto p=item[0].first;
         if (friends_[p])
         {
+          //debug
+          // outfile<<"comment "<<p<<std::endl;
+
           count_[p].first += 1;
         }
       }
+      filtered_post_vids.clear();
+      filtered_comment_vids.clear();
+      for (int i=post_x_size;i<post_vids.size();i++){
+        auto item=post_creationDate_items[0][i];
+        auto creationDate=gbp::BufferBlock::Ref<Date>(item).milli_second;
+        if (start_date <= creationDate && creationDate < end_date)
+        {
+          filtered_post_vids.push_back(post_vids[i]);
+        }
+      }
+      post_hasCreator_person_out_items.clear();
+      post_hasCreator_person_out_items=txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(post_label_id_, person_label_id_, hasCreator_label_id_, filtered_post_vids, true);
+      for (int i=0;i<filtered_post_vids.size();i++){
+        auto item = post_hasCreator_person_out_items[i];
+        assert(txn.check_edge_exist(item));
+        auto p=item[0].first;
+        if (friends_[p])
+        {
+          //debug
+          // outfile<<"post "<<p<<std::endl;
+
+          count_[p].second += 1;
+        }
+      }
+      for (int i=comment_x_size;i<comment_vids.size();i++){
+        auto item=comment_creationDate_items[0][i];
+        auto creationDate = gbp::BufferBlock::Ref<Date>(item).milli_second;
+        if (start_date <= creationDate && creationDate < end_date)
+        {
+          filtered_comment_vids.push_back(comment_vids[i]);
+        }
+      }
+      comment_hasCreator_person_out_items.clear();
+      comment_hasCreator_person_out_items=txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(comment_label_id_, person_label_id_, hasCreator_label_id_, filtered_comment_vids, true);
+      for (int i=0;i<filtered_comment_vids.size();i++){
+        auto item = comment_hasCreator_person_out_items[i];
+        assert(txn.check_edge_exist(item));
+        auto p=item[0].first;
+        if (friends_[p])
+        {
+          //debug
+          // outfile <<"comment "<<p<<std::endl;
+
+          count_[p].second += 1;
+        }
+      }
+      
       auto person_oids=txn.BatchGetVertexIds(person_label_id_, friends);
       for (int i=0;i<friends.size();i++){
         auto v=friends[i];

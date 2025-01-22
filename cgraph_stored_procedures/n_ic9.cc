@@ -81,6 +81,9 @@ namespace gs
         return false;
       }
 
+      //debug
+      // int msg_num=0;
+
       message_info_comparer cmp;
       std::priority_queue<message_info, std::vector<message_info>,
                           message_info_comparer>
@@ -104,6 +107,9 @@ namespace gs
               auto edges = post_hasCreator_person_in.get_edges(v);
               for (; edges.is_valid(); edges.next())
               {
+                //debug
+                // msg_num++;
+
                 auto u = edges.get_neighbor();
                 auto item = post_creationDate_col_.getProperty(u);
                 auto creation_date =
@@ -149,6 +155,9 @@ namespace gs
               auto edges = comment_hasCreator_person_in.get_edges(v);
               for (; edges.is_valid(); edges.next())
               {
+                //debug
+                // msg_num++;
+
                 auto u = edges.get_neighbor();
                 auto item = comment_creationDate_col_.getProperty(u);
                 #ifdef ZED_PROFILE
@@ -188,6 +197,11 @@ namespace gs
             }
           },
           txn.GetVertexNum(person_label_id_));
+
+
+      //debug
+      // std::ofstream ofs("ic9_access_message.txt",std::ios::app);
+      // ofs<<msg_num<<std::endl;
 
       std::vector<message_info> vec;
       vec.reserve(que.size());

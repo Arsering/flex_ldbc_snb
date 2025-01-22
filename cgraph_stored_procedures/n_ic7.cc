@@ -71,6 +71,9 @@ namespace gs
       oid_t personid = input.get_long();
       CHECK(input.empty());
 
+      //debug
+      // int msg_num=0;
+
       vid_t root{};
       if (!txn.GetVertexIndex(person_label_id_, personid, root))
       {
@@ -115,6 +118,9 @@ namespace gs
           person_label_id_, root, post_label_id_, hasCreator_label_id_);
       for (; post_ie.is_valid(); post_ie.next())
       {
+        //debug
+        // msg_num++;
+
         auto pid = post_ie.get_neighbor();
         auto message_id = txn.GetVertexId(post_label_id_, pid);
         auto person_ie = person_likes_post_in.get_edges(pid);
@@ -132,6 +138,9 @@ namespace gs
           person_label_id_, root, comment_label_id_, hasCreator_label_id_);
       for (; comment_ie.is_valid(); comment_ie.next())
       {
+        //debug
+        // msg_num++;
+
         auto cid = comment_ie.get_neighbor();
         auto message_id = txn.GetVertexId(comment_label_id_, cid);
         auto person_ie = person_likes_comment_in.get_edges(cid);
@@ -143,6 +152,10 @@ namespace gs
                            message_id, false);
         }
       }
+
+      //debug
+      // std::ofstream ofs("ic7_access_message.txt",std::ios::app);
+      // ofs<<msg_num<<std::endl;
 
       sort(vec.begin(), vec.end(),
            [&](const person_info &a, const person_info &b)

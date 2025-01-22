@@ -147,13 +147,14 @@ namespace gs
         organisation_vids.push_back(ie.get_neighbor());
       }
       auto person_workAt_organisation_in_items=txn.BatchGetEdgePropsFromSrcVids<int>(organisation_label_id_,person_label_id_,  workAt_label_id_, organisation_vids, false);
-      auto organisation_name_col_items=txn.BatchGetVertexPropsFromVids(organisation_label_id_, organisation_vids, {organisation_name_col_});
-      
+      // auto organisation_name_col_items=txn.BatchGetVertexPropsFromVids(organisation_label_id_, organisation_vids, {organisation_name_col_});
+      // auto organisation_name_col_=txn.GetVertexProp(organisation_label_id_, organisation_vids[0]);
       for(int i=0;i<organisation_vids.size();i++){
         auto company=organisation_vids[i];
         auto person_ie=person_workAt_organisation_in_items[i];
         for(int j=0;j<person_ie.size();j++){
-          auto name=organisation_name_col_items[0][i];
+          // auto name=organisation_name_col_items[0][i];
+          auto name=organisation_name_col_.getProperty(company);
           auto data_item=person_ie[j].second;
           auto wf=data_item;
           if (wf < workfromyear)

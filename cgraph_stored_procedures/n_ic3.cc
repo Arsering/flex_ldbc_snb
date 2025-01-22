@@ -233,9 +233,19 @@ namespace gs
 
       // auto xe = txn.GetIncomingEdges<grape::EmptyType>(
       //     place_label_id_, countryX, place_label_id_, isPartOf_label_id_);
+
+      //debug
+      // std::ofstream outfile;
+      // outfile.open("/data-1/yichengzhang/data/latest_gs_bp/graphscope-flex/experiment_space/LDBC_SNB/shells/90_ic3_log",std::ios::app);
+      // outfile<<"ic3: "<<std::endl;
+
       auto xe = place_isPartOf_place_in.get_edges(countryX);
+
       for (; xe.is_valid(); xe.next())
       {
+        //debug
+        // outfile<<xe.get_neighbor()<<std::endl;
+
         place_Locatedin_[xe.get_neighbor()] = true;
       }
       // auto ye = txn.GetIncomingEdges<grape::EmptyType>(
@@ -243,6 +253,9 @@ namespace gs
       auto ye = place_isPartOf_place_in.get_edges(countryY);
       for (; ye.is_valid(); ye.next())
       {
+        //debug
+        // outfile<<ye.get_neighbor()<<std::endl;
+        
         place_Locatedin_[ye.get_neighbor()] = true;
       }
       
@@ -284,6 +297,9 @@ namespace gs
           auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (friends_[p])
           {
+            //debug
+            // outfile<<"postx "<<p<<std::endl;
+
             count_[p].first += 1;
           }
         }
@@ -304,6 +320,9 @@ namespace gs
           auto p = gbp::BufferBlock::Ref<gs::MutableNbr<grape::EmptyType>>(item).neighbor;
           if (friends_[p])
           {
+            //debug
+            // outfile<<"commentx "<<p<<std::endl;
+
             count_[p].first += 1;
           }
         }
@@ -326,6 +345,9 @@ namespace gs
           item.free();
           if (friends_[p])
           {
+            //debug
+            // outfile<<"posty "<<p<<std::endl;
+
             count_[p].second += 1;
           }
         }
@@ -348,6 +370,9 @@ namespace gs
 
           if (friends_[p])
           {
+            //debug
+            // outfile<<"commenty "<<p<<std::endl;
+
             count_[p].second += 1;
           }
         }
