@@ -18,14 +18,23 @@ namespace gs
           comment_label_id_(graph.schema().get_vertex_label_id("COMMENT")),
           likes_label_id_(graph.schema().get_edge_label_id("LIKES")),
           hasCreator_label_id_(graph.schema().get_edge_label_id("HASCREATOR")),
-          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
-          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
-          post_content_col_(graph.GetPropertyHandle(post_label_id_, "content")),
-          post_imageFile_col_(graph.GetPropertyHandle(post_label_id_, "imageFile")),
-          post_length_col_(graph.GetPropertyHandle(post_label_id_, "length")),
-          comment_content_col_(graph.GetPropertyHandle(comment_label_id_, "content")),
-          post_creationDate_col_(graph.GetPropertyHandle(post_label_id_, "creationDate")),
-          comment_creationDate_col_(graph.GetPropertyHandle(comment_label_id_, "creationDate")),
+          person_firstName_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(person_label_id_, "firstName")))),
+          person_lastName_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(person_label_id_, "lastName")))),
+          post_content_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(post_label_id_, "content")))),
+          post_imageFile_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(post_label_id_, "imageFile")))),
+          post_length_col_(*(std::dynamic_pointer_cast<IntColumn>(
+              graph.get_vertex_property_column(post_label_id_, "length")))),
+          comment_content_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(comment_label_id_, "content")))),
+          post_creationDate_col_(*(std::dynamic_pointer_cast<DateColumn>(
+              graph.get_vertex_property_column(post_label_id_, "creationDate")))),
+          comment_creationDate_col_(*(std::dynamic_pointer_cast<DateColumn>(
+              graph.get_vertex_property_column(comment_label_id_,
+                                               "creationDate")))),
           graph_(graph) {}
     ~IC7() {}
 
@@ -79,6 +88,20 @@ namespace gs
       auto person_num = txn.GetVertexNum(person_label_id_);
       friends_.clear();
       friends_.resize(person_num);
+#if OV
+      const auto &ie = txn.GetIncomingEdges<Date>(
+          person_label_id_, root, person_label_id_, knows_label_id_);
+      for (auto &e : ie)
+      {
+        friends_[e.neighbor] = true;
+      }
+      const auto &oe = txn.GetOutgoingEdges<Date>(
+          person_label_id_, root, person_label_id_, knows_label_id_);
+      for (auto &e : oe)
+      {
+        friends_[e.neighbor] = true;
+      }
+#else
       auto ie = txn.GetIncomingEdges<Date>(
           person_label_id_, root, person_label_id_, knows_label_id_);
       for (; ie.is_valid(); ie.next())
@@ -91,6 +114,7 @@ namespace gs
       {
         friends_[oe.get_neighbor()] = true;
       }
+#endif
       std::vector<person_info> vec;
 
       auto post_ie = txn.GetIncomingEdges<grape::EmptyType>(
@@ -107,6 +131,7 @@ namespace gs
         auto likes_persons = post_person_likes_in_items[i];
         auto pid = post_vids[i];
         auto message_id = post_oids[i];
+        // auto person_ie = person_likes_post_in.get_edges(pid);
         auto person_ie=person_likes_post_items[i];
         // for (int j=0;j<likes_persons.size();j++){
         //   auto item = likes_persons[j];
@@ -121,8 +146,6 @@ namespace gs
                            message_id, true);
         }
       }
-      // auto person_likes_comment_in = txn.GetIncomingGraphView<Date>(
-      //     comment_label_id_, person_label_id_, likes_label_id_);
       auto comment_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, comment_label_id_, hasCreator_label_id_);
       std::vector<vid_t> comment_vids;
@@ -135,7 +158,6 @@ namespace gs
         auto likes_persons = comment_person_likes_in_items[i];
         auto cid = comment_vids[i];
         auto message_id = comment_oids[i];
-        // auto person_ie = person_likes_comment_in.get_edges(cid);
         for (int j=0;j<likes_persons.size();j++){
           auto item = likes_persons[j];
           vec.emplace_back(item.first, cid, item.second.milli_second,
@@ -143,7 +165,6 @@ namespace gs
                            message_id, false);
         }
       }
-
       sort(vec.begin(), vec.end(),
            [&](const person_info &a, const person_info &b)
            {
@@ -177,7 +198,6 @@ namespace gs
           pq.emplace(vec[i]);
         }
       }
-
       std::vector<person_info> tmp;
       tmp.reserve(pq.size());
       std::vector<vid_t> person_vids;
@@ -202,8 +222,8 @@ namespace gs
         }
         pq.pop();
       }
-      auto person_props=txn.BatchGetVertexPropsFromVids(person_label_id_, person_vids, {person_firstName_col_, person_lastName_col_});
-      auto post_lengths=txn.BatchGetVertexPropsFromVids(post_label_id_, res_post_vids, {post_length_col_});
+      auto person_props=txn.BatchGetVertexPropsFromVids(person_label_id_, person_vids, {&person_firstName_col_, &person_lastName_col_});
+      auto post_lengths=txn.BatchGetVertexPropsFromVids(post_label_id_, res_post_vids, {&post_length_col_});
       for(int i=0;i<res_post_vids.size();i++){
         auto length=gbp::BufferBlock::RefSingle<int>(post_lengths[0][i]);
         if(length==0){
@@ -214,11 +234,11 @@ namespace gs
           post_content_index++;
         }
       }
-      auto comment_content=txn.BatchGetVertexPropsFromVids(comment_label_id_, res_comment_vids, {comment_content_col_});
-      auto post_content=txn.BatchGetVertexPropsFromVids(post_label_id_, res_post_content_vids, {post_content_col_});
-      auto post_imageFile=txn.BatchGetVertexPropsFromVids(post_label_id_, res_post_imageFile_vids, {post_imageFile_col_});
-      auto post_creationDate=txn.BatchGetVertexPropsFromVids(post_label_id_, res_post_vids, {post_creationDate_col_});
-      auto comment_creationDate=txn.BatchGetVertexPropsFromVids(comment_label_id_, res_comment_vids, {comment_creationDate_col_});
+      auto comment_content=txn.BatchGetVertexPropsFromVids(comment_label_id_, res_comment_vids, {&comment_content_col_});
+      auto post_content=txn.BatchGetVertexPropsFromVids(post_label_id_, res_post_content_vids, {&post_content_col_});
+      auto post_imageFile=txn.BatchGetVertexPropsFromVids(post_label_id_, res_post_imageFile_vids, {&post_imageFile_col_});
+      auto post_creationDate=txn.BatchGetVertexPropsFromVids(post_label_id_, res_post_vids, {&post_creationDate_col_});
+      auto comment_creationDate=txn.BatchGetVertexPropsFromVids(comment_label_id_, res_comment_vids, {&comment_creationDate_col_});
       constexpr int64_t mill_per_min = 60 * 1000l;
       for (auto i = tmp.size(); i > 0; --i)
       {
@@ -273,14 +293,15 @@ namespace gs
     label_t likes_label_id_;
     label_t hasCreator_label_id_;
 
-    cgraph::PropertyHandle person_firstName_col_;
-    cgraph::PropertyHandle person_lastName_col_;
-    cgraph::PropertyHandle post_content_col_;
-    cgraph::PropertyHandle post_imageFile_col_;
-    cgraph::PropertyHandle post_length_col_;
-    cgraph::PropertyHandle comment_content_col_;
-    cgraph::PropertyHandle post_creationDate_col_;
-    cgraph::PropertyHandle comment_creationDate_col_;
+    StringColumn &person_firstName_col_;
+    StringColumn &person_lastName_col_;
+
+    StringColumn &post_content_col_;
+    StringColumn &post_imageFile_col_;
+    IntColumn &post_length_col_;
+    StringColumn &comment_content_col_;
+    DateColumn &post_creationDate_col_;
+    DateColumn &comment_creationDate_col_;
 
     std::vector<oid_t> persons_;
     std::vector<oid_t> messages_;

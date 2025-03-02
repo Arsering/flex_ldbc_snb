@@ -1,0 +1,600 @@
+#include <fstream>
+#include <queue>
+#include <string_view>
+
+#include "flex/engines/graph_db/app/app_base.h"
+#include "flex/engines/graph_db/database/graph_db_session.h"
+#include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
+#include "flex/utils/property/column.h"
+#include "flex/utils/property/types.h"
+// #include "utils.h"
+
+// #define ZED_PROFILE
+
+namespace gs
+{
+
+  class IC1 : public AppBase
+  {
+  public:
+    IC1(GraphDBSession &graph)
+        : person_label_id_(graph.schema().get_vertex_label_id("PERSON")),
+          place_label_id_(graph.schema().get_vertex_label_id("PLACE")),
+          knows_label_id_(graph.schema().get_edge_label_id("KNOWS")),
+          isLocatedIn_label_id_(graph.schema().get_edge_label_id("ISLOCATEDIN")),
+          organisation_label_id_(
+              graph.schema().get_vertex_label_id("ORGANISATION")),
+          workAt_label_id_(graph.schema().get_edge_label_id("WORKAT")),
+          studyAt_label_id_(graph.schema().get_edge_label_id("STUDYAT")),
+          person_firstName_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(person_label_id_, "firstName")))),
+          person_lastName_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(person_label_id_, "lastName")))),
+          person_birthday_col_(*(std::dynamic_pointer_cast<DateColumn>(
+              graph.get_vertex_property_column(person_label_id_, "birthday")))),
+          person_creationDate_col_(*(std::dynamic_pointer_cast<DateColumn>(
+              graph.get_vertex_property_column(person_label_id_,
+                                               "creationDate")))),
+          person_gender_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(person_label_id_, "gender")))),
+          person_browserUsed_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(person_label_id_,
+                                               "browserUsed")))),
+          person_locationIp_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(person_label_id_, "locationIP")))),
+          place_name_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(place_label_id_, "name")))),
+          person_email_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(person_label_id_, "email")))),
+          person_language_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(person_label_id_, "language")))),
+          organisation_name_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(organisation_label_id_, "name")))),
+          graph_(graph) {}
+    ~IC1() {}
+
+    struct person_info
+    {
+#if OV
+      person_info(uint8_t distance_, std::string_view &lastName_, oid_t id_,
+                  vid_t vid_)
+          : distance(distance_), lastName(lastName_), id(id_), vid(vid_) {}
+
+      uint8_t distance;
+
+      std::string_view lastName;
+
+      oid_t id;
+      vid_t vid;
+#else
+      person_info(uint8_t distance_, gbp::BufferBlock lastName_, oid_t id_,
+                  vid_t vid_)
+          : distance(distance_), lastName(lastName_), id(id_), vid(vid_) {}
+
+      uint8_t distance;
+      gbp::BufferBlock lastName;
+      oid_t id;
+      vid_t vid;
+#endif
+    };
+
+    struct person_info_comparer
+    {
+      bool operator()(person_info &lhs, person_info &rhs)
+      {
+
+        if (lhs.distance < rhs.distance)
+        {
+          return true;
+        }
+        if (lhs.distance > rhs.distance)
+        {
+          return false;
+        }
+
+        if (lhs.lastName < rhs.lastName)
+        {
+          return true;
+        }
+        if (lhs.lastName > rhs.lastName)
+        {
+          return false;
+        }
+        return lhs.id < rhs.id;
+      }
+    };
+
+    void get_friends(ReadTransaction &txn, vid_t root,
+                     std::string_view &firstname)
+    {
+      auto person_knows_person_out = txn.GetOutgoingGraphView<Date>(
+          person_label_id_, person_label_id_, knows_label_id_);
+      auto person_knows_person_in = txn.GetIncomingGraphView<Date>(
+          person_label_id_, person_label_id_, knows_label_id_);
+
+      person_info_comparer comparer;
+      std::priority_queue<person_info, std::vector<person_info>,
+                          person_info_comparer>
+          pq(comparer);
+      uint8_t dep = 1;
+      distance_[root] = 1;
+      std::queue<vid_t> q;
+      q.push(root);
+
+      // 用于记录每层访问的节点
+      std::vector<vid_t> current_level_nodes;
+      int current_depth = 1;
+
+      while (!q.empty())
+      {
+        auto u = q.front();
+        q.pop();
+        if (dep != distance_[u])
+        {
+          if (pq.size() == 20)
+            break;
+          dep = distance_[u];
+
+          // 打印上一层访问的节点
+          std::ofstream ofs("level_nodes.txt", std::ios::app);
+          ofs << "Depth " << current_depth << ": ";
+          for (auto &vid : current_level_nodes)
+          {
+            ofs << vid << " ";
+          }
+          ofs << "\n";
+          ofs.close();
+
+          current_level_nodes.clear();
+          current_depth++;
+        }
+
+#if OV
+        auto &ie = person_knows_person_in.get_edges(u);
+        for (auto &e : ie)
+        {
+          auto v = e.neighbor;
+#else
+        auto ie = person_knows_person_in.get_edges(u);
+        for (; ie.is_valid(); ie.next())
+        {
+          auto v = ie.get_neighbor();
+#endif
+          if (distance_[v])
+            continue;
+#ifdef ZED_PROFILE
+          person_count += 1;
+#endif
+          distance_[v] = distance_[u] + 1;
+          if (distance_[v] < 4)
+          {
+            q.push(v);
+          }
+#if OV
+          if (person_firstName_col_.get_view(v) == firstname)
+#else
+          auto person_firstName_item = person_firstName_col_.get(v);
+          if (person_firstName_item == firstname)
+#endif
+          {
+            if (pq.size() < 20)
+            {
+#if OV
+              pq.emplace(distance_[v], person_lastName_col_.get_view(v),
+                         txn.GetVertexId(person_label_id_, v), v);
+#else
+              pq.emplace(distance_[v], person_lastName_col_.get(v),
+                         txn.GetVertexId(person_label_id_, v), v);
+#endif
+            }
+            else
+            {
+              const person_info &top = pq.top();
+              uint8_t distance = distance_[v];
+              if (distance < top.distance)
+              {
+#if OV
+                pq.emplace(distance, person_lastName_col_.get_view(v),
+                           txn.GetVertexId(person_label_id_, v), v);
+#else
+                pq.emplace(distance, person_lastName_col_.get(v),
+                           txn.GetVertexId(person_label_id_, v), v);
+#endif
+              }
+              else if (distance == top.distance)
+              {
+#if OV
+                std::string_view lastName = person_lastName_col_.get_view(v);
+                if (lastName < top.lastName)
+#else
+                auto lastName_item = person_lastName_col_.get(v);
+
+                if (lastName_item < top.lastName)
+#endif
+                {
+                  pq.pop();
+#if OV
+                  pq.emplace(distance, std::move(lastName),
+                             txn.GetVertexId(person_label_id_, v), v);
+#else
+                  pq.emplace(distance, lastName_item,
+                             txn.GetVertexId(person_label_id_, v), v);
+#endif
+                }
+#if OV
+                else if (lastName == top.lastName)
+#else
+                else if (lastName_item == top.lastName)
+
+#endif
+                {
+                  oid_t id = txn.GetVertexId(person_label_id_, v);
+                  if (id < top.id)
+                  {
+                    pq.pop();
+#if OV
+                    pq.emplace(distance, std::move(lastName), id, v);
+#else
+                    pq.emplace(distance, lastName_item, id, v);
+#endif
+                  }
+                }
+              }
+            }
+          }
+        }
+#if OV
+        auto &oe = person_knows_person_out.get_edges(u);
+        for (auto &e : oe)
+        {
+          auto v = e.neighbor;
+#else
+        auto oe = person_knows_person_out.get_edges(u);
+        for (; oe.is_valid(); oe.next())
+        {
+          auto v = oe.get_neighbor();
+#ifdef ZED_PROFILE
+          edge_count += 1;
+#endif
+#endif
+          if (distance_[v])
+            continue;
+#ifdef ZED_PROFILE
+          person_count += 1;
+#endif
+          distance_[v] = distance_[u] + 1;
+          if (distance_[v] < 4)
+          {
+            q.push(v);
+          }
+#if OV
+          if (person_firstName_col_.get_view(v) == firstname)
+          {
+            if (pq.size() < 20)
+            {
+              pq.emplace(distance_[v], person_lastName_col_.get_view(v),
+                         txn.GetVertexId(person_label_id_, v), v);
+            }
+#else
+          auto person_firstName_item = person_firstName_col_.get(v);
+          if (person_firstName_item == firstname)
+          {
+            if (pq.size() < 20)
+            {
+              pq.emplace(distance_[v], person_lastName_col_.get(v),
+                         txn.GetVertexId(person_label_id_, v), v);
+            }
+#endif
+            else
+            {
+              const person_info &top = pq.top();
+              uint8_t distance = distance_[v];
+              if (distance < top.distance)
+              {
+                pq.pop();
+#if OV
+                pq.emplace(distance, person_lastName_col_.get_view(v),
+                           txn.GetVertexId(person_label_id_, v), v);
+#else
+                pq.emplace(distance, person_lastName_col_.get(v),
+                           txn.GetVertexId(person_label_id_, v), v);
+#endif
+              }
+              else if (distance == top.distance)
+              {
+#if OV
+                std::string_view lastName = person_lastName_col_.get_view(v);
+                if (lastName < top.lastName)
+                {
+                  pq.pop();
+                  pq.emplace(distance, std::move(lastName),
+                             txn.GetVertexId(person_label_id_, v), v);
+                }
+                else if (lastName == top.lastName)
+                {
+                  oid_t id = txn.GetVertexId(person_label_id_, v);
+                  if (id < top.id)
+                  {
+                    pq.pop();
+                    pq.emplace(distance, std::move(lastName), id, v);
+                  }
+                }
+#else
+                auto lastName_item = person_lastName_col_.get(v);
+                if (lastName_item < top.lastName)
+                {
+                  pq.pop();
+                  pq.emplace(distance, lastName_item,
+                             txn.GetVertexId(person_label_id_, v), v);
+                }
+                else if (lastName_item == top.lastName)
+                {
+                  oid_t id = txn.GetVertexId(person_label_id_, v);
+                  if (id < top.id)
+                  {
+                    pq.pop();
+                    pq.emplace(distance, lastName_item, id, v);
+                  }
+                }
+#endif
+              }
+            }
+          }
+        }
+
+        // 记录当前访问的节点
+        current_level_nodes.push_back(u);
+      }
+
+      // 打印最后一层的节点
+      if (!current_level_nodes.empty())
+      {
+        std::ofstream ofs("level_nodes.txt", std::ios::app);
+        ofs << "Depth " << current_depth << ": ";
+        for (auto &vid : current_level_nodes)
+        {
+          ofs << vid << " ";
+        }
+        ofs << "\n";
+        ofs.close();
+      }
+
+      ans_.reserve(pq.size());
+      while (!pq.empty())
+      {
+        ans_.emplace_back(pq.top());
+        pq.pop();
+      }
+    }
+
+    bool Query(Decoder &input, Encoder &output) override
+    {
+      auto txn = graph_.GetReadTransaction();
+
+      oid_t person_id = input.get_long();
+      std::string_view firstname = input.get_string();
+      CHECK(input.empty());
+
+      ans_.clear();
+      distance_.clear();
+      distance_.resize(txn.GetVertexNum(person_label_id_), 0);
+      vid_t root{};
+      if (!txn.GetVertexIndex(person_label_id_, person_id, root))
+      {
+        return false;
+      }
+
+      get_friends(txn, root, firstname);
+
+      std::vector<ColumnBase *> person_property_handles;
+      std::vector<vid_t> person_vids;
+      for(auto &info:ans_){
+        person_vids.push_back(info.vid);
+      }
+
+      person_property_handles.push_back(&person_birthday_col_);
+      person_property_handles.push_back(&person_creationDate_col_);
+      person_property_handles.push_back(&person_gender_col_);
+      person_property_handles.push_back(&person_browserUsed_col_);
+      person_property_handles.push_back(&person_locationIp_col_);
+      person_property_handles.push_back(&person_email_col_);
+      person_property_handles.push_back(&person_language_col_);
+
+      auto person_isLocatedIn_place_out =
+          txn.GetOutgoingSingleGraphView<grape::EmptyType>(
+              person_label_id_, place_label_id_, isLocatedIn_label_id_);
+      auto person_studyAt_organisation_out = txn.GetOutgoingGraphView<int>(
+          person_label_id_, organisation_label_id_, studyAt_label_id_);
+      auto person_workAt_organisation_out = txn.GetOutgoingGraphView<int>(
+          person_label_id_, organisation_label_id_, workAt_label_id_);
+      auto organisation_isLocatedIn_place_out =
+          txn.GetOutgoingSingleGraphView<grape::EmptyType>(
+              organisation_label_id_, place_label_id_, isLocatedIn_label_id_);
+
+      auto person_property_items = txn.BatchGetVertexPropsFromVids(person_label_id_, person_vids, person_property_handles);
+      auto person_isLocatedIn_place_out_items = txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(person_label_id_, place_label_id_, isLocatedIn_label_id_, person_vids, true);
+      auto person_studyAt_organisation_out_items = txn.BatchGetEdgePropsFromSrcVids<int>(person_label_id_, organisation_label_id_, studyAt_label_id_, person_vids, true);
+      auto person_workAt_organisation_out_items = txn.BatchGetEdgePropsFromSrcVids<int>(person_label_id_, organisation_label_id_, workAt_label_id_, person_vids, true);
+      
+      for (size_t i = ans_.size(); i > 0; i--)
+      {
+        auto &info = ans_[i - 1];
+        auto v = info.vid;
+        output.put_long(info.id);
+        output.put_int(info.distance - 1);
+#if OV
+        output.put_string_view(info.lastName);
+        output.put_long(person_birthday_col_.get_view(v).milli_second);
+        output.put_long(person_creationDate_col_.get_view(v).milli_second);
+        output.put_string_view(person_gender_col_.get_view(v));
+        output.put_string_view(person_browserUsed_col_.get_view(v));
+        output.put_string_view(person_locationIp_col_.get_view(v));
+#else
+
+        output.put_buffer_object(info.lastName);
+        output.put_long(gbp::BufferBlock::RefSingle<gs::Date>(person_property_items[0][i-1]).milli_second);
+        output.put_long(gbp::BufferBlock::RefSingle<gs::Date>(person_property_items[1][i-1]).milli_second);
+        output.put_buffer_object(person_property_items[2][i-1]);//gender
+        output.put_buffer_object(person_property_items[3][i-1]);//browserUsed
+        output.put_buffer_object(person_property_items[4][i-1]);//locationIp
+#endif
+#if OV
+        assert(person_isLocatedIn_place_out.exist(v));
+        auto person_place = person_isLocatedIn_place_out.get_edge(v).neighbor;
+        output.put_string_view(place_name_col_.get_view(person_place));
+        output.put_string_view(person_email_col_.get_view(v));
+        output.put_string_view(person_language_col_.get_view(v));
+#else
+        auto place_item = person_isLocatedIn_place_out_items[i-1];//get place name
+        assert(txn.check_edge_exist(place_item));
+        auto person_place = place_item[0].first;
+        auto item = place_name_col_.get(person_place);
+        output.put_buffer_object(item);//end get place name
+        output.put_buffer_object(person_property_items[5][i-1]);//email
+        output.put_buffer_object(person_property_items[6][i-1]);//language
+#endif
+        int university_num = 0;
+        size_t un_offset = output.skip_int();
+#if OV
+        auto &universities = person_studyAt_organisation_out.get_edges(v);
+        for (auto &e1 : universities)
+        {
+          output.put_string_view(organisation_name_col_.get_view(e1.neighbor));
+          output.put_int(e1.data);
+          assert(organisation_isLocatedIn_place_out.exist(e1.neighbor));
+          auto univ_place =
+              organisation_isLocatedIn_place_out.get_edge(e1.neighbor).neighbor;
+          output.put_string_view(place_name_col_.get_view(univ_place));
+          university_num++;
+        }
+#else
+        auto universities = person_studyAt_organisation_out_items[i-1];
+        std::vector<vid_t> universitie_vids;
+        for(int j=0;j<universities.size();j++){
+          universitie_vids.push_back(universities[j].first);
+        }
+        auto universitie_items=txn.BatchGetVertexPropsFromVids(organisation_label_id_, universitie_vids, {&organisation_name_col_});
+        auto universitie_isLocatedIn_place_out_items=txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(organisation_label_id_, place_label_id_, isLocatedIn_label_id_, universitie_vids, true);
+        for (int j=0;j<universities.size();j++){
+          auto item = universitie_items[0][j];
+          output.put_buffer_object(item);
+          auto item_t = universities[j].second;
+          output.put_int(item_t);
+          auto universitie_place_item=universitie_isLocatedIn_place_out_items[j];
+          assert(txn.check_edge_exist(universitie_place_item));
+          auto univ_place = universitie_place_item[0].first;
+          item = place_name_col_.get(univ_place);
+          output.put_buffer_object(item);
+          university_num++;
+        }
+#endif
+        output.put_int_at(un_offset, university_num);
+        int company_num = 0;
+        size_t cn_offset = output.skip_int();
+#if OV
+        auto &companies = person_workAt_organisation_out.get_edges(v);
+        for (auto &e1 : companies)
+        {
+          output.put_string_view(organisation_name_col_.get_view(e1.neighbor));
+          output.put_int(e1.data);
+          assert(organisation_isLocatedIn_place_out.exist(e1.neighbor));
+          auto company_place =
+              organisation_isLocatedIn_place_out.get_edge(e1.neighbor).neighbor;
+          output.put_string_view(place_name_col_.get_view(company_place));
+          company_num++;
+        }
+#else
+        // auto companies = person_workAt_organisation_out.get_edges(v);
+        // for (; companies.is_valid(); companies.next())
+        // {
+        //   auto item = organisation_name_col_.get(companies.get_neighbor());
+        //   output.put_buffer_object(item);
+        //   auto item_t = companies.get_data();
+        //   output.put_int(*((int *)item_t));
+        //   item = organisation_isLocatedIn_place_out.get_edge(companies.get_neighbor());
+        //   assert(organisation_isLocatedIn_place_out.exist1(item));
+
+        //   auto company_place =
+        //       gbp::BufferBlock::RefSingle<MutableNbr<grape::EmptyType>>(item).neighbor;
+        //   item = place_name_col_.get(company_place);
+        //   output.put_buffer_object(item);
+        //   company_num++;
+        // }
+        auto companies = person_workAt_organisation_out_items[i-1];
+        std::vector<vid_t> company_vids;
+        for(int j=0;j<companies.size();j++){
+          company_vids.push_back(companies[j].first);
+        }
+        auto company_items=txn.BatchGetVertexPropsFromVids(organisation_label_id_, company_vids, {&organisation_name_col_});
+        auto company_isLocatedIn_place_out_items=txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(organisation_label_id_, place_label_id_, isLocatedIn_label_id_, company_vids, true);
+        for (int j=0;j<companies.size();j++){
+          auto item = company_items[0][j];
+          output.put_buffer_object(item);
+          auto item_t = companies[j].second;
+          output.put_int(item_t);
+          auto company_place_item=company_isLocatedIn_place_out_items[j];
+          assert(txn.check_edge_exist(company_place_item));
+          auto company_place = company_place_item[0].first;
+          item = place_name_col_.get(company_place);
+          output.put_buffer_object(item);
+          company_num++;
+        }
+#endif
+        output.put_int_at(cn_offset, company_num);
+      }
+// outfile<<"hello"<<std::endl;
+#ifdef ZED_PROFILE
+      // std::cout<<"end query,"<<person_count<<","<<edge_count<<std::endl;
+      person_count = 0;
+      edge_count = 0;
+#endif
+      return true;
+    }
+
+  private:
+    label_t person_label_id_;
+    label_t place_label_id_;
+    label_t knows_label_id_;
+    label_t isLocatedIn_label_id_;
+    label_t organisation_label_id_;
+    label_t workAt_label_id_;
+    label_t studyAt_label_id_;
+
+    std::vector<person_info> ans_;
+    std::vector<uint8_t> distance_;
+    StringColumn &person_firstName_col_;
+    StringColumn &person_lastName_col_;
+    DateColumn &person_birthday_col_;
+    DateColumn &person_creationDate_col_;
+    StringColumn &person_gender_col_;
+    StringColumn &person_browserUsed_col_;
+    StringColumn &person_locationIp_col_;
+    StringColumn &place_name_col_;
+    StringColumn &person_email_col_;
+    StringColumn &person_language_col_;
+    StringColumn &organisation_name_col_;
+
+    GraphDBSession &graph_;
+
+#ifdef ZED_PROFILE
+    int person_count = 0;
+    int edge_count = 0;
+#endif
+  };
+
+} // namespace gs
+
+extern "C"
+{
+  void *CreateApp(gs::GraphDBSession &db)
+  {
+    gs::IC1 *app = new gs::IC1(db);
+    return static_cast<void *>(app);
+  }
+
+  void DeleteApp(void *app)
+  {
+    gs::IC1 *casted = static_cast<gs::IC1 *>(app);
+    delete casted;
+  }
+}

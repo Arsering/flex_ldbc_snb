@@ -4,7 +4,6 @@
 #include "flex/engines/graph_db/app/app_base.h"
 #include "flex/engines/graph_db/database/graph_db_session.h"
 #include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
-#include "flex/storages/rt_mutable_graph/types.h"
 #include "flex/utils/property/types.h"
 // #include "utils.h"
 
@@ -27,15 +26,19 @@ namespace gs
           hasType_label_id_(graph.schema().get_edge_label_id("HASTYPE")),
           isSubClassOf_label_id_(
               graph.schema().get_edge_label_id("ISSUBCLASSOF")),
-          tagClass_name_col_(graph.GetPropertyHandle(tagClass_label_id_, "name")),
-          tag_name_col_(graph.GetPropertyHandle(tag_label_id_, "name")),
-          person_firstName_col_(graph.GetPropertyHandle(person_label_id_, "firstName")),
-          person_lastName_col_(graph.GetPropertyHandle(person_label_id_, "lastName")),
+          tag_name_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(tag_label_id_, "name")))),
+          tagClass_name_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(tagClass_label_id_, "name")))),
           tagClass_num_(graph.graph().vertex_num(tagClass_label_id_)),
+          person_firstName_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(person_label_id_, "firstName")))),
+          person_lastName_col_(*(std::dynamic_pointer_cast<StringColumn>(
+              graph.get_vertex_property_column(person_label_id_, "lastName")))),
           graph_(graph) {}
     ~IC12() {}
 
-    void get_sub_tagClass(const ReadTransaction &txn, vid_t root)//这个dfs也不好batch
+    void get_sub_tagClass(const ReadTransaction &txn, vid_t root)
     {
       std::queue<vid_t> q;
       q.push(root);
@@ -47,6 +50,17 @@ namespace gs
       {
         auto v = q.front();
         q.pop();
+#if OV
+        const auto &ie = tagClass_isSubClassOf_tagClass_in.get_edges(v);
+        for (auto &e : ie)
+        {
+          if (!sub_tagClass_[e.neighbor])
+          {
+            sub_tagClass_[e.neighbor] = true;
+            q.push(e.neighbor);
+          }
+        }
+#else
         auto ie = tagClass_isSubClassOf_tagClass_in.get_edges(v);
         for (; ie.is_valid(); ie.next())
         {
@@ -56,6 +70,7 @@ namespace gs
             q.push(ie.get_neighbor());
           }
         }
+#endif
       }
     }
 
@@ -91,9 +106,9 @@ namespace gs
     {
       // std::cout<<"begin query"<<std::endl;
       auto txn = graph_.GetReadTransaction();
-      person_count = 0;
-      message_count = 0;
-      vec_count = 0;
+      person_count=0;
+      message_count=0;
+      vec_count=0;
 
       oid_t personid = input.get_long();
       std::string_view tagclassname = input.get_string();
@@ -104,14 +119,15 @@ namespace gs
       {
         return false;
       }
-      tagClass_num_ = txn.GetVertexNum(tagClass_label_id_);
       vid_t tagClass_id = tagClass_num_;
       for (vid_t i = 0; i < tagClass_num_; ++i)
       {
-        auto tagClass_name = tagClass_name_col_.getProperty(i);//这里有筛选，不batch
-        std::vector<char> data(tagClass_name.Size());
-        tagClass_name.Copy(data.data(), data.size());
+#if OV
+        if (tagClass_name_col_.get_view(i) == tagclassname)
+#else
+        auto tagClass_name = tagClass_name_col_.get(i);
         if (tagClass_name == tagclassname)
+#endif
         {
           tagClass_id = i;
           break;
@@ -128,7 +144,7 @@ namespace gs
           pq(comparer);
       sub_tagClass_.clear();
 
-      auto post_hasTag_tag_out = txn.GetOutgoingGraphView<grape::EmptyType>(
+       auto post_hasTag_tag_out = txn.GetOutgoingGraphView<grape::EmptyType>(
           post_label_id_, tag_label_id_, hasTag_label_id_);
       auto tag_hasType_tagClass_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
@@ -206,14 +222,12 @@ namespace gs
       while (!pq.empty())
       {
         vec.emplace_back(pq.top());
-        res_person_vids.push_back(vec.back().person_vid);
+        res_person_vids.push_back(pq.top().person_vid);
         pq.pop();
       }
       std::set<vid_t> tmp;
-      vec_count = vec.size();
-      auto person_props=txn.BatchGetVertexPropsFromVids(person_label_id_, res_person_vids, {person_firstName_col_,person_lastName_col_});
-      
-      // auto res_comment_hasCreator_person_in_items=txn.BatchGetVidsNeighbors<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, res_person_vids, false);
+      vec_count=vec.size();
+      auto person_props=txn.BatchGetVertexPropsFromVids(person_label_id_, res_person_vids, {&person_firstName_col_,&person_lastName_col_});
       std::vector<std::pair<int,int>> res_person_comment_index;
       auto res_comment_vids=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, res_person_vids, res_person_comment_index, false);
       auto res_comment_replyOf_post_out_items=txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(comment_label_id_, post_label_id_, replyOf_label_id_, res_comment_vids, true);
@@ -260,7 +274,7 @@ namespace gs
         for(auto tag:tmp){
           tmp_vids.push_back(tag);
         }
-        auto tag_name_col_items=txn.BatchGetVertexPropsFromVids(tag_label_id_, tmp_vids, {tag_name_col_});
+        auto tag_name_col_items=txn.BatchGetVertexPropsFromVids(tag_label_id_, tmp_vids, {&tag_name_col_});
         for (int i=0;i<tmp_vids.size();i++){
           auto item = tag_name_col_items[0][i];
           output.put_buffer_object(item);
@@ -283,13 +297,13 @@ namespace gs
     label_t hasTag_label_id_;
     label_t hasType_label_id_;
     label_t isSubClassOf_label_id_;
+
+    StringColumn &tag_name_col_;
+    StringColumn &tagClass_name_col_;
     vid_t tagClass_num_;
 
-    cgraph::PropertyHandle tag_name_col_;
-    cgraph::PropertyHandle tagClass_name_col_;
-    cgraph::PropertyHandle person_firstName_col_;
-    cgraph::PropertyHandle person_lastName_col_;
-
+    StringColumn &person_firstName_col_;
+    StringColumn &person_lastName_col_;
     std::vector<bool> sub_tagClass_;
     int person_count;
     int message_count;

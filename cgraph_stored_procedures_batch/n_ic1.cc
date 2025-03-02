@@ -277,11 +277,11 @@ namespace gs
         output.put_buffer_object(person_property_items[2][i]);//gender
         output.put_buffer_object(person_property_items[3][i]);//browserUsed
         output.put_buffer_object(person_property_items[4][i]);//locationIp
-        auto place_item=person_isLocatedIn_place_out_items[i];
+        auto place_item=person_isLocatedIn_place_out_items[i];//get place name
         assert(txn.check_edge_exist(place_item));
         auto person_place = place_item[0].first;
         auto item = place_name_col_.getProperty(person_place);
-        output.put_buffer_object(item);
+        output.put_buffer_object(item);//end get place name
         output.put_buffer_object(person_property_items[5][i]);//email
         output.put_buffer_object(person_property_items[6][i]);//language
         int university_num = 0;
