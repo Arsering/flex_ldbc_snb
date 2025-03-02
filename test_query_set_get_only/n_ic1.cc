@@ -459,6 +459,7 @@ namespace gs
 #endif
         output.put_int_at(cn_offset, company_num);
       }
+      ans_.clear();
       return true;
     }
 
