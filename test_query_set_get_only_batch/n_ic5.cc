@@ -82,9 +82,6 @@ namespace gs
       std::vector<vid_t> post_vids;
       auto post_hasCreator_person_in = txn.GetIncomingGraphView<grape::EmptyType>(
           person_label_id_, post_label_id_, hasCreator_label_id_);
-      auto forum_containerOf_post_in =
-          txn.GetIncomingSingleGraphView<grape::EmptyType>(
-              post_label_id_, forum_label_id_, containerOf_label_id_);
       for(int i=0;i<friends.size();i++){
         for(int j=0;j<forum_hasMember_person_in_items[i].size();j++){
           auto forum=forum_hasMember_person_in_items[i][j];

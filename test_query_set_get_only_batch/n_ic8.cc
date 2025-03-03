@@ -60,11 +60,7 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
-      // std::cout<<"begin query"<<std::endl;
-      reply_count = 0;
-      message_count=0;
       auto txn = graph_.GetReadTransaction();
-
       oid_t personid = input.get_long();
       CHECK(input.empty());
 
@@ -96,11 +92,8 @@ namespace gs
       auto post_replies_creationDates=txn.BatchGetVertexPropsFromVids(comment_label_id_,post_replies,{&comment_creationDate_col_});
       auto post_replies_oids=txn.BatchGetVertexIds(comment_label_id_,post_replies);
       for(int i=0;i<post_vids.size();i++){
-        message_count++;
-        // auto item=comment_replyOf_post_in_item[i];
         for(auto j=post_reply_index[i].first;j<post_reply_index[i].second;j++){
           auto u=post_replies[j];
-          reply_count++;
           if(pq.size()<20){
             pq.emplace(u,gbp::BufferBlock::RefSingle<gs::Date>(post_replies_creationDates[0][j]).milli_second,post_replies_oids[j]);
           }
@@ -120,36 +113,19 @@ namespace gs
           }
         }
       }
-
-      auto comment_replyOf_comment_in =
-          txn.GetIncomingGraphView<grape::EmptyType>(
-              comment_label_id_, comment_label_id_, replyOf_label_id_);
       auto comment_ie = txn.GetIncomingEdges<grape::EmptyType>(
           person_label_id_, root, comment_label_id_, hasCreator_label_id_);
       std::vector<vid_t> comment_vids;
       for(;comment_ie.is_valid();comment_ie.next()){
         comment_vids.push_back(comment_ie.get_neighbor());
       }
-      // auto comment_replyOf_comment_in_item=txn.BatchGetVidsNeighbors<grape::EmptyType>(comment_label_id_,comment_label_id_,replyOf_label_id_,comment_vids,false);
-      // std::vector<vid_t> comment_replies;
       std::vector<std::pair<int,int>> comment_reply_index;
       auto comment_replies=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(comment_label_id_,comment_label_id_,replyOf_label_id_,comment_vids,comment_reply_index,false);
-      // comment_reply_index.resize(comment_vids.size());
-      // for(int i=0;i<comment_vids.size();i++){
-      //   comment_reply_index[i].first=comment_replies.size();
-      //   for(int j=0;j<comment_replyOf_comment_in_item[i].size();j++){
-      //     comment_replies.push_back(comment_replyOf_comment_in_item[i][j]);
-      //   }
-      //   comment_reply_index[i].second=comment_replies.size();
-      // }
       auto comment_replies_creationDates=txn.BatchGetVertexPropsFromVids(comment_label_id_,comment_replies,{&comment_creationDate_col_});
       auto comment_replies_oids=txn.BatchGetVertexIds(comment_label_id_,comment_replies);
       for(int i=0;i<comment_vids.size();i++){
-        message_count++;
-        // auto item=comment_replyOf_comment_in_item[i];
         for(auto j=comment_reply_index[i].first;j<comment_reply_index[i].second;j++){
           auto u=comment_replies[j];
-          reply_count++;
           if(pq.size()<20){
             pq.emplace(u,gbp::BufferBlock::RefSingle<gs::Date>(comment_replies_creationDates[0][j]).milli_second,comment_replies_oids[j]);
           }
@@ -224,8 +200,6 @@ namespace gs
     DateColumn &comment_creationDate_col_;
 
     GraphDBSession &graph_;
-    int reply_count = 0;
-    int message_count=0;
   };
 
 } // namespace gs

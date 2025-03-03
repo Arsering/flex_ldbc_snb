@@ -9,8 +9,6 @@
 #include "flex/utils/property/types.h"
 // #include "utils.h"
 
-// #define ZED_PROFILE
-
 namespace gs
 {
 
@@ -135,16 +133,6 @@ namespace gs
             break;
           dep = distance_[u];
 
-          // 打印上一层访问的节点
-          std::ofstream ofs("level_nodes.txt", std::ios::app);
-          ofs << "Depth " << current_depth << ": ";
-          for (auto &vid : current_level_nodes)
-          {
-            ofs << vid << " ";
-          }
-          ofs << "\n";
-          ofs.close();
-
           current_level_nodes.clear();
           current_depth++;
         }
@@ -162,9 +150,6 @@ namespace gs
 #endif
           if (distance_[v])
             continue;
-#ifdef ZED_PROFILE
-          person_count += 1;
-#endif
           distance_[v] = distance_[u] + 1;
           if (distance_[v] < 4)
           {
@@ -253,15 +238,9 @@ namespace gs
         for (; oe.is_valid(); oe.next())
         {
           auto v = oe.get_neighbor();
-#ifdef ZED_PROFILE
-          edge_count += 1;
-#endif
 #endif
           if (distance_[v])
             continue;
-#ifdef ZED_PROFILE
-          person_count += 1;
-#endif
           distance_[v] = distance_[u] + 1;
           if (distance_[v] < 4)
           {
@@ -346,19 +325,6 @@ namespace gs
         current_level_nodes.push_back(u);
       }
 
-      // 打印最后一层的节点
-      if (!current_level_nodes.empty())
-      {
-        std::ofstream ofs("level_nodes.txt", std::ios::app);
-        ofs << "Depth " << current_depth << ": ";
-        for (auto &vid : current_level_nodes)
-        {
-          ofs << vid << " ";
-        }
-        ofs << "\n";
-        ofs.close();
-      }
-
       ans_.reserve(pq.size());
       while (!pq.empty())
       {
@@ -399,18 +365,6 @@ namespace gs
       person_property_handles.push_back(&person_locationIp_col_);
       person_property_handles.push_back(&person_email_col_);
       person_property_handles.push_back(&person_language_col_);
-
-      auto person_isLocatedIn_place_out =
-          txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-              person_label_id_, place_label_id_, isLocatedIn_label_id_);
-      auto person_studyAt_organisation_out = txn.GetOutgoingGraphView<int>(
-          person_label_id_, organisation_label_id_, studyAt_label_id_);
-      auto person_workAt_organisation_out = txn.GetOutgoingGraphView<int>(
-          person_label_id_, organisation_label_id_, workAt_label_id_);
-      auto organisation_isLocatedIn_place_out =
-          txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-              organisation_label_id_, place_label_id_, isLocatedIn_label_id_);
-
       auto person_property_items = txn.BatchGetVertexPropsFromVids(person_label_id_, person_vids, person_property_handles);
       auto person_isLocatedIn_place_out_items = txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(person_label_id_, place_label_id_, isLocatedIn_label_id_, person_vids, true);
       auto person_studyAt_organisation_out_items = txn.BatchGetEdgePropsFromSrcVids<int>(person_label_id_, organisation_label_id_, studyAt_label_id_, person_vids, true);
@@ -504,22 +458,6 @@ namespace gs
           company_num++;
         }
 #else
-        // auto companies = person_workAt_organisation_out.get_edges(v);
-        // for (; companies.is_valid(); companies.next())
-        // {
-        //   auto item = organisation_name_col_.get(companies.get_neighbor());
-        //   output.put_buffer_object(item);
-        //   auto item_t = companies.get_data();
-        //   output.put_int(*((int *)item_t));
-        //   item = organisation_isLocatedIn_place_out.get_edge(companies.get_neighbor());
-        //   assert(organisation_isLocatedIn_place_out.exist1(item));
-
-        //   auto company_place =
-        //       gbp::BufferBlock::RefSingle<MutableNbr<grape::EmptyType>>(item).neighbor;
-        //   item = place_name_col_.get(company_place);
-        //   output.put_buffer_object(item);
-        //   company_num++;
-        // }
         auto companies = person_workAt_organisation_out_items[i-1];
         std::vector<vid_t> company_vids;
         for(int j=0;j<companies.size();j++){
@@ -543,11 +481,6 @@ namespace gs
         output.put_int_at(cn_offset, company_num);
       }
 // outfile<<"hello"<<std::endl;
-#ifdef ZED_PROFILE
-      // std::cout<<"end query,"<<person_count<<","<<edge_count<<std::endl;
-      person_count = 0;
-      edge_count = 0;
-#endif
       return true;
     }
 
@@ -575,11 +508,6 @@ namespace gs
     StringColumn &organisation_name_col_;
 
     GraphDBSession &graph_;
-
-#ifdef ZED_PROFILE
-    int person_count = 0;
-    int edge_count = 0;
-#endif
   };
 
 } // namespace gs

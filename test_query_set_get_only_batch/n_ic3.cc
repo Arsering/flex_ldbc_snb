@@ -167,9 +167,6 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
-      // std::cout<<"begin query"<<std::endl;
-      person_count=0;
-      message_count=0;
       auto txn = graph_.GetReadTransaction();
 
       oid_t personid = input.get_long();
@@ -248,13 +245,6 @@ namespace gs
       std::priority_queue<person_info, std::vector<person_info>,
                           person_info_comparer>
           pq(comparer);
-
-      auto post_hasCreator_person_out =
-          txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-              post_label_id_, person_label_id_, hasCreator_label_id_);
-      auto comment_hasCreator_person_out =
-          txn.GetOutgoingSingleGraphView<grape::EmptyType>(
-              comment_label_id_, person_label_id_, hasCreator_label_id_);
 #if OV
       const auto &postex = txn.GetIncomingEdges<grape::EmptyType>(
           place_label_id_, countryX, post_label_id_, isLocatedIn_label_id_);
@@ -525,8 +515,6 @@ namespace gs
     vid_t place_num_;
 
     GraphDBSession &graph_;
-    int person_count;
-    int message_count=0;
   };
 
 } // namespace gs

@@ -91,12 +91,6 @@ namespace gs
 
       int64_t current_date = 0;
 
-      auto post_hasCreator_person_in = txn.GetIncomingGraphView<grape::EmptyType>(
-          person_label_id_, post_label_id_, hasCreator_label_id_);
-      auto comment_hasCreator_person_in =
-          txn.GetIncomingGraphView<grape::EmptyType>(
-              person_label_id_, comment_label_id_, hasCreator_label_id_);
-
       auto ie = txn.GetIncomingEdges<Date>(
           person_label_id_, root, person_label_id_, knows_label_id_);
       auto oe = txn.GetOutgoingEdges<Date>(

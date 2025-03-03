@@ -6,8 +6,6 @@
 #include "flex/utils/property/types.h"
 #include "n_utils.h"
 
-// #define ZED_PROFILE
-
 namespace gs
 {
 
@@ -75,9 +73,6 @@ namespace gs
 
     bool Query(Decoder &input, Encoder &output) override
     {
-      #ifdef ZED_PROFILE
-      // std::cout<<"begin query"<<std::endl;
-      #endif
       auto txn = graph_.GetReadTransaction();
 
       oid_t personid = input.get_long();
@@ -234,12 +229,7 @@ namespace gs
           post_index--;
         }
         output.put_long(v.creation_date);
-      }
-      #ifdef ZED_PROFILE
-      // std::cout<<"end query,"<<person_count<<","<<comment_count<<std::endl;
-      comment_count=0;
-      person_count=0;
-      #endif
+        }
       return true;
     }
 
@@ -258,11 +248,6 @@ namespace gs
     StringColumn &comment_content_col_;
     DateColumn &comment_creationDate_col_;
     DateColumn &post_creationDate_col_;
-
-    #ifdef ZED_PROFILE
-    int comment_count=0;
-    int person_count=0;
-    #endif
 
     GraphDBSession &graph_;
   };

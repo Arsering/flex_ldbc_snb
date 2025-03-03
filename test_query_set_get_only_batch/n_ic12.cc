@@ -106,9 +106,6 @@ namespace gs
     {
       // std::cout<<"begin query"<<std::endl;
       auto txn = graph_.GetReadTransaction();
-      person_count=0;
-      message_count=0;
-      vec_count=0;
 
       oid_t personid = input.get_long();
       std::string_view tagclassname = input.get_string();
@@ -166,12 +163,10 @@ namespace gs
       auto comment_replyOf_post_out_items=txn.BatchGetVidsNeighborsWithTimestamp<grape::EmptyType>(comment_label_id_, post_label_id_, replyOf_label_id_, comment_vids, true);
       
       for (int i=0;i<person_vids.size();i++){
-        person_count++;
         auto v = person_vids[i];
         int count = 0;
         bool mark = false;
         for (int j=person_comment_index[i].first;j<person_comment_index[i].second;j++){
-          message_count++;
           auto item = comment_replyOf_post_out_items[j];
           if (txn.check_edge_exist(item))
           {
@@ -226,7 +221,6 @@ namespace gs
         pq.pop();
       }
       std::set<vid_t> tmp;
-      vec_count=vec.size();
       auto person_props=txn.BatchGetVertexPropsFromVids(person_label_id_, res_person_vids, {&person_firstName_col_,&person_lastName_col_});
       std::vector<std::pair<int,int>> res_person_comment_index;
       auto res_comment_vids=txn.BatchGetVidsNeighborsWithIndex<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, res_person_vids, res_person_comment_index, false);
@@ -305,9 +299,6 @@ namespace gs
     StringColumn &person_firstName_col_;
     StringColumn &person_lastName_col_;
     std::vector<bool> sub_tagClass_;
-    int person_count;
-    int message_count;
-    int vec_count;
 
     GraphDBSession &graph_;
   };
