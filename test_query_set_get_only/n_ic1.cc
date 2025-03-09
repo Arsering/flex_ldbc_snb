@@ -366,8 +366,9 @@ namespace gs
         output.put_buffer_object(info.lastName);
         auto item = person_birthday_col_.get(v);
         output.put_long(gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second);
-        item = person_creationDate_col_.get(v);
-        output.put_long(gbp::BufferBlock::RefSingle<gs::Date>(item).milli_second);
+        auto item1 = person_creationDate_col_.get(v);
+        output.put_long(gbp::BufferBlock::RefSingle<gs::Date>(item1).milli_second);
+
         item = person_gender_col_.get(v);
         output.put_buffer_object(item);
         item = person_browserUsed_col_.get(v);

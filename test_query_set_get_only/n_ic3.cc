@@ -377,6 +377,7 @@ namespace gs
 
       auto commentex = txn.GetIncomingEdges<grape::EmptyType>(
           place_label_id_, countryX, comment_label_id_, isLocatedIn_label_id_);
+
       for (; commentex.is_valid(); commentex.next())
       {
         auto item = comment_creationDate_col_.get(commentex.get_neighbor());
@@ -393,7 +394,6 @@ namespace gs
           }
         }
       }
-
       auto postey = txn.GetIncomingEdges<grape::EmptyType>(
           place_label_id_, countryY, post_label_id_, isLocatedIn_label_id_);
       for (; postey.is_valid(); postey.next())

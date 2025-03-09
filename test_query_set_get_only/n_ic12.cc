@@ -362,7 +362,6 @@ namespace gs
         output.put_buffer_object(item);
         item = person_lastName_col_.get(v.person_vid);
         output.put_buffer_object(item);
-
 #endif
         tmp.clear();
 #if OV
