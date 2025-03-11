@@ -113,6 +113,7 @@ namespace gs
           break;
         }
       }
+
       assert(tagClass_id != tagClass_num_);
       sub_tagClass_.clear();
       sub_tagClass_.resize(txn.GetVertexNum(tagClass_label_id_));
@@ -153,6 +154,7 @@ namespace gs
         }
         comment_range_per_person.push_back(comment_vids_tmp.size());
       }
+
       auto comment_replyOf_post_out_items = txn.BatchGetOutgoingSingleEdges(comment_label_id_, post_label_id_, replyOf_label_id_, comment_vids_tmp);
       std::vector<vid_t> post_vids;
       size_t person_idx_cur = 0;
@@ -171,7 +173,9 @@ namespace gs
           comment_vids.push_back(comment_vids_tmp[comment_idx]);
         }
       }
-      comment_range_per_person.back() = post_vids.size();
+
+      for (; person_idx_cur < comment_range_per_person.size(); person_idx_cur++)
+        comment_range_per_person[person_idx_cur] = post_vids.size();
 
       auto post_hasTag_tag_out_items = txn.BatchGetOutgoingEdges<grape::EmptyType>(post_label_id_, tag_label_id_, hasTag_label_id_, post_vids);
       assert(post_hasTag_tag_out_items.size() == post_vids.size());
@@ -181,6 +185,7 @@ namespace gs
       auto tag_hasType_tagClass_out =
           txn.GetOutgoingSingleGraphView<grape::EmptyType>(
               tag_label_id_, tagClass_label_id_, hasType_label_id_);
+
       for (auto person_idx = 0; person_idx < neighbor_list.size(); ++person_idx)
       {
         for (; post_idx < comment_range_per_person[person_idx]; post_idx++)
@@ -198,9 +203,11 @@ namespace gs
           }
         }
       }
+
       std::vector<std::pair<int, vid_t>> result_list_final;
       for (auto i = 0; i < neighbor_list.size(); ++i)
       {
+
         if (count_per_person[i] > 0)
         {
           result_list_final.emplace_back(count_per_person[i], neighbor_list[i]);

@@ -92,6 +92,7 @@ namespace gs
 
       auto post_hasCreator_person_in = txn.GetIncomingGraphView<grape::EmptyType>(
           person_label_id_, post_label_id_, hasCreator_label_id_);
+
       auto comment_hasCreator_person_in =
           txn.GetIncomingGraphView<grape::EmptyType>(
               person_label_id_, comment_label_id_, hasCreator_label_id_);
@@ -99,7 +100,7 @@ namespace gs
         std::vector<vid_t> person_vids;
         get_1d_2d_neighbors(txn, person_label_id_, knows_label_id_, root, txn.GetVertexNum(person_label_id_), person_vids);
 
-        size_t batch_size = 500;
+        size_t batch_size = 300;
         std::vector<vid_t> person_vids_tmp;
         person_vids_tmp.reserve(batch_size);
         for (size_t i = 0; i < person_vids.size(); i += batch_size)
@@ -113,6 +114,7 @@ namespace gs
           std::vector<vid_t> post_vids;
           std::vector<vid_t> post_creator_ids;
           auto post_hasCreator_person_in = txn.BatchGetIncomingEdges<grape::EmptyType>(person_label_id_, post_label_id_, hasCreator_label_id_, person_vids_tmp);
+
           for (auto person_idx = 0; person_idx < person_vids_tmp.size(); person_idx++)
           {
             for (; post_hasCreator_person_in[person_idx].is_valid(); post_hasCreator_person_in[person_idx].next())
@@ -121,8 +123,10 @@ namespace gs
               post_creator_ids.push_back(person_vids_tmp[person_idx]);
             }
           }
+
           post_hasCreator_person_in.clear();
           auto post_creationDate_col_items = txn.BatchGetVertexPropsFromVids(post_label_id_, post_vids, {"creationDate"});
+
           for (size_t post_idx = 0; post_idx < post_creationDate_col_items[0].size(); post_idx++)
           {
             auto creationDate = gbp::BufferBlock::RefSingle<gs::Date>(post_creationDate_col_items[0][post_idx]).milli_second;
@@ -164,7 +168,9 @@ namespace gs
 
           std::vector<vid_t> comment_vids;
           std::vector<vid_t> comment_creator_ids;
+
           auto comment_hasCreator_person_in = txn.BatchGetIncomingEdges<grape::EmptyType>(person_label_id_, comment_label_id_, hasCreator_label_id_, person_vids_tmp);
+
           for (auto person_idx = 0; person_idx < person_vids_tmp.size(); person_idx++)
           {
             for (; comment_hasCreator_person_in[person_idx].is_valid(); comment_hasCreator_person_in[person_idx].next())
@@ -174,7 +180,9 @@ namespace gs
             }
           }
           comment_hasCreator_person_in.clear();
+
           auto comment_creationDate_col_items = txn.BatchGetVertexPropsFromVids(comment_label_id_, comment_vids, {"creationDate"});
+
           for (size_t comment_idx = 0; comment_idx < comment_creationDate_col_items[0].size(); comment_idx++)
           {
             auto creationDate = gbp::BufferBlock::RefSingle<gs::Date>(comment_creationDate_col_items[0][comment_idx]).milli_second;
@@ -205,6 +213,7 @@ namespace gs
           }
         }
       }
+
       std::vector<message_info> vec;
       vec.reserve(que.size());
       while (!que.empty())
@@ -212,11 +221,13 @@ namespace gs
         vec.emplace_back(que.top());
         que.pop();
       }
+
       std::reverse(vec.begin(), vec.end());
 
       std::vector<vid_t> person_vids;
       std::vector<vid_t> post_vids;
       std::vector<vid_t> comment_vids;
+
       for (size_t i = 0; i < vec.size(); i++)
       {
         person_vids.push_back(vec[i].other_person_vid);

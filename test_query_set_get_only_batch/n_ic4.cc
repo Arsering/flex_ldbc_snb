@@ -29,17 +29,10 @@ namespace gs
 
     struct tag_info
     {
-#if OV
-      tag_info(int count_, const std::string_view &tag_name_)
-          : count(count_), tag_name(tag_name_) {}
-      int count;
-      std::string_view tag_name;
-#else
       tag_info(int count_, gbp::BufferBlock tag_name_)
           : count(count_), tag_name(tag_name_) {}
       int count;
       gbp::BufferBlock tag_name;
-#endif
     };
 
     struct tag_info_comparer
@@ -54,12 +47,7 @@ namespace gs
         {
           return false;
         }
-#if OV
         return lhs.tag_name < rhs.tag_name;
-#else
-        return lhs.tag_name < rhs.tag_name;
-
-#endif
       }
     };
 
@@ -92,37 +80,6 @@ namespace gs
 
       for (auto v : friends_)
       {
-#if OV
-        const auto &ie = post_hasCreator_person_in.get_edges(v);
-        for (auto &e : ie)
-        {
-          auto creationDate =
-              post_creationDate_col_.get_view(e.neighbor).milli_second;
-          auto post_id = e.neighbor;
-          if (creationDate < end_date)
-          {
-            const auto &oe = post_hasTag_tag_out.get_edges(post_id);
-            if (start_date <= creationDate)
-            {
-              for (auto &e1 : oe)
-              {
-                if (!neg[e1.neighbor])
-                {
-                  post_count[e1.neighbor] += 1;
-                }
-              }
-            }
-            else
-            {
-              for (auto &e1 : oe)
-              {
-                neg[e1.neighbor] = true;
-                post_count[e1.neighbor] = 0;
-              }
-            }
-          }
-        }
-#else
         auto ie = post_hasCreator_person_in.get_edges(v);
         for (; ie.is_valid(); ie.next())
         {
@@ -152,7 +109,6 @@ namespace gs
             }
           }
         }
-#endif
       }
 
       tag_info_comparer comparer;
@@ -164,12 +120,7 @@ namespace gs
         int count = post_count[tag_id];
         if (count)
         {
-#if OV
-          que.emplace(count, tag_name_col_.get_view(tag_id));
-#else
           que.emplace(count, tag_name_col_.get(tag_id));
-
-#endif
         }
         ++tag_id;
       }
@@ -182,29 +133,15 @@ namespace gs
           if (count > top.count)
           {
             que.pop();
-#if OV
-            que.emplace(count, tag_name_col_.get_view(tag_id));
-#else
             que.emplace(count, tag_name_col_.get(tag_id));
-#endif
           }
           else if (count == top.count)
           {
-#if OV
-            std::string_view tag_name = tag_name_col_.get_view(tag_id);
-            if (tag_name < top.tag_name)
-
-#else
             auto tag_name_item = tag_name_col_.get(tag_id);
             if (tag_name_item < top.tag_name)
-#endif
             {
               que.pop();
-#if OV
-              que.emplace(count, tag_name);
-#else
               que.emplace(count, tag_name_item);
-#endif
             }
           }
         }
@@ -220,11 +157,7 @@ namespace gs
       for (auto i = vec.size(); i > 0; i--)
       {
         auto &t = vec[i - 1];
-#if OV
-        output.put_string_view(t.tag_name);
-#else
         output.put_buffer_object(t.tag_name);
-#endif
         output.put_int(t.count);
       }
       return true;

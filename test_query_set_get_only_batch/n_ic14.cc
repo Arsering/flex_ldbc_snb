@@ -48,6 +48,58 @@ namespace gs
     int get_score(vid_t x, vid_t y) const
     {
       int score = 0;
+#if OV
+      const auto &x_ie = comment_hasCreator_person_in_.get_edges(x);
+      for (auto &e : x_ie)
+      {
+        auto v = e.neighbor;
+        if (comment_replyOf_post_out_.exist(v))
+        {
+          auto &e1 = comment_replyOf_post_out_.get_edge(v);
+          assert(post_hasCreator_person_out_.exist(e1.neighbor));
+          auto n = post_hasCreator_person_out_.get_edge(e1.neighbor).neighbor;
+          if (n == y)
+          {
+            score += 2;
+          }
+        }
+        else if (comment_replyOf_comment_out_.exist(v))
+        {
+          auto &e2 = comment_replyOf_comment_out_.get_edge(v);
+          assert(comment_hasCreator_person_out_.exist(e2.neighbor));
+          auto n = comment_hasCreator_person_out_.get_edge(e2.neighbor).neighbor;
+          if (n == y)
+          {
+            score += 1;
+          }
+        }
+      }
+      const auto &y_ie = comment_hasCreator_person_in_.get_edges(y);
+      for (auto &e : y_ie)
+      {
+        auto v = e.neighbor;
+        if (comment_replyOf_post_out_.exist(v))
+        {
+          auto &e1 = comment_replyOf_post_out_.get_edge(v);
+          assert(post_hasCreator_person_out_.exist(e1.neighbor));
+          auto n = post_hasCreator_person_out_.get_edge(e1.neighbor).neighbor;
+          if (n == x)
+          {
+            score += 2;
+          }
+        }
+        else if (comment_replyOf_comment_out_.exist(v))
+        {
+          auto &e2 = comment_replyOf_comment_out_.get_edge(v);
+          assert(comment_hasCreator_person_out_.exist(e2.neighbor));
+          auto n = comment_hasCreator_person_out_.get_edge(e2.neighbor).neighbor;
+          if (n == x)
+          {
+            score += 1;
+          }
+        }
+      }
+#else
       auto x_ie = comment_hasCreator_person_in_.get_edges(x);
       for (; x_ie.is_valid(); x_ie.next())
       {
@@ -117,6 +169,7 @@ namespace gs
           }
         }
       }
+#endif
       return score;
     }
 
@@ -141,6 +194,58 @@ namespace gs
       }
 
       int ret = 0;
+#if OV
+      const auto &comment_ie = comment_hasCreator_person_in_.get_edges(u);
+      for (auto &e : comment_ie)
+      {
+        if (comment_replyOf_post_out_.exist(e.neighbor))
+        {
+          auto &e1 = comment_replyOf_post_out_.get_edge(e.neighbor);
+          assert(post_hasCreator_person_out_.exist(e1.neighbor));
+          auto n = post_hasCreator_person_out_.get_edge(e1.neighbor).neighbor;
+          if (n == v)
+          {
+            ret += 2;
+          }
+        }
+        else if (comment_replyOf_comment_out_.exist(e.neighbor))
+        {
+          auto &e2 = comment_replyOf_comment_out_.get_edge(e.neighbor);
+          assert(comment_hasCreator_person_out_.exist(e2.neighbor));
+          auto n = comment_hasCreator_person_out_.get_edge(e2.neighbor).neighbor;
+          if (n == v)
+          {
+            ret += 1;
+          }
+        }
+
+        const auto &follows_ie =
+            comment_replyOf_comment_in_.get_edges(e.neighbor);
+        for (auto &f : follows_ie)
+        {
+          assert(comment_hasCreator_person_out_.exist(f.neighbor));
+          auto n = comment_hasCreator_person_out_.get_edge(f.neighbor).neighbor;
+          if (n == v)
+          {
+            ret += 1;
+          }
+        }
+      }
+      const auto &post_ie = post_hasCreator_person_in_.get_edges(u);
+      for (auto &e : post_ie)
+      {
+        const auto &follows_ie = comment_replyOf_post_in_.get_edges(e.neighbor);
+        for (auto &f : follows_ie)
+        {
+          assert(comment_hasCreator_person_out_.exist(f.neighbor));
+          auto n = comment_hasCreator_person_out_.get_edge(f.neighbor).neighbor;
+          if (n == v)
+          {
+            ret += 2;
+          }
+        }
+      }
+#else
       auto comment_ie = comment_hasCreator_person_in_.get_edges(u);
       for (; comment_ie.is_valid(); comment_ie.next())
       {
@@ -210,11 +315,63 @@ namespace gs
           }
         }
       }
+#endif
       return ret;
     }
 
     void calc_scores(vid_t root, std::vector<int> &count) const
     {
+#if OV
+      const auto &comment_ie = comment_hasCreator_person_in_.get_edges(root);
+      for (auto &e : comment_ie)
+      {
+        if (comment_replyOf_post_out_.exist(e.neighbor))
+        {
+          auto &e1 = comment_replyOf_post_out_.get_edge(e.neighbor);
+          assert(post_hasCreator_person_out_.exist(e1.neighbor));
+          auto n = post_hasCreator_person_out_.get_edge(e1.neighbor).neighbor;
+          if (count[n] != 0)
+          {
+            count[n] += 2;
+          }
+        }
+        else if (comment_replyOf_comment_out_.exist(e.neighbor))
+        {
+          auto &e2 = comment_replyOf_comment_out_.get_edge(e.neighbor);
+          assert(comment_hasCreator_person_out_.exist(e2.neighbor));
+          auto n = comment_hasCreator_person_out_.get_edge(e2.neighbor).neighbor;
+          if (count[n] != 0)
+          {
+            count[n] += 1;
+          }
+        }
+        const auto &follows_ie =
+            comment_replyOf_comment_in_.get_edges(e.neighbor);
+        for (auto &e1 : follows_ie)
+        {
+          assert(comment_hasCreator_person_out_.exist(e1.neighbor));
+          auto n = comment_hasCreator_person_out_.get_edge(e1.neighbor).neighbor;
+          if (count[n] != 0)
+          {
+            count[n] += 1;
+          }
+        }
+      }
+      const auto &post_ie = post_hasCreator_person_in_.get_edges(root);
+      for (auto &e : post_ie)
+      {
+        const auto &follows_ie = comment_replyOf_post_in_.get_edges(e.neighbor);
+        for (auto &f : follows_ie)
+        {
+          assert(comment_hasCreator_person_out_.exist(f.neighbor));
+          auto n = comment_hasCreator_person_out_.get_edge(f.neighbor).neighbor;
+          if (count[n] != 0)
+          {
+            count[n] += 2;
+          }
+        }
+      }
+#else
       auto comment_ie = comment_hasCreator_person_in_.get_edges(root);
       for (; comment_ie.is_valid(); comment_ie.next())
       {
@@ -282,6 +439,7 @@ namespace gs
           }
         }
       }
+#endif
     }
 
   private:
@@ -404,9 +562,55 @@ namespace gs
       }
     }
 
-    void dfs(const GraphView<Date> &person_knows_person_out,
-             const GraphView<Date> &person_knows_person_in, vid_t src, vid_t dst,
+    void dfs(gs::ReadTransaction &txn, vid_t src, gs::AdjListView<gs::Date> person_knows_person_out, gs::AdjListView<gs::Date> person_knows_person_in, vid_t dst,
              std::vector<vid_t> &vec)
+    {
+      vec.push_back(src);
+      if (src == dst)
+      {
+        paths_.push_back(vec);
+        vec.pop_back();
+        return;
+      }
+
+      std::vector<vid_t> nbrs;
+      for (; person_knows_person_out.is_valid(); person_knows_person_out.next())
+      {
+        nbrs.push_back(person_knows_person_out.get_neighbor());
+      }
+      person_knows_person_out.free();
+      auto person_knows_person_out_items = txn.BatchGetOutgoingEdges<gs::Date>(person_label_id_, person_label_id_, knows_label_id_, nbrs);
+      auto person_knows_person_in_items = txn.BatchGetIncomingEdges<gs::Date>(person_label_id_, person_label_id_, knows_label_id_, nbrs);
+      for (size_t i = 0; i < nbrs.size(); i++)
+      {
+        auto v = nbrs[i];
+        if (persons_[v] && dis_from_src_[v] == dis_from_src_[src] + 1)
+        {
+          dfs(txn, v, person_knows_person_out_items[i], person_knows_person_in_items[i], dst, vec);
+        }
+      }
+      nbrs.clear();
+      for (; person_knows_person_in.is_valid(); person_knows_person_in.next())
+      {
+        nbrs.push_back(person_knows_person_in.get_neighbor());
+      }
+      person_knows_person_in.free();
+      person_knows_person_out_items = txn.BatchGetOutgoingEdges<gs::Date>(person_label_id_, person_label_id_, knows_label_id_, nbrs);
+      person_knows_person_in_items = txn.BatchGetIncomingEdges<gs::Date>(person_label_id_, person_label_id_, knows_label_id_, nbrs);
+      for (size_t i = 0; i < nbrs.size(); i++)
+      {
+        auto v = nbrs[i];
+        if (persons_[v] && dis_from_src_[v] == dis_from_src_[src] + 1)
+        {
+          dfs(txn, v, person_knows_person_out_items[i], person_knows_person_in_items[i], dst, vec);
+        }
+      }
+      vec.pop_back();
+    }
+
+    void dfs1(const GraphView<Date> &person_knows_person_out,
+              const GraphView<Date> &person_knows_person_in, vid_t src, vid_t dst,
+              std::vector<vid_t> &vec)
     {
       vec.push_back(src);
       if (src == dst)
@@ -421,7 +625,7 @@ namespace gs
         auto v = oe.get_neighbor();
         if (persons_[v] && dis_from_src_[v] == dis_from_src_[src] + 1)
         {
-          dfs(person_knows_person_out, person_knows_person_in, v, dst, vec);
+          dfs1(person_knows_person_out, person_knows_person_in, v, dst, vec);
         }
       }
       auto ie = person_knows_person_in.get_edges(src);
@@ -430,23 +634,28 @@ namespace gs
         auto v = ie.get_neighbor();
         if (persons_[v] && dis_from_src_[v] == dis_from_src_[src] + 1)
         {
-          dfs(person_knows_person_out, person_knows_person_in, v, dst, vec);
+          dfs1(person_knows_person_out, person_knows_person_in, v, dst, vec);
         }
       }
       vec.pop_back();
     }
 
-    void next_tire(const GraphView<Date> &person_knows_person_out,
-                   const GraphView<Date> &person_knows_person_in, int8_t depth,
+    void next_tire(gs::ReadTransaction &txn, int8_t depth,
                    std::queue<vid_t> &curr, std::queue<vid_t> &next,
                    std::vector<int8_t> &dis0, std::vector<int8_t> &dis1,
                    std::vector<vid_t> &vec, bool dir = true)
     {
+      std::vector<vid_t> vid_vec;
       while (!curr.empty())
       {
-        auto x = curr.front();
+        vid_vec.push_back(curr.front());
         curr.pop();
-        auto oe = person_knows_person_out.get_edges(x);
+      }
+      auto person_knows_person_out_items = txn.BatchGetOutgoingEdges<gs::Date>(person_label_id_, person_label_id_, knows_label_id_, vid_vec);
+      auto person_knows_person_in_items = txn.BatchGetIncomingEdges<gs::Date>(person_label_id_, person_label_id_, knows_label_id_, vid_vec);
+      for (size_t i = 0; i < person_knows_person_out_items.size(); i++)
+      {
+        auto &oe = person_knows_person_out_items[i];
         for (; oe.is_valid(); oe.next())
         {
           auto v = oe.get_neighbor();
@@ -460,7 +669,8 @@ namespace gs
             }
           }
         }
-        auto ie = person_knows_person_in.get_edges(x);
+        oe.free();
+        auto &ie = person_knows_person_in_items[i];
         for (; ie.is_valid(); ie.next())
         {
           auto v = ie.get_neighbor();
@@ -474,6 +684,7 @@ namespace gs
             }
           }
         }
+        ie.free();
       }
     }
 
@@ -521,8 +732,9 @@ namespace gs
         if (!q1.empty() && (q1.size() <= q2.size()))
         {
           ++src_dep;
-          next_tire(person_knows_person_out, person_knows_person_in, src_dep, q1,
-                    tmp, dis_from_src_, dis_from_dst_, vec, true);
+          // next_tire(person_knows_person_out, person_knows_person_in, src_dep, q1,
+          //           tmp, dis_from_src_, dis_from_dst_, vec, true);
+          next_tire(txn, src_dep, q1, tmp, dis_from_src_, dis_from_dst_, vec, true);
           if (!vec.empty())
           {
             break;
@@ -532,8 +744,9 @@ namespace gs
         else
         {
           ++dst_dep;
-          next_tire(person_knows_person_out, person_knows_person_in, dst_dep, q2,
-                    tmp, dis_from_dst_, dis_from_src_, vec, false);
+          // next_tire(person_knows_person_out, person_knows_person_in, dst_dep, q2, tmp, dis_from_dst_, dis_from_src_, vec, false);
+          next_tire(txn, dst_dep, q2, tmp, dis_from_dst_, dis_from_src_, vec, false);
+
           if (!vec.empty())
           {
             break;
@@ -607,7 +820,10 @@ namespace gs
       }
 
       std::vector<vid_t> v;
-      dfs(person_knows_person_out, person_knows_person_in, src, dst, v);
+      dfs1(person_knows_person_out, person_knows_person_in, src, dst, v);
+      // auto oe = person_knows_person_out.get_edges(src);
+      // auto ie = person_knows_person_in.get_edges(src);
+      // dfs(txn, src, oe, ie, dst, v);
       generate_scores(txn);
 
       for (size_t i = 0; i < paths_.size(); i++)
@@ -618,13 +834,23 @@ namespace gs
            [&](const int a, const int b)
            { return scores_[b] < scores_[a]; });
 
+      std::vector<vid_t> person_vids;
+      for (size_t i = 0; i < v.size(); i++)
+      {
+        for (auto j : paths_[v[i]])
+        {
+          person_vids.push_back(j);
+        }
+      }
+      auto person_oids = txn.BatchGetVertexIds(person_label_id_, person_vids);
+      size_t person_num_tmp = 0;
       for (size_t i = 0; i < v.size(); i++)
       {
         auto x = v[i];
         output.put_int(paths_[x].size());
         for (auto i : paths_[x])
         {
-          output.put_long(txn.GetVertexId(person_label_id_, i));
+          output.put_long(person_oids[person_num_tmp++]);
         }
         double score = scores_[x];
         score = score / 2.0f;
