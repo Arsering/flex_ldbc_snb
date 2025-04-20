@@ -93,8 +93,6 @@ namespace gs
       std::vector<person_info> result_items;
       std::vector<vid_t> result_vids;
 
-      // std::vector<vid_t> oneD_result_vids;
-      // std::vector<vid_t> twoD_result_vids;
       person_info_comparer comparer;
 
       std::vector<bool> bitset(txn.GetVertexNum(person_label_id_), false);
@@ -163,6 +161,7 @@ namespace gs
         size_t level_size = 0;
         for (size_t i = 0; i < neighbors.size(); i++)
         {
+          gbp::get_thread_logfile() << neighbors[i] << std::endl;
           if (person_propertys_items[0][i] == firstname)
           {
             result_vids.emplace_back(neighbors[i]);

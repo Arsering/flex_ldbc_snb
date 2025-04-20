@@ -104,6 +104,8 @@ namespace gs
         bool mark = false;
         for (size_t i = 0; i < person_vids_tmp.size(); i++)
         {
+          gbp::get_thread_logfile() << person_vids_tmp[i] << std::endl;
+
           mark = false;
           for (auto &item = forum_hasMember_person_in_items[i]; item.is_valid(); item.next())
           {

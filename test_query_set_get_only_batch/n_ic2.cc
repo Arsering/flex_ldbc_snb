@@ -119,7 +119,9 @@ namespace gs
           std::vector<vid_t> post_vids;
           std::vector<vid_t> post_creator_ids;
           for (size_t i = 0; i < post_hasCreator_person_in_items.size(); i++)
-          {
+          {          
+            gbp::get_thread_logfile() << friend_ids[i] << std::endl;
+
             for (; post_hasCreator_person_in_items[i].is_valid(); post_hasCreator_person_in_items[i].next())
             {
               post_vids.push_back(post_hasCreator_person_in_items[i].get_neighbor());
