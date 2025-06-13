@@ -36,6 +36,10 @@ namespace gs
           place_num_(graph.graph().vertex_num(place_label_id_)),
           graph_(graph)
     {
+      // const char* ratio_str = std::getenv("BATCH_SIZE_RATIO");
+      // if (ratio_str != nullptr) {
+      //   BATCH_SIZE_RATIO = std::atof(ratio_str);
+      // }
     }
     ~IC3() {}
     struct person_info
@@ -154,7 +158,9 @@ namespace gs
       vid_t countryX = place_num_;
       vid_t countryY = place_num_;
       {
-        const size_t scan_batch_size = 100;
+        // size_t scan_batch_size = 100;
+        // scan_batch_size = scan_batch_size * BATCH_SIZE_RATIO;
+        size_t scan_batch_size = BATCH_SIZE;
         std::vector<vid_t> place_vids;
         place_vids.reserve(scan_batch_size);
         for (vid_t i = 0; i < place_num_; i += scan_batch_size)
@@ -389,6 +395,7 @@ namespace gs
     vid_t place_num_;
 
     GraphDBSession &graph_;
+    // float BATCH_SIZE_RATIO = 1.0;
   };
 
 } // namespace gs

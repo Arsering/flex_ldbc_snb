@@ -22,7 +22,12 @@ namespace gs
           containerOf_label_id_(graph.schema().get_edge_label_id("CONTAINEROF")),
           forum_title_col_(*(std::dynamic_pointer_cast<StringColumn>(
               graph.get_vertex_property_column(forum_label_id_, "title")))),
-          graph_(graph) {}
+          graph_(graph) {
+            // const char* ratio_str = std::getenv("BATCH_SIZE_RATIO");
+            // if (ratio_str != nullptr) {
+            //   BATCH_SIZE_RATIO = std::atof(ratio_str);
+            // }
+          }
 
     ~IC5() {}
 
@@ -86,7 +91,9 @@ namespace gs
       std::vector<vid_t> person_vids_tmp;
       get_1d_2d_neighbors(txn, person_label_id_, knows_label_id_, root, txn.GetVertexNum(person_label_id_), person_vids_all);
 
-      size_t batch_size = 300;
+      // size_t batch_size = 300;
+      // batch_size = batch_size * BATCH_SIZE_RATIO;
+      size_t batch_size = BATCH_SIZE;
       std::vector<vid_t> person_vids;
       std::vector<size_t> person_vids_index;
       person_vids_tmp.reserve(batch_size);
@@ -104,7 +111,7 @@ namespace gs
         bool mark = false;
         for (size_t i = 0; i < person_vids_tmp.size(); i++)
         {
-          gbp::get_thread_logfile() << person_vids_tmp[i] << std::endl;
+          // gbp::get_thread_logfile() << person_vids_tmp[i] << std::endl;
 
           mark = false;
           for (auto &item = forum_hasMember_person_in_items[i]; item.is_valid(); item.next())
@@ -242,6 +249,8 @@ namespace gs
 
     std::vector<bool> person_forum_set_;
     std::vector<vid_t> person_forum_list_;
+
+    // float BATCH_SIZE_RATIO = 1.0;
 
     GraphDBSession &graph_;
   };

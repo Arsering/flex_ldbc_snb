@@ -8,6 +8,9 @@
 namespace gs
 {
 
+#define BATCH_SIZE 1
+  // #define BATCH_SIZE_RATIO 4.5
+
   inline void get_1d_friends(const ReadTransaction &txn, label_t person_label,
                              label_t knows_labels, vid_t root,
                              std::vector<vid_t> &friends)

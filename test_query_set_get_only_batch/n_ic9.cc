@@ -35,7 +35,12 @@ namespace gs
                                                "creationDate")))),
           post_creationDate_col_(*(std::dynamic_pointer_cast<DateColumn>(
               graph.get_vertex_property_column(post_label_id_, "creationDate")))),
-          graph_(graph) {}
+          graph_(graph) {
+            // const char* ratio_str = std::getenv("BATCH_SIZE_RATIO");
+            // if (ratio_str != nullptr) {
+            //   BATCH_SIZE_RATIO = std::atof(ratio_str);
+            // }
+          }
     ~IC9() {}
 
     struct message_info
@@ -100,7 +105,9 @@ namespace gs
         std::vector<vid_t> person_vids;
         get_1d_2d_neighbors(txn, person_label_id_, knows_label_id_, root, txn.GetVertexNum(person_label_id_), person_vids);
 
-        size_t batch_size = 300;
+        // size_t batch_size = 300;
+        // batch_size = batch_size * BATCH_SIZE_RATIO;
+        size_t batch_size = BATCH_SIZE;
         std::vector<vid_t> person_vids_tmp;
         person_vids_tmp.reserve(batch_size);
         for (size_t i = 0; i < person_vids.size(); i += batch_size)
@@ -157,7 +164,9 @@ namespace gs
           }
         }
 
-        batch_size = 200;
+        // batch_size = 200;
+        // batch_size = batch_size * BATCH_SIZE_RATIO;
+        batch_size = BATCH_SIZE;
         for (size_t i = 0; i < person_vids.size(); i += batch_size)
         {
           person_vids_tmp.clear();
@@ -309,6 +318,7 @@ namespace gs
     const StringColumn &comment_content_col_;
     const DateColumn &comment_creationDate_col_;
     const DateColumn &post_creationDate_col_;
+    // float BATCH_SIZE_RATIO = 1.0;
 
     GraphDBSession &graph_;
   };

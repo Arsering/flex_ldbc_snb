@@ -4,6 +4,7 @@
 #include "flex/engines/graph_db/database/graph_db_session.h"
 #include "flex/storages/rt_mutable_graph/mutable_property_fragment.h"
 #include "flex/utils/property/types.h"
+#include "n_utils.h"
 
 namespace gs
 {
@@ -34,7 +35,8 @@ namespace gs
               graph.get_vertex_property_column(post_label_id_, "length")))),
           comment_content_col_(*(std::dynamic_pointer_cast<StringColumn>(
               graph.get_vertex_property_column(comment_label_id_, "content")))),
-          graph_(graph) {}
+          graph_(graph) {
+          }
     ~IC2() {}
 
     struct message_info
@@ -105,7 +107,9 @@ namespace gs
             friend_ids_all.push_back(person_knows_person_out.get_neighbor());
           }
         }
-        size_t batch_size = 300;
+        // size_t batch_size = 300;
+        // batch_size = batch_size * BATCH_SIZE_RATIO;
+        size_t batch_size = BATCH_SIZE;
         friend_ids.reserve(batch_size);
         for (size_t i = 0; i < friend_ids_all.size(); i += batch_size)
         {
@@ -120,7 +124,7 @@ namespace gs
           std::vector<vid_t> post_creator_ids;
           for (size_t i = 0; i < post_hasCreator_person_in_items.size(); i++)
           {          
-            gbp::get_thread_logfile() << friend_ids[i] << std::endl;
+            // gbp::get_thread_logfile() << friend_ids[i] << std::endl;
 
             for (; post_hasCreator_person_in_items[i].is_valid(); post_hasCreator_person_in_items[i].next())
             {
@@ -310,6 +314,7 @@ namespace gs
     const StringColumn &comment_content_col_;
 
     GraphDBSession &graph_;
+    // float BATCH_SIZE_RATIO = 1.0;
   };
 
 } // namespace gs
